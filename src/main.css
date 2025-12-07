@@ -1,0 +1,199 @@
+/* =======================================
+   Custom Color Theme for UniSafe
+   ======================================= */
+
+/* Import Exo 2 Font Only */
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800;900&display=swap');
+
+:root {
+    --unisafe-orange: #E6B400;
+    --unisafe-orange-dark: #cc9f00;
+    --unisafe-gray: #f5f5f5;
+    --unisafe-black: #222222;
+    --radius-xl: 16px;
+}
+
+/* Background global - Use Exo 2 for everything */
+body {
+    background-color: var(--unisafe-gray);
+    font-family: 'Exo 2', sans-serif;
+}
+
+/* All elements use Exo 2 */
+* {
+    font-family: 'Exo 2', sans-serif;
+}
+
+/* Logo heading - Bold Exo 2 */
+.unisafe-logo {
+    color: var(--unisafe-yellow);
+    font-weight: 800;
+    font-size: 2rem;
+    font-family: 'Exo 2', sans-serif;
+}
+
+/* Exo 2 utility class */
+.font-exo {
+    font-family: 'Exo 2', sans-serif;
+}
+
+/* Logo heading */
+.unisafe-logo {
+    color: var(--unisafe-orange);
+    font-weight: 800;
+    font-size: 2rem;
+    font-family: 'Exo 2', sans-serif;
+}
+
+/* Mobile Sidebar Overlay */
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 40;
+}
+
+.sidebar-mobile {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+}
+
+.sidebar-mobile.active {
+    transform: translateX(0);
+}
+
+/* Responsive utilities */
+@media (max-width: 1024px) {
+    .sidebar-desktop {
+        display: none;
+    }
+    
+    .sidebar-mobile {
+        display: block;
+    }
+}
+
+@media (min-width: 1024px) {
+    .sidebar-mobile {
+        display: none;
+    }
+    
+    .sidebar-desktop {
+        display: block;
+    }
+}
+
+/* Animation for sidebar */
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+.slide-in {
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Rounded icons for IRT dashboard */
+.fa-chart-pie,
+.fa-list-check,
+.fa-file-lines,
+.fa-folder-open,
+.fa-file-invoice,
+.fa-gear,
+.fa-right-from-bracket,
+.fa-bell,
+.fa-magnifying-glass,
+.fa-chevron-down,
+.fa-bars {
+    border-radius: 50% ;
+    width: 16px ;
+    height: 16px ;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Logo heading */
+.unisafe-logo {
+    color: var(--unisafe-yellow);
+    font-weight: 800;
+    font-size: 2rem;
+}
+
+/* Card Highlights */
+.card-shadow {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    border-radius: var(--radius-xl);
+}
+
+/* Sidebar settings */
+.sidebar-link-active {
+    background-color: var(--unisafe-orange);
+    color: white ;
+    font-weight: 600;
+}
+
+.sidebar-link:hover {
+    background-color: rgba(230, 180, 0, 0.1);
+}
+
+/* Button UniSafe */
+.btn-unisafe {
+    background-color: var(--unisafe-orange);
+    color: white;
+    padding: 10px 22px;
+    border-radius: 10px;
+    transition: 0.2s ease;
+}
+
+.btn-unisafe:hover {
+    background-color: var(--unisafe-orange-dark);
+}
+
+/* Input Style */
+.input-unisafe {
+    border: 2px solid var(--unisafe-yellow);
+    border-radius: 12px;
+    padding: 14px;
+    outline: none;
+}
+
+.input-unisafe:focus {
+    border-color: var(--unisafe-yellow-dark);
+}
+
+/* Text highlight */
+.text-unisafe {
+    color: var(--unisafe-yellow);
+}
+
+/* For the yellow hero box */
+.hero-yellow {
+    background-color: var(--unisafe-yellow);
+    padding: 32px;
+    border-radius: 14px;
+}

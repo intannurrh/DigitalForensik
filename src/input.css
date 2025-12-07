@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global font override */
+@layer base {
+  * {
+    font-family: 'Exo 2', sans-serif ;
+  }
+  
+  html, body, div, span, h1, h2, h3, h4, h5, h6, p, a, button, input, label, textarea, select, td, th, li, tr {
+    font-family: 'Exo 2', sans-serif;
+  }
+}

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log Aktivitas Sistem - UniSafe IRT</title>
+    <meta name="description" content="Audit Trail Sistem Manajemen Insiden">
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/.dist/output.css">
+    <link rel="stylesheet" href="/src/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Exo 2', sans-serif;
+        }
+        
+        .sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+        }
+        
+        .main-content {
+            transition: margin-left 0.3s ease-in-out;
+        }
+        
+        .main-content.expanded {
+            margin-left: 0;
+        }
+        
+        .burger-menu {
+            display: block;
+        }
+        
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 30;
+            display: none;
+        }
+        
+        .sidebar-overlay.active {
+            display: block;
+        }
+        
+        @media (min-width: 769px) {
+            .sidebar-overlay {
+                display: none !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar:not(.collapsed) {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        .log-level-critical {
+            background-color: #FEE2E2;
+            color: #DC2626;
+            border-color: #FCA5A5;
+        }
+
+        .log-level-warning {
+            background-color: #FEF3C7;
+            color: #D97706;
+            border-color: #FCD34D;
+        }
+
+        .log-level-info {
+            background-color: #DBEAFE;
+            color: #2563EB;
+            border-color: #93C5FD;
+        }
+
+        .log-level-success {
+            background-color: #D1FAE5;
+            color: #059669;
+            border-color: #6EE7B7;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+
+    <!-- Main Layout -->
+    <div class="flex">
+        <!-- Sidebar Overlay -->
+        <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar w-64 bg-white shadow-sm h-screen fixed z-40">
+            <div class="px-6 py-6 border-b flex items-center gap-3">
+                <img src="/logo.png" alt="UniSafe Logo" class="h-10 w-auto">
+            </div>
+
+            <nav class="mt-6 px-4 space-y-1">
+                <!-- Dashboard -->
+                <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <!-- Manajemen Insiden -->
+                <a href="manajemenInsiden.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span>Manajemen Insiden</span>
+                </a>
+
+                <!-- Laporan Masuk -->
+                <a href="incoming.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-file-lines"></i>
+                    <span>Laporan Masuk</span>
+                </a>
+
+                <!-- Investigasi -->
+                <a href="investigasi.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-folder-open"></i>
+                    <span>Investigasi</span>
+                </a>
+
+                <!-- Laporan Akhir -->
+                <a href="finalReport.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <span>Laporan Akhir</span>
+                </a>
+
+                <!-- Log Aktivitas -->
+                <a href="logAktivitas.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-800 font-medium transition" style="background-color: #E6B400;">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Log Aktivitas</span>
+                </a>
+            </nav>
+
+            <!-- Bottom Navigation -->
+            <div class="absolute bottom-0 left-0 right-0 px-4 w-full pb-6">
+                <div class="border-t border-gray-200 pt-2 mt-2 space-y-1">
+                    <a href="setting.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition">
+                        <i class="fa-solid fa-gear"></i>
+                        <span>Pengaturan</span>
+                    </a>
+                    <a href="../login.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>Keluar</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main id="mainContent" class="main-content ml-64 w-full min-h-screen px-8 py-6">
+
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-8">
+                <div class="flex items-center space-x-4">
+                    <button id="burgerMenu" class="burger-menu text-gray-600 hover:text-gray-800 transition">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" placeholder="Cari aktivitas..." class="pl-10 pr-4 py-2 bg-gray-100 rounded-lg border-0 focus:outline-none focus:ring-2 w-80" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'">
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-6">
+                    <button class="relative">
+                        <i class="fa-solid fa-bell text-xl text-gray-600"></i>
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">2</span>
+                    </button>
+
+                    <div class="flex items-center space-x-3">
+                        <img src="https://i.pravatar.cc/150?img=47" alt="Profile" class="w-10 h-10 rounded-full">
+                        <div class="hidden sm:block">
+                            <p class="text-sm font-semibold user-name">Admin IRT</p>
+                            <p class="text-xs text-gray-500">Administrator</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs text-gray-500"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Content -->
+            <div>
+                
+                <!-- Page Header -->
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-gray-800">Log Aktivitas Sistem</h1>
+                    <p class="text-gray-600 mt-2">Audit trail untuk monitoring aktivitas sensitif sistem</p>
+                </div>
+
+                <!-- Filter Section -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Mulai</label>
+                            <input type="date" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Selesai</label>
+                            <input type="date" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Level</label>
+                            <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'">
+                                <option>Semua</option>
+                                <option>Critical</option>
+                                <option>Warning</option>
+                                <option>Info</option>
+                                <option>Success</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">User</label>
+                            <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'">
+                                <option>Semua User</option>
+                                <option>Admin IRT</option>
+                                <option>Mahasiswa</option>
+                                <option>Sistem</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 mt-4">
+                        <button class="text-white px-6 py-2 rounded-lg font-medium transition-colors" style="background-color: #E6B400;" onmouseover="this.style.backgroundColor='#D4A000'" onmouseout="this.style.backgroundColor='#E6B400'">
+                            <i class="fa-solid fa-filter mr-2"></i>
+                            Terapkan Filter
+                        </button>
+                        <button class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors">
+                            <i class="fa-solid fa-download mr-2"></i>
+                            Export Log
+                        </button>
+                        <button class="bg-white border border-red-300 hover:bg-red-50 text-red-700 px-6 py-2 rounded-lg font-medium transition-colors">
+                            <i class="fa-solid fa-broom mr-2"></i>
+                            Hapus Log Lama
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Log Table -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50 border-b border-gray-200">
+                                <tr>
+                                    <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Timestamp</th>
+                                    <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Level</th>
+                                    <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                                    <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aktivitas</th>
+                                    <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IP Address</th>
+                                    <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Detail</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <!-- Critical Log Entry -->
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">07/12/2024 14:35:22</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full log-level-critical">
+                                            Critical
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Unknown</td>
+                                    <td class="px-6 py-4 text-sm text-gray-900">Login Gagal - Password Salah</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">192.168.1.105</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <button class="text-blue-600 hover:text-blue-900 font-medium">View</button>
+                                    </td>
+                                </tr>
+
+                                <!-- Warning Log Entry -->
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">07/12/2024 14:30:15</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full log-level-warning">
+                                            Warning
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Admin IRT</td>
+                                    <td class="px-6 py-4 text-sm text-gray-900">Upload File Berbahaya</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">192.168.1.100</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <button class="text-blue-600 hover:text-blue-900 font-medium">View</button>
+                                    </td>
+                                </tr>
+
+                                <!-- Info Log Entry -->
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">07/12/2024 14:25:10</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full log-level-info">
+                                            Info
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Mahasiswa</td>
+                                    <td class="px-6 py-4 text-sm text-gray-900">Submit Laporan Insiden</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">192.168.1.102</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <button class="text-blue-600 hover:text-blue-900 font-medium">View</button>
+                                    </td>
+                                </tr>
+
+                                <!-- Success Log Entry -->
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">07/12/2024 14:20:05</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full log-level-success">
+                                            Success
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Admin IRT</td>
+                                    <td class="px-6 py-4 text-sm text-gray-900">Login Berhasil</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">192.168.1.100</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <button class="text-blue-600 hover:text-blue-900 font-medium">View</button>
+                                    </td>
+                                </tr>
+
+                                <!-- Info Log Entry 2 -->
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">07/12/2024 14:15:30</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full log-level-info">
+                                            Info
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Admin IRT</td>
+                                    <td class="px-6 py-4 text-sm text-gray-900">Ubah Status Laporan</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">192.168.1.100</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <button class="text-blue-600 hover:text-blue-900 font-medium">View</button>
+                                    </td>
+                                </tr>
+
+                                <!-- Critical Log Entry 2 -->
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">07/12/2024 14:10:45</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full log-level-critical">
+                                            Critical
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Unknown</td>
+                                    <td class="px-6 py-4 text-sm text-gray-900">Akses File Tanpa Izin</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">192.168.1.200</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <button class="text-blue-600 hover:text-blue-900 font-medium">View</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="bg-gray-50 px-6 py-3 flex items-center justify-between border-t border-gray-200">
+                        <div class="flex-1 flex justify-between sm:hidden">
+                            <button class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                Previous
+                            </button>
+                            <button class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                Next
+                            </button>
+                        </div>
+                        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                            <div>
+                                <p class="text-sm text-gray-700">
+                                    Showing <span class="font-medium">1</span> to <span class="font-medium">6</span> of <span class="font-medium">247</span> results
+                                </p>
+                            </div>
+                            <div>
+                                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+                                    <button class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                        <i class="fa-solid fa-chevron-left"></i>
+                                    </button>
+                                    <button class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                        1
+                                    </button>
+                                    <button class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                        2
+                                    </button>
+                                    <button class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                        3
+                                    </button>
+                                    <button class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistics Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Total Aktivitas</p>
+                                <p class="text-2xl font-bold text-gray-900">1,247</p>
+                            </div>
+                            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                                <i class="fa-solid fa-chart-line text-blue-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Critical Events</p>
+                                <p class="text-2xl font-bold text-red-600">12</p>
+                            </div>
+                            <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
+                                <i class="fa-solid fa-exclamation-triangle text-red-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Warning Events</p>
+                                <p class="text-2xl font-bold text-yellow-600">45</p>
+                            </div>
+                            <div class="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
+                                <i class="fa-solid fa-exclamation text-yellow-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Success Rate</p>
+                                <p class="text-2xl font-bold text-green-600">94.2%</p>
+                            </div>
+                            <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                                <i class="fa-solid fa-check-circle text-green-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Sidebar toggle functionality
+        const burgerMenu = document.getElementById("burgerMenu");
+        const sidebar = document.getElementById("sidebar");
+        const mainContent = document.getElementById("mainContent");
+        const sidebarOverlay = document.getElementById("sidebarOverlay");
+        
+        function toggleSidebar() {
+            sidebar.classList.toggle("collapsed");
+            mainContent.classList.toggle("expanded");
+            sidebarOverlay.classList.toggle("active");
+            
+            // Change icon based on sidebar state
+            const icon = burgerMenu.querySelector("i");
+            // When sidebar is collapsed (hidden), show bars icon to open it
+            // When sidebar is open (not collapsed), show times icon to close it
+            if (sidebar.classList.contains("collapsed")) {
+                icon.classList.remove("fa-times");
+                icon.classList.add("fa-bars");
+            } else {
+                icon.classList.remove("fa-bars");
+                icon.classList.add("fa-times");
+            }
+        }
+        
+        burgerMenu.addEventListener("click", toggleSidebar);
+        
+        // Close sidebar when clicking on overlay (mobile only)
+        sidebarOverlay.addEventListener("click", function() {
+            if (window.innerWidth <= 768) {
+                toggleSidebar();
+            }
+        });
+        
+        // Initialize sidebar state - always start collapsed
+        function initializeSidebar() {
+            // Ensure sidebar starts collapsed on all devices
+            if (!sidebar.classList.contains("collapsed")) {
+                sidebar.classList.add("collapsed");
+                mainContent.classList.add("expanded");
+                
+                // Set correct icon - should show bars when collapsed
+                const icon = burgerMenu.querySelector("i");
+                icon.classList.remove("fa-times");
+                icon.classList.add("fa-bars");
+            }
+        }
+        
+        // Initialize on page load
+        initializeSidebar();
+        
+        // Handle window resize
+        window.addEventListener("resize", function() {
+            initializeSidebar();
+        });
+
+        // Initialize current date values
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            const lastWeek = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+            
+            const dateInputs = document.querySelectorAll('input[type="date"]');
+            if (dateInputs[0]) dateInputs[0].value = lastWeek;
+            if (dateInputs[1]) dateInputs[1].value = today;
+        });
+    </script>
+    
+    <script src="/src/main.js"></script>
+</body>
+</html>

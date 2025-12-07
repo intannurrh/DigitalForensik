@@ -1,0 +1,21 @@
+{
+  "name": "webdigfor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:css": "tailwindcss -i ./src/input.css -o ./.dist/output.css",
+    "watch:css": "tailwindcss -i ./src/input.css -o ./.dist/output.css --watch",
+    "dev": "concurrently \"npm run watch:css\" \"python3 -m http.server 8080\"",
+    "serve": "python3 -m http.server 8080"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "tailwindcss": "^3.4.1",
+    "concurrently": "^8.2.2"
+  }
+}

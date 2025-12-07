@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - UniSafe IRT</title>
+    <meta name="description" content="Sistem Manajemen Insiden Keamanan Siber">
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/.dist/output.css">
+    <link rel="stylesheet" href="/src/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Exo 2', sans-serif;
+        }
+        
+        .sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+        }
+        
+        .main-content {
+            transition: margin-left 0.3s ease-in-out;
+        }
+        
+        .main-content.expanded {
+            margin-left: 0;
+        }
+        
+        .burger-menu {
+            display: block;
+        }
+        
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 30;
+            display: none;
+        }
+        
+        .sidebar-overlay.active {
+            display: block;
+        }
+        
+        @media (min-width: 769px) {
+            .sidebar-overlay {
+                display: none !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar:not(.collapsed) {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+
+    <!-- Main Layout -->
+    <div class="flex">
+        <!-- Sidebar Overlay -->
+        <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar w-64 bg-white shadow-sm h-screen fixed z-40">
+            <div class="px-6 py-6 border-b flex items-center gap-3">
+                <img src="/logo.png" alt="UniSafe Logo" class="h-10 w-auto">
+            </div>
+
+            <nav class="mt-6 px-4 space-y-1">
+                <!-- Dashboard -->
+                <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-800 font-medium transition" style="background-color: #E6B400;">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <!-- Manajemen Insiden -->
+                <a href="manajemenInsiden.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span>Manajemen Insiden</span>
+                </a>
+
+                <!-- Laporan Masuk -->
+                <a href="incoming.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-file-lines"></i>
+                    <span>Laporan Masuk</span>
+                </a>
+
+                <!-- Investigasi -->
+                <a href="investigasi.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-folder-open"></i>
+                    <span>Investigasi</span>
+                </a>
+
+                <!-- Laporan Akhir -->
+                <a href="finalReport.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <span>Laporan Akhir</span>
+                </a>
+
+                <!-- Log Aktivitas -->
+                <a href="logAktivitas.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Log Aktivitas</span>
+                </a>
+            </nav>
+
+            <!-- Bottom Navigation -->
+            <div class="absolute bottom-0 left-0 right-0 px-4 w-full pb-6">
+                <div class="border-t border-gray-200 pt-2 mt-2 space-y-1">
+                    <a href="setting.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition">
+                        <i class="fa-solid fa-gear"></i>
+                        <span>Pengaturan</span>
+                    </a>
+                    <a href="../login.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>Keluar</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main id="mainContent" class="main-content ml-64 w-full min-h-screen px-8 py-6">
+
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-8">
+                <div class="flex items-center space-x-4">
+                    <button id="burgerMenu" class="burger-menu text-gray-600 hover:text-gray-800 transition">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" placeholder="Cari..." class="pl-10 pr-4 py-2 bg-gray-100 rounded-lg border-0 focus:outline-none focus:ring-2 w-80" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'">
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-6">
+                    <button class="relative">
+                        <i class="fa-solid fa-bell text-xl text-gray-600"></i>
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">2</span>
+                    </button>
+
+                    <div class="flex items-center space-x-3">
+                        <img src="https://i.pravatar.cc/150?img=47" alt="Profile" class="w-10 h-10 rounded-full">
+                        <div class="hidden sm:block">
+                            <p class="text-sm font-semibold user-name">Admin IRT</p>
+                            <p class="text-xs text-gray-500">Administrator</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs text-gray-500"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Content -->
+            <div>
+                
+                <!-- Page Header -->
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-gray-800">Dashboard</h1>
+                    <p class="text-gray-600 mt-2">Selamat datang di sistem manajemen insiden</p>
+                </div>
+
+                <!-- Statistics Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+
+                    <!-- Total Incidents -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600 mb-1">Total Insiden</p>
+                                <p id="totalIncidents" class="text-3xl font-bold text-gray-900">0</p>
+                            </div>
+                            <div class="bg-blue-100 p-3 rounded-lg">
+                                <i class="fa-solid fa-shield-halved text-blue-600 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-arrow-up text-green-600"></i>
+                            <span class="text-gray-600">0% dari bulan lalu</span>
+                        </div>
+                    </div>
+
+                    <!-- Critical Incidents -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600 mb-1">Insiden Kritis</p>
+                                <p id="criticalIncidents" class="text-3xl font-bold text-red-600">0</p>
+                            </div>
+                            <div class="bg-red-100 p-3 rounded-lg">
+                                <i class="fa-solid fa-exclamation-triangle text-red-600 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-arrow-down text-red-600"></i>
+                            <span class="text-gray-600">0% dari bulan lalu</span>
+                        </div>
+                    </div>
+
+                    <!-- Resolved -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600 mb-1">Selesai</p>
+                                <p id="resolvedIncidents" class="text-3xl font-bold text-green-600">0</p>
+                            </div>
+                            <div class="bg-green-100 p-3 rounded-lg">
+                                <i class="fa-solid fa-check-circle text-green-600 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-arrow-up text-green-600"></i>
+                            <span class="text-gray-600">0% dari bulan lalu</span>
+                        </div>
+                    </div>
+
+                    <!-- In Progress -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600 mb-1">Dalam Proses</p>
+                                <p id="inProgressIncidents" class="text-3xl font-bold" style="color: #E6B400;">0</p>
+                            </div>
+                            <div class="bg-amber-100 p-3 rounded-lg">
+                                <i class="fa-solid fa-spinner text-amber-600 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-arrow-up text-green-600"></i>
+                            <span class="text-gray-600">0% dari bulan lalu</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category Statistics -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- Phishing -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Phishing</p>
+                                <p id="phishingIncidents" class="text-2xl font-bold text-gray-900">0</p>
+                            </div>
+                            <div class="bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-fish text-blue-600"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Malware -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Malware</p>
+                                <p id="malwareIncidents" class="text-2xl font-bold text-gray-900">0</p>
+                            </div>
+                            <div class="bg-purple-100 w-12 h-12 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-virus text-purple-600"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Network -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Network</p>
+                                <p id="networkIncidents" class="text-2xl font-bold text-gray-900">0</p>
+                            </div>
+                            <div class="bg-green-100 w-12 h-12 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-network-wired text-green-600"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Breach -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Data Breach</p>
+                                <p id="dataBreachIncidents" class="text-2xl font-bold text-gray-900">0</p>
+                            </div>
+                            <div class="bg-red-100 w-12 h-12 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-database text-red-600"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="mb-8">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Aksi Cepat</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <button onclick="createNewReport()" class="text-white px-6 py-3 rounded-lg font-medium transition-colors shadow-sm hover:shadow-md" style="background-color: #E6B400;" onmouseover="this.style.backgroundColor='#D4A000'" onmouseout="this.style.backgroundColor='#E6B400'">
+                            <i class="fa-solid fa-plus mr-2"></i>
+                            Buat Laporan Baru
+                        </button>
+                        <button onclick="viewStatistics()" class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-6 py-3 rounded-lg font-medium transition-colors shadow-sm hover:shadow-md">
+                            <i class="fa-solid fa-chart-line mr-2"></i>
+                            Lihat Statistik
+                        </button>
+                        <button onclick="exportReports()" class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-6 py-3 rounded-lg font-medium transition-colors shadow-sm hover:shadow-md">
+                            <i class="fa-solid fa-download mr-2"></i>
+                            Export Laporan
+                        </button>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Sidebar toggle functionality
+        const burgerMenu = document.getElementById('burgerMenu');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        
+        function toggleSidebar() {
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('expanded');
+            sidebarOverlay.classList.toggle('active');
+            
+            // Change icon based on sidebar state
+            const icon = burgerMenu.querySelector('i');
+            // When sidebar is collapsed (hidden), show bars icon to open it
+            // When sidebar is open (not collapsed), show times icon to close it
+            if (sidebar.classList.contains('collapsed')) {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            } else {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            }
+        }
+        
+        burgerMenu.addEventListener('click', toggleSidebar);
+        
+        // Close sidebar when clicking on overlay (mobile only)
+        sidebarOverlay.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                toggleSidebar();
+            }
+        });
+        
+        // Initialize sidebar state based on screen size
+        function initializeSidebar() {
+            if (window.innerWidth <= 768) {
+                // On mobile, sidebar should be collapsed by default
+                if (!sidebar.classList.contains('collapsed')) {
+                    toggleSidebar();
+                }
+            } else {
+                // On desktop, sidebar should be expanded by default
+                if (sidebar.classList.contains('collapsed')) {
+                    toggleSidebar();
+                }
+            }
+        }
+        
+        // Initialize on page load
+        initializeSidebar();
+        
+        // Handle window resize
+        window.addEventListener("resize", function() {
+            initializeSidebar();
+        });
+        
+        // Dummy data for dashboard
+        const dashboardData = {
+            totalIncidents: 142,
+            newIncidents: 8,
+            inProgress: 23,
+            resolved: 111,
+            criticalIncidents: 5,
+            phishingIncidents: 67,
+            malwareIncidents: 31,
+            networkIncidents: 28,
+            dataBreachIncidents: 16
+        };
+        
+        // Update dashboard with dummy data
+        function updateDashboard() {
+            // Update statistics cards
+            document.getElementById('totalIncidents').textContent = dashboardData.totalIncidents;
+            document.getElementById('newIncidents').textContent = dashboardData.newIncidents;
+            document.getElementById('inProgressIncidents').textContent = dashboardData.inProgress;
+            document.getElementById('resolvedIncidents').textContent = dashboardData.resolved;
+            
+            // Update critical incidents
+            document.getElementById('criticalIncidents').textContent = dashboardData.criticalIncidents;
+            document.getElementById('phishingIncidents').textContent = dashboardData.phishingIncidents;
+            document.getElementById('malwareIncidents').textContent = dashboardData.malwareIncidents;
+            document.getElementById('networkIncidents').textContent = dashboardData.networkIncidents;
+            document.getElementById('dataBreachIncidents').textContent = dashboardData.dataBreachIncidents;
+            
+            // Recent incidents section removed - no longer needed
+        }
+        
+
+        
+        function getStatusClass(status) {
+            switch(status) {
+                case 'Menunggu Review': return 'bg-yellow-100 text-yellow-800';
+                case 'Dalam Proses': return 'bg-blue-100 text-blue-800';
+                case 'Diterima': return 'bg-green-100 text-green-800';
+                case 'Ditolak': return 'bg-red-100 text-red-800';
+                case 'Selesai': return 'bg-gray-100 text-gray-800';
+                default: return 'bg-gray-100 text-gray-800';
+            }
+        }
+        
+
+        
+        function createNewReport() {
+            // Navigate to create new report page
+            window.location.href = `manajemenInsiden.html#create`;
+        }
+        
+        function viewStatistics() {
+            // Create and show statistics modal
+            showStatisticsModal();
+        }
+        
+        function showStatisticsModal() {
+            // Create modal HTML
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center overflow-y-auto';
+            modal.innerHTML = `
+                <div class="bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto m-4">
+                    <div class="sticky top-0 bg-white border-b border-gray-200 p-6 flex justify-between items-center">
+                        <h2 class="text-2xl font-bold text-gray-800">Statistik Laporan</h2>
+                        <button onclick="closeStatisticsModal()" class="text-gray-400 hover:text-gray-600 transition">
+                            <i class="fa-solid fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <h3 class="text-lg font-semibold mb-3">Total Laporan</h3>
+                                <p class="text-3xl font-bold">${dashboardData.totalIncidents}</p>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold mb-3">Tingkat Penyelesaian</h3>
+                                <p class="text-3xl font-bold">${Math.round((dashboardData.resolved / dashboardData.totalIncidents) * 100)}%</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <p class="text-sm text-gray-600 mb-1">Phishing</p>
+                                <p class="text-xl font-bold">${dashboardData.phishingIncidents}</p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <p class="text-sm text-gray-600 mb-1">Malware</p>
+                                <p class="text-xl font-bold">${dashboardData.malwareIncidents}</p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <p class="text-sm text-gray-600 mb-1">Network</p>
+                                <p class="text-xl font-bold">${dashboardData.networkIncidents}</p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <p class="text-sm text-gray-600 mb-1">Data Breach</p>
+                                <p class="text-xl font-bold">${dashboardData.dataBreachIncidents}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-end mt-6">
+                            <button onclick="closeStatisticsModal()" class="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium transition">
+                                Tutup
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+        
+        function closeStatisticsModal() {
+            const modal = document.querySelector('.fixed.inset-0');
+            if (modal) {
+                modal.remove();
+            }
+        }
+        
+        function exportReports() {
+            // Create CSV content
+            const csvContent = [
+                ['ID', 'Judul', 'Kategori', 'Status', 'Tanggal'],
+                ...dashboardData.recentIncidents.map(inc => [
+                    inc.id,
+                    inc.title,
+                    inc.category,
+                    inc.status,
+                    inc.date
+                ])
+            ].map(row => row.join(',')).join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `dashboard_reports_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        
+        // Initialize dashboard on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDashboard();
+        });
+    </script>
+    <script src="/src/main.js"></script>
+</body>
+</html>

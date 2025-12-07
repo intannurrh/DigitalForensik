@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Masuk - UniSafe IRT</title>
+    <meta name="description" content="Laporan Masuk Sistem Manajemen Insiden">
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/.dist/output.css">
+    <link rel="stylesheet" href="/src/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+        
+        .sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+        }
+        
+        .main-content {
+            transition: margin-left 0.3s ease-in-out;
+        }
+        
+        .main-content.expanded {
+            margin-left: 0;
+        }
+        
+        .burger-menu {
+            display: block;
+        }
+        
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 30;
+            display: none;
+        }
+        
+        .sidebar-overlay.active {
+            display: block;
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 50;
+            overflow-y: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.hidden {
+            display: none;
+        }
+        
+        @media (min-width: 769px) {
+            .sidebar-overlay {
+                display: none !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar:not(.collapsed) {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+        
+    
+        body {
+            font-family: 'Exo 2', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+
+    <!-- Main Layout -->
+    <div class="flex">
+        <!-- Sidebar Overlay -->
+        <div id="sidebarOverlay" class="sidebar-overlay"></div>
+    
+
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar w-64 bg-white shadow-sm h-screen fixed z-40">
+            <div class="px-6 py-6 border-b flex items-center gap-3">
+                <img src="/logo.png" alt="UniSafe Logo" class="h-10 w-auto">
+
+            </div>
+
+            <nav class="mt-6 px-4 space-y-1">
+                <!-- Dashboard -->
+                <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <!-- Manajemen Insiden -->
+                <a href="manajemenInsiden.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span>Manajemen Insiden</span>
+                </a>
+
+                <!-- Laporan Masuk -->
+                <a href="incoming.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-800 font-medium transition" style="background-color: #E6B400;">
+                    <i class="fa-solid fa-file-lines"></i>
+                    <span>Laporan Masuk</span>
+                </a>
+
+                <!-- Investigasi -->
+                <a href="investigasi.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-folder-open"></i>
+                    <span>Investigasi</span>
+                </a>
+
+                <!-- Laporan Akhir -->
+                <a href="finalReport.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <span>Laporan Akhir</span>
+                </a>
+
+                <!-- Log Aktivitas -->
+                <a href="logAktivitas.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Log Aktivitas</span>
+                </a>
+            </nav>
+
+            <!-- Bottom Navigation -->
+            <div class="absolute bottom-0 left-0 right-0 px-4 w-full pb-6">
+                <div class="border-t border-gray-200 pt-2 mt-2 space-y-1">
+                    <a href="setting.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition">
+                        <i class="fa-solid fa-gear"></i>
+                        <span>Pengaturan</span>
+                    </a>
+                    <a href="login.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>Keluar</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main id="mainContent" class="main-content ml-64 w-full min-h-screen px-8 py-6">
+
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-8">
+                <div class="flex items-center space-x-4">
+                    <button id="burgerMenu" class="burger-menu text-gray-600 hover:text-gray-800 transition">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <input id="searchInput" type="text" placeholder="Cari laporan..." class="pl-10 pr-4 py-2 bg-gray-100 rounded-lg border-0 focus:outline-none focus:ring-2 w-80" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'">
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-6">
+                    <button class="relative">
+                        <i class="fa-solid fa-bell text-xl text-gray-600"></i>
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">2</span>
+                    </button>
+
+                    <div class="flex items-center space-x-3">
+                        <img src="https://i.pravatar.cc/150?img=47" alt="Profile" class="w-10 h-10 rounded-full">
+                        <div class="hidden sm:block">
+                            <p class="text-sm font-semibold user-name">Admin IRT</p>
+                            <p class="text-xs text-gray-500">Administrator</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs text-gray-500"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Content -->
+            <div>
+                
+                <!-- Page Header -->
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-gray-800">Laporan Masuk</h1>
+                    <p class="text-gray-600 mt-2">Kelola laporan yang masuk dari mahasiswa</p>
+                </div>
+
+                <!-- Filter Bar -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
+                    <div class="flex flex-wrap gap-4 items-center">
+                        <div class="flex-1 min-w-[200px]">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                            <select id="statusFilter" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'">
+                                <option>Semua Status</option>
+                                <option>Menunggu Review</option>
+                                <option>Diterima</option>
+                                <option>Ditolak</option>
+                            </select>
+                        </div>
+                        <div class="flex-1 min-w-[200px]">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
+                            <select id="categoryFilter" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'">
+                                <option>Semua Kategori</option>
+                                <option>Phishing</option>
+                                <option>Malware</option>
+                                <option>Network</option>
+                                <option>Data Breach</option>
+                            </select>
+                        </div>
+                        <div class="flex-1 min-w-[200px]">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal</label>
+                            <input id="dateFilter" type="date" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'">
+                        </div>
+                        <div class="flex gap-2 items-end">
+                            <button onclick="applyFilters()" class="text-white px-6 py-2 rounded-lg font-medium transition-colors" style="background-color: #E6B400;" onmouseover="this.style.backgroundColor='#D4A000'" onmouseout="this.style.backgroundColor='#E6B400'">
+                                <i class="fa-solid fa-search mr-2"></i>
+                                Cari
+                            </button>
+                            <button onclick="resetFilters()" class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors">
+                                <i class="fa-solid fa-rotate mr-2"></i>
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports Table -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-200">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Judul</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pelapor</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prioritas</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Waktu</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportsTableBody" class="bg-white divide-y divide-gray-200">
+                            <!-- Reports will be populated here by JavaScript -->
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="flex justify-between items-center mt-6">
+                    <p class="text-sm text-gray-600">Menampilkan 0 dari 0 total</p>
+                    <div class="flex gap-2">
+                        <button class="px-3 py-2 border border-gray-300 rounded-lg text-gray-500 hover:bg-gray-50 transition-colors" disabled>
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        <button class="px-3 py-2 border border-gray-300 rounded-lg text-gray-500 hover:bg-gray-50 transition-colors" disabled>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Report Detail Modal -->
+    <div id="reportModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="sticky top-0 bg-white border-b border-gray-200 p-6 flex justify-between items-center">
+                    <h2 class="text-2xl font-bold text-gray-800">Detail Laporan</h2>
+                    <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 transition">
+                        <i class="fa-solid fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500 mb-2">ID Laporan</h3>
+                            <p id="modalReportId" class="text-lg font-semibold">-</p>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500 mb-2">Status</h3>
+                            <span id="modalStatus" class="px-3 py-1 rounded-full text-sm font-medium">-</span>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500 mb-2">Prioritas</h3>
+                            <span id="modalPriority" class="px-3 py-1 rounded-full text-sm font-medium">-</span>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500 mb-2">Kategori</h3>
+                            <p id="modalCategory" class="text-lg font-semibold">-</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h3 class="text-sm font-medium text-gray-500 mb-2">Judul Laporan</h3>
+                        <p id="modalTitle" class="text-lg font-semibold">-</p>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h3 class="text-sm font-medium text-gray-500 mb-2">Pelapor</h3>
+                        <div class="flex items-center gap-3">
+                            <img id="modalReporterAvatar" src="https://i.pravatar.cc/150?img=1" alt="Avatar" class="w-12 h-12 rounded-full">
+                            <div>
+                                <p id="modalReporterName" class="font-semibold">-</p>
+                                <p id="modalReporterEmail" class="text-sm text-gray-500">-</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h3 class="text-sm font-medium text-gray-500 mb-2">Deskripsi Laporan</h3>
+                        <p id="modalDescription" class="text-gray-700 leading-relaxed">-</p>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h3 class="text-sm font-medium text-gray-500 mb-2">Bukti</h3>
+                        <div id="modalEvidence" class="space-y-2">
+                            <!-- Evidence items will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h3 class="text-sm font-medium text-gray-500 mb-2">Catatan Tambahan</h3>
+                        <textarea id="modalNotes" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" rows="4" placeholder="Tambahkan catatan..."></textarea>
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <div class="text-sm text-gray-500">
+                            <p>Dilaporkan pada: <span id="modalReportDate">-</span></p>
+                        </div>
+                        <div class="flex gap-3">
+                            <button onclick="closeModal()" class="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium transition">
+                                Tutup
+                            </button>
+                            <button onclick="acceptReport()" class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition">
+                                <i class="fa-solid fa-check mr-2"></i>Terima
+                            </button>
+                            <button onclick="rejectReport()" class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition">
+                                <i class="fa-solid fa-times mr-2"></i>Tolak
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Sidebar toggle functionality
+        const burgerMenu = document.getElementById("burgerMenu");
+        const sidebar = document.getElementById("sidebar");
+        const mainContent = document.getElementById("mainContent");
+        const sidebarOverlay = document.getElementById("sidebarOverlay");
+        
+        function toggleSidebar() {
+            sidebar.classList.toggle("collapsed");
+            mainContent.classList.toggle("expanded");
+            sidebarOverlay.classList.toggle("active");
+            
+            // Change icon based on sidebar state
+            const icon = burgerMenu.querySelector("i");
+            // When sidebar is collapsed (hidden), show bars icon to open it
+            // When sidebar is open (not collapsed), show times icon to close it
+            if (sidebar.classList.contains("collapsed")) {
+                icon.classList.remove("fa-times");
+                icon.classList.add("fa-bars");
+            } else {
+                icon.classList.remove("fa-bars");
+                icon.classList.add("fa-times");
+            }
+        }
+        
+        burgerMenu.addEventListener("click", toggleSidebar);
+        
+        // Close sidebar when clicking on overlay (mobile only)
+        sidebarOverlay.addEventListener("click", function() {
+            if (window.innerWidth <= 768) {
+                toggleSidebar();
+            }
+        });
+        
+        // Initialize sidebar state - always start collapsed
+        function initializeSidebar() {
+            // Ensure sidebar starts collapsed on all devices
+            if (!sidebar.classList.contains("collapsed")) {
+                sidebar.classList.add("collapsed");
+                mainContent.classList.add("expanded");
+                
+                // Set correct icon - should show bars when collapsed
+                const icon = burgerMenu.querySelector("i");
+                icon.classList.remove("fa-times");
+                icon.classList.add("fa-bars");
+            }
+        }
+        
+        // Initialize on page load
+        initializeSidebar();
+        
+        // Handle window resize
+        window.addEventListener("resize", function() {
+            initializeSidebar();
+        });
+        
+        // Sample data for incoming reports
+        const reportsData = [
+            {
+                id: 'INC-001',
+                title: 'Email Phishing dengan Link Palsu',
+                reporter: 'Ahmad Fadli',
+                reporterEmail: 'ahmad.fadli@university.ac.id',
+                category: 'Phishing',
+                status: 'Menunggu Review',
+                priority: 'Tinggi',
+                reportDate: '2024-01-15 09:30:00',
+                description: 'Saya menerima email yang mencurigakan yang mengatasnamakan admin IT dan meminta saya untuk mengklik link untuk verifikasi akun. Link tersebut mengarah ke situs palsu yang mirip dengan portal universitas.',
+                evidence: [
+                    { name: 'screenshot_email.png', type: 'image' },
+                    { name: 'email_headers.eml', type: 'file' }
+                ],
+                avatar: 'https://i.pravatar.cc/150?img=32'
+            },
+            {
+                id: 'INC-002',
+                title: 'Akses Tidak Sah ke Email',
+                reporter: 'Siti Nurhaliza',
+                reporterEmail: 'siti.nurhaliza@university.ac.id',
+                category: 'Network',
+                status: 'Diterima',
+                priority: 'Sedang',
+                reportDate: '2024-01-15 11:45:00',
+                description: 'Akun email saya dikunjungi dari lokasi yang tidak biasa. Saya menerima notifikasi login dari Shanghai, China, padahal saya sedang berada di kampus.',
+                evidence: [
+                    { name: 'login_log.txt', type: 'file' },
+                    { name: 'notification.png', type: 'image' }
+                ],
+                avatar: 'https://i.pravatar.cc/150?img=47'
+            },
+            {
+                id: 'INC-003',
+                title: 'File Attachment Mencurigakan',
+                reporter: 'Budi Santoso',
+                reporterEmail: 'budi.santoso@university.ac.id',
+                category: 'Malware',
+                status: 'Menunggu Review',
+                priority: 'Tinggi',
+                reportDate: '2024-01-15 14:20:00',
+                description: 'Menerima email dengan attachment .exe yang diklaim sebagai nilai ujian. Setelah dianalisis, file tersebut terindikasi sebagai malware.',
+                evidence: [
+                    { name: 'malware_analysis.pdf', type: 'file' }
+                ],
+                avatar: 'https://i.pravatar.cc/150?img=68'
+            },
+            {
+                id: 'INC-004',
+                title: 'Data Pribadi Bocor',
+                reporter: 'Maya Indah',
+                reporterEmail: 'maya.indah@university.ac.id',
+                category: 'Data Breach',
+                status: 'Ditolak',
+                priority: 'Rendah',
+                reportDate: '2024-01-14 16:00:00',
+                description: 'Data mahasiswa bocor di grup WhatsApp. Saya menemukan file Excel berisi data pribadi mahasiswa semester 4.',
+                evidence: [
+                    { name: 'screenshot_chat.png', type: 'image' },
+                    { name: 'data_mahasiswa.xlsx', type: 'file' }
+                ],
+                avatar: 'https://i.pravatar.cc/150?img=15'
+            },
+            {
+                id: 'INC-005',
+                title: 'Email Palsu dari Dekan',
+                reporter: 'Rizki Pratama',
+                reporterEmail: 'rizki.pratama@university.ac.id',
+                category: 'Phishing',
+                status: 'Menunggu Review',
+                priority: 'Tinggi',
+                reportDate: '2024-01-14 17:30:00',
+                description: 'Menerima email yang mengaku sebagai dekan fakultas meminta transfer ujian online. Email tersebut tidak berasal dari dekan yang sebenarnya.',
+                evidence: [
+                    { name: 'fake_email.png', type: 'image' }
+                ],
+                avatar: 'https://i.pravatar.cc/150?img=82'
+            }
+        ];
+        
+        let filteredReports = [...reportsData];
+        let currentReport = null;
+        
+        // Populate reports table
+        function populateReportsTable() {
+            const tableBody = document.getElementById('reportsTableBody');
+            tableBody.innerHTML = '';
+            
+            if (filteredReports.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="px-6 py-12 text-center text-gray-500">
+                            <div class="flex flex-col items-center">
+                                <i class="fa-solid fa-inbox text-4xl mb-4 text-gray-300"></i>
+                                <p class="text-lg font-medium">Tidak ada laporan yang cocok</p>
+                                <p class="text-sm text-gray-400 mt-2">Coba ubah filter pencarian</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            filteredReports.forEach(report => {
+                const statusClass = getStatusClass(report.status);
+                const priorityClass = getPriorityClass(report.priority);
+                
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50 transition-colors';
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${report.id}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm font-medium text-gray-900">${report.title}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <img class="h-8 w-8 rounded-full mr-3" src="${report.avatar}" alt="">
+                            <div class="text-sm font-medium text-gray-900">${report.reporter}</div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">${report.category}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">${report.status}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${priorityClass}">${report.priority}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${report.reportDate}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button onclick="viewReport('${report.id}')" class="text-amber-600 hover:text-amber-900 mr-3" title="Lihat Detail">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                        <button onclick="editReport('${report.id}')" class="text-blue-600 hover:text-blue-900 mr-3" title="Edit">
+                            <i class="fa-solid fa-edit"></i>
+                        </button>
+                        <button onclick="deleteReport('${report.id}')" class="text-red-600 hover:text-red-900" title="Hapus">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+        
+        function getStatusClass(status) {
+            switch(status) {
+                case 'Menunggu Review': return 'bg-yellow-100 text-yellow-800';
+                case 'Diterima': return 'bg-green-100 text-green-800';
+                case 'Ditolak': return 'bg-red-100 text-red-800';
+                default: return 'bg-gray-100 text-gray-800';
+            }
+        }
+        
+        function getPriorityClass(priority) {
+            switch(priority) {
+                case 'Tinggi': return 'bg-red-100 text-red-800';
+                case 'Sedang': return 'bg-yellow-100 text-yellow-800';
+                case 'Rendah': return 'bg-green-100 text-green-800';
+                default: return 'bg-gray-100 text-gray-800';
+            }
+        }
+        
+        function viewReport(reportId) {
+            currentReport = reportsData.find(r => r.id === reportId);
+            if (currentReport) {
+                document.getElementById('modalReportId').textContent = currentReport.id;
+                document.getElementById('modalTitle').textContent = currentReport.title;
+                document.getElementById('modalStatus').textContent = currentReport.status;
+                document.getElementById('modalStatus').className = `px-3 py-1 rounded-full text-sm font-medium ${getStatusClass(currentReport.status)}`;
+                document.getElementById('modalPriority').textContent = currentReport.priority;
+                document.getElementById('modalPriority').className = `px-3 py-1 rounded-full text-sm font-medium ${getPriorityClass(currentReport.priority)}`;
+                document.getElementById('modalCategory').textContent = currentReport.category;
+                document.getElementById('modalReporterName').textContent = currentReport.reporter;
+                document.getElementById('modalReporterEmail').textContent = currentReport.reporterEmail;
+                document.getElementById('modalReporterAvatar').src = currentReport.avatar;
+                document.getElementById('modalDescription').textContent = currentReport.description;
+                document.getElementById('modalReportDate').textContent = currentReport.reportDate;
+                
+                const evidenceContainer = document.getElementById('modalEvidence');
+                evidenceContainer.innerHTML = '';
+                currentReport.evidence.forEach(evidence => {
+                    const evidenceItem = document.createElement('div');
+                    evidenceItem.className = 'flex items-center justify-between p-3 bg-gray-50 rounded-lg';
+                    evidenceItem.innerHTML = `
+                        <div class="flex items-center">
+                            <i class="fa-solid ${evidence.type === 'image' ? 'fa-image' : 'fa-file'} text-gray-400 mr-3"></i>
+                            <span class="text-sm font-medium">${evidence.name}</span>
+                        </div>
+                        <button onclick="downloadEvidence('${evidence.name}')" class="text-amber-600 hover:text-amber-900">
+                            <i class="fa-solid fa-download"></i>
+                        </button>
+                    `;
+                    evidenceContainer.appendChild(evidenceItem);
+                });
+                
+                document.getElementById('reportModal').classList.remove('hidden');
+            }
+        }
+        
+        function closeModal() {
+            document.getElementById('reportModal').classList.add('hidden');
+            document.getElementById('modalNotes').value = '';
+        }
+        
+        function acceptReport() {
+            if (currentReport) {
+                const notes = document.getElementById('modalNotes').value;
+                const reportIndex = reportsData.findIndex(r => r.id === currentReport.id);
+                if (reportIndex !== -1) {
+                    reportsData[reportIndex].status = 'Diterima';
+                    filteredReports = [...reportsData];
+                    populateReportsTable();
+                    alert(`Laporan ${currentReport.id} telah diterima. ${notes ? 'Catatan: ' + notes : ''}`);
+                    closeModal();
+                }
+            }
+        }
+        
+        function rejectReport() {
+            if (currentReport) {
+                const notes = document.getElementById('modalNotes').value;
+                if (!notes.trim()) {
+                    alert('Harap tambahkan alasan penolakan di catatan tambahan.');
+                    return;
+                }
+                const reportIndex = reportsData.findIndex(r => r.id === currentReport.id);
+                if (reportIndex !== -1) {
+                    reportsData[reportIndex].status = 'Ditolak';
+                    filteredReports = [...reportsData];
+                    populateReportsTable();
+                    alert(`Laporan ${currentReport.id} telah ditolak. Alasan: ${notes}`);
+                    closeModal();
+                }
+            }
+        }
+        
+        function editReport(reportId) {
+            alert(`Fitur edit untuk laporan ${reportId} akan segera tersedia.`);
+        }
+        
+        function deleteReport(reportId) {
+            if (confirm(`Apakah Anda yakin ingin menghapus laporan ${reportId}?`)) {
+                const reportIndex = reportsData.findIndex(r => r.id === reportId);
+                if (reportIndex !== -1) {
+                    reportsData.splice(reportIndex, 1);
+                    filteredReports = [...reportsData];
+                    populateReportsTable();
+                    alert(`Laporan ${reportId} telah dihapus.`);
+                }
+            }
+        }
+        
+        function downloadEvidence(filename) {
+            alert(`Mengunduh ${filename}...`);
+        }
+        
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('keyup', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            filteredReports = reportsData.filter(report => 
+                report.id.toLowerCase().includes(searchTerm) ||
+                report.title.toLowerCase().includes(searchTerm) ||
+                report.reporter.toLowerCase().includes(searchTerm) ||
+                report.category.toLowerCase().includes(searchTerm) ||
+                report.status.toLowerCase().includes(searchTerm) ||
+                report.priority.toLowerCase().includes(searchTerm)
+            );
+            populateReportsTable();
+        });
+        
+        // Filter functionality
+        document.getElementById('statusFilter').addEventListener('change', applyFilters);
+        document.getElementById('categoryFilter').addEventListener('change', applyFilters);
+        document.getElementById('dateFilter').addEventListener('change', applyFilters);
+        
+        function applyFilters() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const dateFilter = document.getElementById('dateFilter').value;
+            
+            filteredReports = reportsData.filter(report => {
+                let matchStatus = !statusFilter || statusFilter === 'Semua Status' || report.status === statusFilter;
+                let matchCategory = !categoryFilter || categoryFilter === 'Semua Kategori' || report.category === categoryFilter;
+                let matchDate = !dateFilter || report.reportDate.startsWith(dateFilter);
+                
+                return matchStatus && matchCategory && matchDate;
+            });
+            
+            populateReportsTable();
+        }
+        
+        // Reset filters
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('statusFilter').selectedIndex = 0;
+            document.getElementById('categoryFilter').selectedIndex = 0;
+            document.getElementById('dateFilter').value = '';
+            filteredReports = [...reportsData];
+            populateReportsTable();
+        }
+        
+        // Initialize table on page load
+        populateReportsTable();
+    </script>
+    
+    <script src="/src/main.js"></script>
+</body>
+</html>

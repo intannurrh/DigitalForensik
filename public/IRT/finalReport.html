@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Akhir - UniSafe IRT</title>
+    <meta name="description" content="Laporan Akhir & Final Reports">
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/.dist/output.css">
+    <link rel="stylesheet" href="/src/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+        
+        .sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+        }
+        
+        .main-content {
+            transition: margin-left 0.3s ease-in-out;
+        }
+        
+        .main-content.expanded {
+            margin-left: 0;
+        }
+        
+        .burger-menu {
+            display: block;
+        }
+        
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 30;
+            display: none;
+        }
+        
+        .sidebar-overlay.active {
+            display: block;
+        }
+        
+        @media (min-width: 769px) {
+            .sidebar-overlay {
+                display: none !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar:not(.collapsed) {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+        
+    
+        body {
+            font-family: 'Exo 2', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+
+    <!-- Main Layout -->
+    <div class="flex">
+        <!-- Sidebar Overlay -->
+        <div id="sidebarOverlay" class="sidebar-overlay"></div>
+    
+
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar w-64 bg-white shadow-sm h-screen fixed z-40">
+            <div class="px-6 py-6 border-b flex items-center gap-3">
+                <img src="/logo.png" alt="UniSafe Logo" class="h-10 w-auto">
+
+            </div>
+
+            <nav class="mt-6 px-4 space-y-1">
+                <!-- Dashboard -->
+                <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <!-- Manajemen Insiden -->
+                <a href="manajemenInsiden.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span>Manajemen Insiden</span>
+                </a>
+
+                <!-- Laporan Masuk -->
+                <a href="incoming.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-file-lines"></i>
+                    <span>Laporan Masuk</span>
+                </a>
+
+                <!-- Investigasi -->
+                <a href="investigasi.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-folder-open"></i>
+                    <span>Investigasi</span>
+                </a>
+
+                <!-- Laporan Akhir -->
+                <a href="finalReport.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <span>Laporan Akhir</span>
+                </a>
+
+                <!-- Log Aktivitas -->
+                <a href="logAktivitas.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Log Aktivitas</span>
+                </a>
+            </nav>
+
+            <!-- Bottom Navigation -->
+            <div class="absolute bottom-0 left-0 right-0 px-4 w-full pb-6">
+                <div class="border-t border-gray-200 pt-2 mt-2 space-y-1">
+                    <a href="setting.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition">
+                        <i class="fa-solid fa-gear"></i>
+                        <span>Pengaturan</span>
+                    </a>
+                    <a href="../login.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>Keluar</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main id="mainContent" class="main-content ml-64 w-full min-h-screen px-8 py-6">
+
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-8">
+                <div class="flex items-center space-x-4">
+                    <button id="burgerMenu" class="burger-menu text-gray-600 hover:text-gray-800 transition">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" placeholder="Cari laporan akhir..." class="pl-10 pr-4 py-2 bg-gray-100 rounded-lg border-0 focus:outline-none focus:ring-2 w-80" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'">
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-6">
+                    <button class="relative">
+                        <i class="fa-solid fa-bell text-xl text-gray-600"></i>
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">2</span>
+                    </button>
+
+                    <div class="flex items-center space-x-3">
+                        <img src="https://i.pravatar.cc/150?img=47" alt="Profile" class="w-10 h-10 rounded-full">
+                        <div class="hidden sm:block">
+                            <p class="text-sm font-semibold user-name">Admin IRT</p>
+                            <p class="text-xs text-gray-500">Administrator</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs text-gray-500"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Content -->
+            <div>
+                
+                <!-- Page Header -->
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-gray-800">Laporan Akhir</h1>
+                    <p class="text-gray-600 mt-2">Kelola dan generate laporan akhir insiden</p>
+                </div>
+
+                <!-- Action Bar -->
+                <div class="flex justify-between items-center mb-6">
+                    <div class="flex gap-4">
+                        <button class="text-white px-6 py-2 rounded-lg font-medium transition-colors" style="background-color: #E6B400;" onmouseover="this.style.backgroundColor='#D4A000'" onmouseout="this.style.backgroundColor='#E6B400'">
+                            <i class="fa-solid fa-plus mr-2"></i>
+                            Buat Laporan Baru
+                        </button>
+                        <button class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors">
+                            <i class="fa-solid fa-filter mr-2"></i>
+                            Filter
+                        </button>
+                        <button class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors">
+                            <i class="fa-solid fa-download mr-2"></i>
+                            Export All
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="text-sm text-gray-600">Urutkan:</span>
+                        <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'">
+                            <option>Terbaru</option>
+                            <option>Terlama</option>
+                            <option>A-Z</option>
+                            <option>Z-A</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Reports Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    
+                    <!-- Report Card 1 -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-200">
+                        <div class="bg-gradient-to-r from-green-500 to-green-600 p-4">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-white font-semibold">RPT-2024-001</h3>
+                                    <p class="text-green-100 text-sm">Phishing Investigation</p>
+                                </div>
+                                <span class="bg-white text-green-600 px-2 py-1 rounded-full text-xs font-semibold">Complete</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span class="text-sm text-gray-600">Tanggal:</span>
+                                    <span class="text-sm font-medium">10 Dec 2024</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-sm text-gray-600">Insiden:</span>
+                                    <span class="text-sm font-medium">Phishing Attack</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-sm text-gray-600">Investigator:</span>
+                                    <span class="text-sm font-medium">Admin IRT</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-sm text-gray-600">Status:</span>
+                                    <span class="text-sm font-medium text-green-600">Selesai</span>
+                                </div>
+                            </div>
+                            <div class="flex gap-2 mt-4">
+                                <button class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                                    <i class="fa-solid fa-eye mr-1"></i>
+                                    View
+                                </button>
+                                <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                                    <i class="fa-solid fa-download mr-1"></i>
+                                    Download
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div class="col-span-full">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
+                        <i class="fa-solid fa-file-contract text-4xl mb-4 text-gray-300"></i>
+                        <h3 class="text-lg font-semibold text-gray-700 mb-2">Belum Ada Laporan Akhir</h3>
+                        <p class="text-gray-500">Laporan akhir akan tersedia setelah investigasi selesai. Generate laporan untuk dokumentasi lengkap.</p>
+                        <button class="mt-6 text-white px-6 py-3 rounded-lg font-medium transition-colors" style="background-color: #E6B400;" onmouseover="this.style.backgroundColor='#D4A000'" onmouseout="this.style.backgroundColor='#E6B400'">
+                            <i class="fa-solid fa-plus mr-2"></i>
+                            Buat Laporan Akhir
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Sidebar toggle functionality
+        const burgerMenu = document.getElementById("burgerMenu");
+        const sidebar = document.getElementById("sidebar");
+        const mainContent = document.getElementById("mainContent");
+        const sidebarOverlay = document.getElementById("sidebarOverlay");
+        
+        function toggleSidebar() {
+            sidebar.classList.toggle("collapsed");
+            mainContent.classList.toggle("expanded");
+            sidebarOverlay.classList.toggle("active");
+            
+            // Change icon based on sidebar state
+            const icon = burgerMenu.querySelector("i");
+            // When sidebar is collapsed (hidden), show bars icon to open it
+            // When sidebar is open (not collapsed), show times icon to close it
+            if (sidebar.classList.contains("collapsed")) {
+                icon.classList.remove("fa-times");
+                icon.classList.add("fa-bars");
+            } else {
+                icon.classList.remove("fa-bars");
+                icon.classList.add("fa-times");
+            }
+        }
+        
+        burgerMenu.addEventListener("click", toggleSidebar);
+        
+        // Close sidebar when clicking on overlay (mobile only)
+        sidebarOverlay.addEventListener("click", function() {
+            if (window.innerWidth <= 768) {
+                toggleSidebar();
+            }
+        });
+        
+        // Initialize sidebar state - always start collapsed
+        function initializeSidebar() {
+            // Ensure sidebar starts collapsed on all devices
+            if (!sidebar.classList.contains("collapsed")) {
+                sidebar.classList.add("collapsed");
+                mainContent.classList.add("expanded");
+                
+                // Set correct icon - should show bars when collapsed
+                const icon = burgerMenu.querySelector("i");
+                icon.classList.remove("fa-times");
+                icon.classList.add("fa-bars");
+            }
+        }
+        
+        // Initialize on page load
+        initializeSidebar();
+        
+        // Handle window resize
+        window.addEventListener("resize", function() {
+            initializeSidebar();
+        });
+
+        // Final Report Functionality
+        let finalReports = JSON.parse(localStorage.getItem('finalReports') || '[]');
+        
+        // Initialize dummy data if no reports exist
+        if (finalReports.length === 0) {
+            finalReports = [
+                {
+                    id: "RPT-2024-001",
+                    title: "Investigasi Phishing Attack terhadap Email Mahasiswa",
+                    date: "2024-12-01",
+                    type: "Phishing Attack",
+                    summary: "Mahasiswa melaporkanenerima email mencurigakan yang mengatasnamakan pihak kampus dengan permintaan data pribadi dan login credentials. Email tersebut mengandung link palsu yang mengarah ke website mirip portal akademik namun dengan domain berbeda.",
+                    analysis: "Berdasarkan analisis header email dan URL, ditemukan bahwa email tersebut berasal dari server luar negeri dengan teknik spoofing. Website palsu menggunakan sertifikat SSL self-signed dan memiliki layout yang mirip dengan portal resmi. Domain yang digunakan terdaftar baru 2 minggu sebelum insiden.",
+                    recovery: "Akun korban segera diubah passwordnya dan dilakukan pembersihan malware dari perangkat. Seluruh data pribadi yang berpotensi disalahgunakan diamankan. Dilakukan edukasi keamanan siber kepada korban dan ditempatkan warning system untuk email serupa.",
+                    recommendations: "1. Implementasi email filtering yang lebih ketat\n2. Edukasi rutin tentang phishing kepada mahasiswa\n3. Verifikasi dua faktor untuk semua akun kampus\n4. Regular security awareness training\n5. Implementasi DMARC dan SPF records",
+                    investigator: "Admin IRT",
+                    status: "Complete",
+                    createdAt: "2024-12-01T10:30:00.000Z"
+                },
+                {
+                    id: "RPT-2024-002", 
+                    title: "Peretasan Akun Email Mahasiswa untuk Penipuan",
+                    date: "2024-12-03",
+                    type: "Peretasan Akun Email",
+                    summary: "Akun email mahasiswa diretas dan digunakan untuk mengirim email penipuan kepada seluruh kontak dengan permintaan transfer uang dengan dalih keadaan darurat. Pelaku berhasil mengakses setelah korban mengklik link phishing yang dikirim melalui SMS.",
+                    analysis: "Trace log menunjukkan akses tidak sah dari IP address luar negeri (Nigeria). Pelaku menggunakan teknik password spraying setelah mendapatkan credentials dari data breach. Tidak ditemukan malware pada perangkat korban, namun ditemukan keylogger pada browser yang korban gunakan.",
+                    recovery: "Akun email segera direcovery dan password diubah. Seluruh akses session dari perangkat tidak dikenal di-revoke. Dilakukan koordinasi dengan pihak penyedia email untuk memblokir akses dari IP mencurigakan. Korban diminta untuk mengubah password akun terkait.",
+                    recommendations: "1. Implementasi multi-factor authentication pada email\n2. Regular password audit untuk mahasiswa\n3. Security monitoring untuk akses dari luar negeri\n4. Edukasi tentang keamanan password\n5. Implementasi anomaly detection untuk login patterns",
+                    investigator: "Tim Investigasi IRT",
+                    status: "Complete", 
+                    createdAt: "2024-12-03T14:45:00.000Z"
+                },
+                {
+                    id: "RPT-2024-003",
+                    title: "Serangan DDoS pada Portal Akademik",
+                    date: "2024-12-05",
+                    type: "DDoS",
+                    summary: "Portal akademik universitas mengalami serangan DDoS volume-based yang menyebabkan downtime selama 4 jam selama periode registrasi. Serangan berasal dari botnet dengan ribuan IP address globally distributed.",
+                    analysis: "Serangan menggunakan kombinasi SYN flood dan HTTP flood dengan puncak traffic 15 Gbps. Sumber serangan berasal dari berbagai negara dengan pola koordinasi yang menunjukkan botnet komersial. Dilakukan mitigation dengan traffic scrubbing dan rate limiting.",
+                    recovery: "Portal kembali online setelah implementasi DDoS protection service. Dilakukan patching pada vulnerability yang dieksploitasi untuk amplification attack. Koordinasi dengan ISP untuk memblokir traffic berbahaya. System monitoring diperkuat untuk deteksi dini.",
+                    recommendations: "1. Implementasi dedicated DDoS protection service\n2. Capacity planning untuk traffic spikes\n3. Multi-CDN implementation\n4. Incident response plan untuk DDoS attacks\n5. Regular security assessment untuk critical infrastructure",
+                    investigator: "Network Security Team IRT",
+                    status: "Complete",
+                    createdAt: "2024-12-05T09:15:00.000Z"
+                },
+                {
+                    id: "RPT-2024-004",
+                    title: "Malware Ransomware pada Sistem Laboratorium",
+                    date: "2024-12-06", 
+                    type: "Malware",
+                    summary: "Sistem komputer di laboratorium komputer terinfeksi ransomware yang mengenkripsi file-file penting mahasiswa. Ransomware menyebar melalui USB flash disk yang terinfeksi dari luar kampus. Demand pembayaran sebesar 0.5 Bitcoin dalam 72 jam.",
+                    analysis: "Identifikasi ransomware strain sebagai variant dari Conti ransomware. Malware menggunakan AES-256 untuk enkripsi file dan RSA-2048 untuk enkripsi key. Vector utama adalah external USB device dengan autorun yang dimanipulasi. Sistem backup offline tidak terpengaruh.",
+                    recovery: "Sistem yang terinfeksi diisolasi dan di-rebuild dari clean images. File-file penting berhasil di-recover dari backup system 24 jam sebelum insiden. Dilakukan full system scan dan patching untuk vulnerability yang dieksploitasi. USB access control diperketat.",
+                    recommendations: "1. Implementasi application whitelisting\n2. Disable autorun untuk removable media\n3. Regular offline backup testing\n4. Network segmentation untuk critical systems\n5. Security awareness training tentang removable media",
+                    investigator: "Cyber Forensics Team",
+                    status: "In Review",
+                    createdAt: "2024-12-06T16:20:00.000Z"
+                },
+                {
+                    id: "RPT-2024-005",
+                    title: "Insiden Data Breach pada Sistem Informasi Mahasiswa",
+                    date: "2024-12-07",
+                    type: "Insiden Siber Lainnya",
+                    summary: "Deteksi akses tidak sah ke database mahasiswa yang berisi data pribadi 5000+ mahasiswa. Pelaku berhasil meng-export data menggunakan credentials staff yang sudah expired namun masih aktif di sistem. Insiden terdeteksi melalui anomaly detection system.",
+                    analysis: "Log analysis menunjukkan akses data dari IP address internal namun pada waktu tidak normal (3 AM). Pelaku menggunakan SQL injection untuk bypass authentication dan berhasil meng-export 3 tabel utama. Tidak ditemukan bukti data leakage ke external parties, namun data telah di-download oleh pelaku.",
+                    recovery: "Segera memblokir semua akses ke database dan melakukan password rotation untuk semua staff accounts. Implementasi database activity monitoring. Notifikasi kepada seluruh mahasiswa yang terdampak dengan rekomendasi password change. Koordinasi dengan legal team untuk compliance reporting.",
+                    recommendations: "1. Implementasi least privilege principle untuk database access\n2. Regular account audit dan lifecycle management\n3. Database activity monitoring dengan real-time alerts\n4. Data encryption untuk sensitive information\n5. Regular penetration testing untuk database systems",
+                    investigator: "Data Security Team",
+                    status: "Draft",
+                    createdAt: "2024-12-07T11:30:00.000Z"
+                }
+            ];
+            localStorage.setItem('finalReports', JSON.stringify(finalReports));
+        }
+        
+        // Button: Buat Laporan Baru
+        document.addEventListener('DOMContentLoaded', function() {
+            // Attach event listeners to all buttons
+            const createReportButtons = document.querySelectorAll('button');
+            
+            createReportButtons.forEach(button => {
+                const buttonText = button.textContent.trim();
+                
+                if (buttonText.includes('Buat Laporan Baru') || buttonText.includes('Buat Laporan Akhir')) {
+                    button.addEventListener('click', showCreateReportModal);
+                }
+                
+                if (buttonText.includes('Filter')) {
+                    button.addEventListener('click', showFilterModal);
+                }
+                
+                if (buttonText.includes('Export All')) {
+                    button.addEventListener('click', exportAllReports);
+                }
+                
+                if (buttonText.includes('View')) {
+                    button.addEventListener('click', function() {
+                        const reportCard = this.closest('.bg-white');
+                        const reportId = reportCard.querySelector('h3').textContent;
+                        viewReport(reportId);
+                    });
+                }
+                
+                if (buttonText.includes('Download')) {
+                    button.addEventListener('click', function() {
+                        const reportCard = this.closest('.bg-white');
+                        const reportId = reportCard.querySelector('h3').textContent;
+                        downloadReport(reportId);
+                    });
+                }
+            });
+            
+            // Sort dropdown functionality
+            const sortSelect = document.querySelector('select');
+            if (sortSelect) {
+                sortSelect.addEventListener('change', function() {
+                    sortReports(this.value);
+                });
+            }
+            
+            // Search functionality
+            const searchInput = document.querySelector('input[placeholder*="Cari"]');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    searchReports(this.value);
+                });
+            }
+            
+            // Load and display reports
+            loadReports();
+        });
+        
+        function showCreateReportModal() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white rounded-xl p-8 max-w-2xl w-full max-h-screen overflow-y-auto">
+                    <h2 class="text-2xl font-bold mb-6">Buat Laporan Akhir</h2>
+                    <form id="createReportForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Laporan</label>
+                            <input type="text" id="reportNumber" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" placeholder="Contoh: RPT-2024-002">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Judul Laporan</label>
+                            <input type="text" id="reportTitle" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" placeholder="Judul investigasi">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Kejadian</label>
+                            <input type="date" id="incidentDate" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Insiden</label>
+                            <select id="incidentType" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none">
+                                <option value="">Pilih jenis insiden</option>
+                                <option value="Phishing Attack">Phishing Attack</option>
+                                <option value="Peretasan Akun Email">Peretasan Akun Email</option>
+                                <option value="Malware">Malware</option>
+                                <option value="DDoS">DDoS</option>
+                                <option value="Insiden Siber Lainnya">Insiden Siber Lainnya</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Ringkasan Kejadian</label>
+                            <textarea id="summary" required rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" placeholder="Jelaskan ringkasan kejadian"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Analisis & Temuan</label>
+                            <textarea id="analysis" required rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" placeholder="Hasil analisis dan temuan investigasi"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tindakan Pemulihan</label>
+                            <textarea id="recovery" required rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" placeholder="Tindakan yang telah dilakukan untuk pemulihan"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Rekomendasi</label>
+                            <textarea id="recommendations" required rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" placeholder="Rekomendasi untuk mencegah insiden serupa"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Investigator</label>
+                            <input type="text" id="investigator" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" placeholder="Nama investigator">
+                        </div>
+                        <div class="flex gap-4 pt-4">
+                            <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                                <i class="fa-solid fa-save mr-2"></i>
+                                Simpan Laporan
+                            </button>
+                            <button type="button" onclick="this.closest('.fixed').remove()" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 px-6 py-3 rounded-lg font-medium transition-colors">
+                                Batal
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Handle form submission
+            document.getElementById('createReportForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const newReport = {
+                    id: document.getElementById('reportNumber').value,
+                    title: document.getElementById('reportTitle').value,
+                    date: document.getElementById('incidentDate').value,
+                    type: document.getElementById('incidentType').value,
+                    summary: document.getElementById('summary').value,
+                    analysis: document.getElementById('analysis').value,
+                    recovery: document.getElementById('recovery').value,
+                    recommendations: document.getElementById('recommendations').value,
+                    investigator: document.getElementById('investigator').value,
+                    status: 'Complete',
+                    createdAt: new Date().toISOString()
+                };
+                
+                finalReports.push(newReport);
+                localStorage.setItem('finalReports', JSON.stringify(finalReports));
+                
+                modal.remove();
+                loadReports();
+                showNotification('Laporan akhir berhasil dibuat!', 'success');
+            });
+        }
+        
+        function showFilterModal() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white rounded-xl p-8 max-w-md w-full">
+                    <h2 class="text-2xl font-bold mb-6">Filter Laporan</h2>
+                    <form id="filterForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                            <select id="filterStatus" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none">
+                                <option value="">Semua Status</option>
+                                <option value="Complete">Complete</option>
+                                <option value="Draft">Draft</option>
+                                <option value="In Review">In Review</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Insiden</label>
+                            <select id="filterType" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none">
+                                <option value="">Semua Jenis</option>
+                                <option value="Phishing Attack">Phishing Attack</option>
+                                <option value="Peretasan Akun Email">Peretasan Akun Email</option>
+                                <option value="Malware">Malware</option>
+                                <option value="DDoS">DDoS</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Mulai</label>
+                            <input type="date" id="filterStartDate" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Selesai</label>
+                            <input type="date" id="filterEndDate" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none">
+                        </div>
+                        <div class="flex gap-4 pt-4">
+                            <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                                Terapkan Filter
+                            </button>
+                            <button type="button" onclick="this.closest('.fixed').remove()" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 px-6 py-3 rounded-lg font-medium transition-colors">
+                                Batal
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            document.getElementById('filterForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                applyFilters();
+                modal.remove();
+            });
+        }
+        
+        function exportAllReports() {
+            if (finalReports.length === 0) {
+                showNotification('Tidak ada laporan untuk diekspor', 'warning');
+                return;
+            }
+            
+            // Create CSV content
+            let csvContent = "ID,Judul,Tanggal,Jenis Insiden,Investigator,Status\n";
+            
+            finalReports.forEach(report => {
+                csvContent += `${report.id},"${report.title}",${report.date},"${report.type}","${report.investigator}",${report.status}\n`;
+            });
+            
+            // Create and download file
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `laporan_akhir_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showNotification('Laporan berhasil diekspor!', 'success');
+        }
+        
+        function viewReport(reportId) {
+            const report = finalReports.find(r => r.id === reportId);
+            if (!report) return;
+            
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white rounded-xl p-8 max-w-4xl w-full max-h-screen overflow-y-auto">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">Laporan Akhir - ${report.id}</h2>
+                        <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700">
+                            <i class="fa-solid fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h3 class="font-semibold text-lg mb-2">Informasi Umum</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div><strong>Nomor Laporan:</strong> ${report.id}</div>
+                                <div><strong>Tanggal:</strong> ${report.date}</div>
+                                <div><strong>Jenis Insiden:</strong> ${report.type}</div>
+                                <div><strong>Investigator:</strong> ${report.investigator}</div>
+                                <div><strong>Status:</strong> <span class="text-green-600 font-semibold">${report.status}</span></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-semibold text-lg mb-2">Judul: ${report.title}</h3>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-semibold text-lg mb-2">Ringkasan Kejadian</h3>
+                            <p class="text-gray-700">${report.summary}</p>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-semibold text-lg mb-2">Analisis & Temuan</h3>
+                            <p class="text-gray-700">${report.analysis}</p>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-semibold text-lg mb-2">Tindakan Pemulihan</h3>
+                            <p class="text-gray-700">${report.recovery}</p>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-semibold text-lg mb-2">Rekomendasi</h3>
+                            <p class="text-gray-700">${report.recommendations}</p>
+                        </div>
+                        
+                        <div class="flex gap-4 pt-4 border-t">
+                            <button onclick="downloadReport('${report.id}')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                                <i class="fa-solid fa-download mr-2"></i>
+                                Download PDF
+                            </button>
+                            <button onclick="this.closest('.fixed').remove()" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-6 py-3 rounded-lg font-medium transition-colors">
+                                Tutup
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+        
+        function downloadReport(reportId) {
+            const report = finalReports.find(r => r.id === reportId);
+            if (!report) return;
+            
+            // Create PDF content (simplified version)
+            const pdfContent = `
+LAPORAN AKHIR INSIDEN SIBER
+================================
+
+Nomor Laporan: ${report.id}
+Tanggal: ${report.date}
+Judul: ${report.title}
+Jenis Insiden: ${report.type}
+Investigator: ${report.investigator}
+Status: ${report.status}
+
+RINGKASAN KEJADIAN:
+${report.summary}
+
+ANALISIS & TEMUAN:
+${report.analysis}
+
+TINDAKAN PEMULIHAN:
+${report.recovery}
+
+REKOMENDASI:
+${report.recommendations}
+
+Dibuat pada: ${new Date(report.createdAt).toLocaleString('id-ID')}
+            `;
+            
+            // Create and download file
+            const blob = new Blob([pdfContent], { type: 'text/plain;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `laporan_${report.id}.txt`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showNotification(`Laporan ${report.id} berhasil diunduh!`, 'success');
+        }
+        
+        function loadReports() {
+            const reportsGrid = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3');
+            const emptyState = document.querySelector('.col-span-full');
+            
+            if (finalReports.length === 0) {
+                reportsGrid.style.display = 'none';
+                if (emptyState) emptyState.style.display = 'block';
+                return;
+            }
+            
+            reportsGrid.style.display = 'grid';
+            if (emptyState) emptyState.style.display = 'none';
+            
+            // Clear existing reports
+            reportsGrid.innerHTML = '';
+            
+            // Add reports to grid
+            finalReports.forEach(report => {
+                const reportCard = document.createElement('div');
+                reportCard.className = 'bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-200';
+                
+                const statusColor = report.status === 'Complete' ? 'from-green-500 to-green-600' : 
+                                  report.status === 'Draft' ? 'from-gray-500 to-gray-600' : 
+                                  'from-yellow-500 to-yellow-600';
+                
+                const statusBgColor = report.status === 'Complete' ? 'bg-green-100 text-green-600' : 
+                                    report.status === 'Draft' ? 'bg-gray-100 text-gray-600' : 
+                                    'bg-yellow-100 text-yellow-600';
+                
+                reportCard.innerHTML = `
+                    <div class="bg-gradient-to-r ${statusColor} p-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-white font-semibold">${report.id}</h3>
+                                <p class="text-white/80 text-sm">${report.type}</p>
+                            </div>
+                            <span class="${statusBgColor} px-2 py-1 rounded-full text-xs font-semibold">${report.status}</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Tanggal:</span>
+                                <span class="text-sm font-medium">${report.date}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Insiden:</span>
+                                <span class="text-sm font-medium">${report.type}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Investigator:</span>
+                                <span class="text-sm font-medium">${report.investigator}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Status:</span>
+                                <span class="text-sm font-medium text-green-600">${report.status}</span>
+                            </div>
+                        </div>
+                        <div class="flex gap-2 mt-4">
+                            <button onclick="viewReport('${report.id}')" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                                <i class="fa-solid fa-eye mr-1"></i>
+                                View
+                            </button>
+                            <button onclick="downloadReport('${report.id}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                                <i class="fa-solid fa-download mr-1"></i>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                reportsGrid.appendChild(reportCard);
+            });
+        }
+        
+        function sortReports(sortBy) {
+            switch(sortBy) {
+                case 'Terbaru':
+                    finalReports.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                    break;
+                case 'Terlama':
+                    finalReports.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+                    break;
+                case 'A-Z':
+                    finalReports.sort((a, b) => a.id.localeCompare(b.id));
+                    break;
+                case 'Z-A':
+                    finalReports.sort((a, b) => b.id.localeCompare(a.id));
+                    break;
+            }
+            loadReports();
+        }
+        
+        function searchReports(query) {
+            if (!query) {
+                loadReports();
+                return;
+            }
+            
+            const filteredReports = finalReports.filter(report => 
+                report.id.toLowerCase().includes(query.toLowerCase()) ||
+                report.title.toLowerCase().includes(query.toLowerCase()) ||
+                report.type.toLowerCase().includes(query.toLowerCase()) ||
+                report.investigator.toLowerCase().includes(query.toLowerCase())
+            );
+            
+            const reportsGrid = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3');
+            const emptyState = document.querySelector('.col-span-full');
+            
+            if (filteredReports.length === 0) {
+                reportsGrid.style.display = 'none';
+                if (emptyState) {
+                    emptyState.style.display = 'block';
+                    emptyState.querySelector('h3').textContent = 'Tidak Ada Laporan Ditemukan';
+                    emptyState.querySelector('p').textContent = `Tidak ada laporan yang cocok dengan pencarian "${query}"`;
+                }
+                return;
+            }
+            
+            reportsGrid.style.display = 'grid';
+            if (emptyState) emptyState.style.display = 'none';
+            
+            // Display filtered reports
+            reportsGrid.innerHTML = '';
+            filteredReports.forEach(report => {
+                // Same report card creation logic as in loadReports
+                const reportCard = document.createElement('div');
+                reportCard.className = 'bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-200';
+                
+                const statusColor = report.status === 'Complete' ? 'from-green-500 to-green-600' : 
+                                  report.status === 'Draft' ? 'from-gray-500 to-gray-600' : 
+                                  'from-yellow-500 to-yellow-600';
+                
+                const statusBgColor = report.status === 'Complete' ? 'bg-green-100 text-green-600' : 
+                                    report.status === 'Draft' ? 'bg-gray-100 text-gray-600' : 
+                                    'bg-yellow-100 text-yellow-600';
+                
+                reportCard.innerHTML = `
+                    <div class="bg-gradient-to-r ${statusColor} p-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-white font-semibold">${report.id}</h3>
+                                <p class="text-white/80 text-sm">${report.type}</p>
+                            </div>
+                            <span class="${statusBgColor} px-2 py-1 rounded-full text-xs font-semibold">${report.status}</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Tanggal:</span>
+                                <span class="text-sm font-medium">${report.date}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Insiden:</span>
+                                <span class="text-sm font-medium">${report.type}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Investigator:</span>
+                                <span class="text-sm font-medium">${report.investigator}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Status:</span>
+                                <span class="text-sm font-medium text-green-600">${report.status}</span>
+                            </div>
+                        </div>
+                        <div class="flex gap-2 mt-4">
+                            <button onclick="viewReport('${report.id}')" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                                <i class="fa-solid fa-eye mr-1"></i>
+                                View
+                            </button>
+                            <button onclick="downloadReport('${report.id}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                                <i class="fa-solid fa-download mr-1"></i>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                reportsGrid.appendChild(reportCard);
+            });
+        }
+        
+        function applyFilters() {
+            const status = document.getElementById('filterStatus').value;
+            const type = document.getElementById('filterType').value;
+            const startDate = document.getElementById('filterStartDate').value;
+            const endDate = document.getElementById('filterEndDate').value;
+            
+            let filteredReports = [...finalReports];
+            
+            if (status) {
+                filteredReports = filteredReports.filter(report => report.status === status);
+            }
+            
+            if (type) {
+                filteredReports = filteredReports.filter(report => report.type === type);
+            }
+            
+            if (startDate) {
+                filteredReports = filteredReports.filter(report => report.date >= startDate);
+            }
+            
+            if (endDate) {
+                filteredReports = filteredReports.filter(report => report.date <= endDate);
+            }
+            
+            // Update display with filtered results
+            const reportsGrid = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-2.lg\\:grid-cols-3');
+            const emptyState = document.querySelector('.col-span-full');
+            
+            if (filteredReports.length === 0) {
+                reportsGrid.style.display = 'none';
+                if (emptyState) {
+                    emptyState.style.display = 'block';
+                    emptyState.querySelector('h3').textContent = 'Tidak Ada Laporan yang Cocok';
+                    emptyState.querySelector('p').textContent = 'Tidak ada laporan yang sesuai dengan filter yang dipilih.';
+                }
+                return;
+            }
+            
+            // Display filtered reports (similar logic as in searchReports)
+            reportsGrid.style.display = 'grid';
+            if (emptyState) emptyState.style.display = 'none';
+            
+            reportsGrid.innerHTML = '';
+            filteredReports.forEach(report => {
+                const reportCard = document.createElement('div');
+                reportCard.className = 'bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-200';
+                
+                const statusColor = report.status === 'Complete' ? 'from-green-500 to-green-600' : 
+                                  report.status === 'Draft' ? 'from-gray-500 to-gray-600' : 
+                                  'from-yellow-500 to-yellow-600';
+                
+                const statusBgColor = report.status === 'Complete' ? 'bg-green-100 text-green-600' : 
+                                    report.status === 'Draft' ? 'bg-gray-100 text-gray-600' : 
+                                    'bg-yellow-100 text-yellow-600';
+                
+                reportCard.innerHTML = `
+                    <div class="bg-gradient-to-r ${statusColor} p-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-white font-semibold">${report.id}</h3>
+                                <p class="text-white/80 text-sm">${report.type}</p>
+                            </div>
+                            <span class="${statusBgColor} px-2 py-1 rounded-full text-xs font-semibold">${report.status}</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Tanggal:</span>
+                                <span class="text-sm font-medium">${report.date}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Insiden:</span>
+                                <span class="text-sm font-medium">${report.type}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Investigator:</span>
+                                <span class="text-sm font-medium">${report.investigator}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-600">Status:</span>
+                                <span class="text-sm font-medium text-green-600">${report.status}</span>
+                            </div>
+                        </div>
+                        <div class="flex gap-2 mt-4">
+                            <button onclick="viewReport('${report.id}')" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                                <i class="fa-solid fa-eye mr-1"></i>
+                                View
+                            </button>
+                            <button onclick="downloadReport('${report.id}')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                                <i class="fa-solid fa-download mr-1"></i>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                reportsGrid.appendChild(reportCard);
+            });
+            
+            showNotification(`Filter diterapkan. ${filteredReports.length} laporan ditemukan.`, 'success');
+        }
+        
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white font-medium z-50 transition-all duration-300 ${
+                type === 'success' ? 'bg-green-500' : 
+                type === 'warning' ? 'bg-yellow-500' : 
+                type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+            }`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fa-solid ${
+                        type === 'success' ? 'fa-check-circle' : 
+                        type === 'warning' ? 'fa-exclamation-triangle' : 
+                        type === 'error' ? 'fa-times-circle' : 
+                        'fa-info-circle'
+                    } mr-2"></i>
+                    ${message}
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+    </script>
+    
+    <script src="/src/main.js"></script>
+</body>
+</html>

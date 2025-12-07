@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investigasi - UniSafe IRT</title>
+    <meta name="description" content="Investigasi & Evidence Handling">
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/.dist/output.css">
+    <link rel="stylesheet" href="/src/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Exo 2', sans-serif;
+        }
+        
+        .sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+        }
+        
+        .main-content {
+            transition: margin-left 0.3s ease-in-out;
+        }
+        
+        .main-content.expanded {
+            margin-left: 0;
+        }
+        
+        .burger-menu {
+            display: block;
+        }
+        
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 30;
+            display: none;
+        }
+        
+        .sidebar-overlay.active {
+            display: block;
+        }
+        
+        @media (min-width: 769px) {
+            .sidebar-overlay {
+                display: none !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar:not(.collapsed) {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 3% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 8px;
+        }
+        
+        .evidence-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+            background-color: #fff;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+        }
+        
+        .evidence-item:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .status-active {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .status-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-completed {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        
+        .priority-high {
+            color: #dc2626;
+        }
+        
+        .priority-medium {
+            color: #d97706;
+        }
+        
+        .priority-low {
+            color: #059669;
+        }
+        
+        .filter-section {
+            display: none;
+        }
+        
+        .evidence-tab {
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        
+        .evidence-tab.active {
+            border-bottom: 2px solid #E6B400;
+            color: #E6B400;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+
+    <!-- Main Layout -->
+    <div class="flex">
+        <!-- Sidebar Overlay -->
+        <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar w-64 bg-white shadow-sm h-screen fixed z-40">
+            <div class="px-6 py-6 border-b flex items-center gap-3">
+                <img src="/logo.png" alt="UniSafe Logo" class="h-10 w-auto">
+
+            </div>
+
+            <nav class="mt-6 px-4 space-y-1">
+                <!-- Dashboard -->
+                <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <!-- Manajemen Insiden -->
+                <a href="manajemenInsiden.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span>Manajemen Insiden</span>
+                </a>
+
+                <!-- Laporan Masuk -->
+                <a href="incoming.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-file-lines"></i>
+                    <span>Laporan Masuk</span>
+                </a>
+
+                <!-- Investigasi -->
+                <a href="investigasi.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-800 font-medium transition" style="background-color: #E6B400;">
+                    <i class="fa-solid fa-folder-open"></i>
+                    <span>Investigasi</span>
+                </a>
+
+                <!-- Laporan Akhir -->
+                <a href="finalReport.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <span>Laporan Akhir</span>
+                </a>
+
+                <!-- Log Aktivitas -->
+                <a href="logAktivitas.html" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Log Aktivitas</span>
+                </a>
+            </nav>
+
+            <!-- Bottom Navigation -->
+            <div class="absolute bottom-0 left-0 right-0 px-4 w-full pb-6">
+                <div class="border-t border-gray-200 pt-2 mt-2 space-y-1">
+                    <a href="setting.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition">
+                        <i class="fa-solid fa-gear"></i>
+                        <span>Pengaturan</span>
+                    </a>
+                    <a href="../login.html" class="flex items-center space-x-3 px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>Keluar</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main id="mainContent" class="main-content ml-64 w-full min-h-screen px-8 py-6">
+
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-8">
+                <div class="flex items-center space-x-4">
+                    <button id="burgerMenu" class="burger-menu text-gray-600 hover:text-gray-800 transition">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="searchInput" placeholder="Cari investigasi..." class="pl-10 pr-4 py-2 bg-gray-100 rounded-lg border-0 focus:outline-none focus:ring-2 w-80" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'" onkeyup="searchInvestigations()">
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-6">
+                    <button class="relative">
+                        <i class="fa-solid fa-bell text-xl text-gray-600"></i>
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">2</span>
+                    </button>
+
+                    <div class="flex items-center space-x-3">
+                        <img src="https://i.pravatar.cc/150?img=47" alt="Profile" class="w-10 h-10 rounded-full">
+                        <div class="hidden sm:block">
+                            <p class="text-sm font-semibold user-name">Admin IRT</p>
+                            <p class="text-xs text-gray-500">Administrator</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs text-gray-500"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Content -->
+            <div>
+                
+                <!-- Page Header -->
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-gray-800">Investigasi</h1>
+                    <p class="text-gray-600 mt-2">Kelola investigasi dan handling evidence</p>
+                </div>
+
+                <!-- Filter Section (Initially Hidden) -->
+                <div id="filterSection" class="filter-section bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6">
+                    <div class="flex flex-wrap gap-4 items-end">
+                        <div class="flex-1 min-w-[200px]">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                            <select id="filterStatus" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'">
+                                <option value="">Semua Status</option>
+                                <option value="active">Aktif</option>
+                                <option value="pending">Menunggu</option>
+                                <option value="completed">Selesai</option>
+                            </select>
+                        </div>
+                        <div class="flex-1 min-w-[200px]">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Prioritas</label>
+                            <select id="filterPriority" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'">
+                                <option value="">Semua Prioritas</option>
+                                <option value="high">Tinggi</option>
+                                <option value="medium">Sedang</option>
+                                <option value="low">Rendah</option>
+                            </select>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="text-white px-6 py-2 rounded-lg font-medium transition-colors" style="background-color: #E6B400;" onmouseover="this.style.backgroundColor='#D4A000'" onmouseout="this.style.backgroundColor='#E6B400'" onclick="applyFilters()">
+                                <i class="fa-solid fa-search mr-2"></i>
+                                Terapkan
+                            </button>
+                            <button class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors" onclick="resetFilters()">
+                                <i class="fa-solid fa-rotate mr-2"></i>
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-4 mb-6">
+                    <button class="text-white px-6 py-2 rounded-lg font-medium transition-colors" style="background-color: #E6B400;" onmouseover="this.style.backgroundColor='#D4A000'" onmouseout="this.style.backgroundColor='#E6B400'" onclick="openModal()">
+                        <i class="fa-solid fa-plus mr-2"></i>
+                        Mulai Investigasi Baru
+                    </button>
+                    <button class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors" onclick="toggleFilter()">
+                        <i class="fa-solid fa-filter mr-2"></i>
+                        Filter
+                    </button>
+                    <button class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors" onclick="archiveEvidence()">
+                        <i class="fa-solid fa-archive mr-2"></i>
+                        Archive Evidence
+                    </button>
+                    <button class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors" onclick="exportReports()">
+                        <i class="fa-solid fa-download mr-2"></i>
+                        Export Reports
+                    </button>
+                </div>
+
+                <!-- Investigations Grid -->
+                <div id="investigationsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Investigation cards will be populated here -->
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for New Investigation -->
+    <div id="investigationModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-gray-800">Mulai Investigasi Baru</h2>
+                <button class="text-gray-500 hover:text-gray-700" onclick="closeModal()">
+                    <i class="fa-solid fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <form id="investigationForm" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">ID Insiden</label>
+                        <input type="text" id="incidentId" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Judul Investigasi</label>
+                        <input type="text" id="investigationTitle" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'" required>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Prioritas</label>
+                        <select id="investigationPriority" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'" required>
+                            <option value="">Pilih Prioritas</option>
+                            <option value="high">Tinggi</option>
+                            <option value="medium">Sedang</option>
+                            <option value="low">Rendah</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Investigator</label>
+                        <input type="text" id="investigatorName" value="Admin IRT" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'" required>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi Kasus</label>
+                    <textarea id="caseDescription" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'" required></textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Evidence Awal</label>
+                    <textarea id="initialEvidence" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'" placeholder="Deskripsikan evidence awal yang ditemukan"></textarea>
+                </div>
+                
+                <div class="flex justify-end gap-2">
+                    <button type="button" class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors" onclick="closeModal()">
+                        Batal
+                    </button>
+                    <button type="submit" class="text-white px-6 py-2 rounded-lg font-medium transition-colors" style="background-color: #E6B400;" onmouseover="this.style.backgroundColor='#D4A000'" onmouseout="this.style.backgroundColor='#E6B400'">
+                        Mulai Investigasi
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Investigation Details -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-gray-800">Detail Investigasi</h2>
+                <button class="text-gray-500 hover:text-gray-700" onclick="closeDetailModal()">
+                    <i class="fa-solid fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div id="detailContent">
+                <!-- Detail content will be populated here -->
+            </div>
+            
+            <div class="flex justify-end gap-2 mt-6">
+                <button class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors" onclick="closeDetailModal()">
+                    Tutup
+                </button>
+                <button class="text-white px-6 py-2 rounded-lg font-medium transition-colors" style="background-color: #E6B400;" onmouseover="this.style.backgroundColor='#D4A000'" onmouseout="this.style.backgroundColor='#E6B400'">
+                    <i class="fa-solid fa-download mr-2"></i>
+                    Export Report
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize dummy data if no investigations exist
+        let investigations = JSON.parse(localStorage.getItem('investigations') || '[]');
+        
+        if (investigations.length === 0) {
+            investigations = [
+                {
+                    id: 'INV-2024-001',
+                    incidentId: 'INC-2024-001',
+                    title: 'Phishing Attack Email Mahasiswa Fakultas Teknik',
+                    priority: 'high',
+                    status: 'active',
+                    investigator: 'Admin IRT',
+                    startDate: '2024-12-05',
+                    expectedEndDate: '2024-12-10',
+                    progress: 75,
+                    caseDescription: 'Investigasi serangan phishing yang mengatasnamakan pihak fakultas dan meminta mahasiswa mengupdate password melalui link mencurigakan. Email mengandung malware keylogger dan dikirim ke 300+ mahasiswa.',
+                    initialEvidence: 'Email phishing yang dilaporkan, log akses email mahasiswa, analisis header email, sample malware.',
+                    ipAddress: '192.168.1.105',
+                    affectedSystems: ['Email Server', 'Student Portal'],
+                    severity: 'high',
+                    timeline: [
+                        { date: '2024-12-05 09:00', action: 'Laporan diterima dari 15 mahasiswa mengenai email mencurigakan', timestamp: '2024-12-05T09:00:00Z' },
+                        { date: '2024-12-05 09:30', action: 'Mulai investigasi dan pengumpulan evidence', timestamp: '2024-12-05T09:30:00Z' },
+                        { date: '2024-12-05 11:00', action: 'Analisis email dan domain terkait - domain dari Rusia', timestamp: '2024-12-05T11:00:00Z' },
+                        { date: '2024-12-05 14:00', action: 'Identifikasi IP source dan lokasi geografis', timestamp: '2024-12-05T14:00:00Z' },
+                        { date: '2024-12-05 16:30', action: 'Isolasi malware dan blacklist domains', timestamp: '2024-12-05T16:30:00Z' },
+                        { date: '2024-12-06 10:00', action: 'Edukasi keamanan kepada mahasiswa yang terdampak', timestamp: '2024-12-06T10:00:00Z' }
+                    ],
+                    evidence: [
+                        { id: 'EV-001', name: 'Phishing Email Sample.eml', type: 'email', size: '2.5 MB', uploadDate: '2024-12-05 09:45', uploadedBy: 'Admin IRT', hash: 'a1b2c3d4e5f6', description: 'Sample email phishing yang dilaporkan mahasiswa' },
+                        { id: 'EV-002', name: 'Email Server Logs_Dec2024.log', type: 'log', size: '15.2 MB', uploadDate: '2024-12-05 10:30', uploadedBy: 'Admin IRT', hash: 'f6e5d4c3b2a1', description: 'Log aktivitas email server selama periode serangan' },
+                        { id: 'EV-003', name: 'Network_Capture.pcap', type: 'pcap', size: '45.8 MB', uploadDate: '2024-12-05 11:15', uploadedBy: 'Admin IRT', hash: 'z9y8x7w6v5u4', description: 'Network traffic capture untuk analisis malware communication' },
+                        { id: 'EV-004', name: 'Malware_Analysis.pdf', type: 'pdf', size: '3.2 MB', uploadDate: '2024-12-05 16:45', uploadedBy: 'Tim Forensik', hash: 't1r2e3w4q5a6', description: 'Detailed analysis report dari malware yang teridentifikasi' }
+                    ],
+                    findings: [
+                        'Phishing email dikirim dari 3 domains berbeda dengan teknik spoofing',
+                        'Malware menggunakan keylogger untuk mencatat login credentials',
+                        'IP addresses melacak ke 2 lokasi: Russia dan Eastern Europe',
+                        'Approximately 45 mahasiswa mengklik link berbahaya',
+                        'Tidak ada data penting yang berhasil dicuri berdasarkan log analysis'
+                    ],
+                    recommendations: [
+                        'Implementasi DMARC dan SPF records yang lebih strict',
+                        'Regular security awareness training untuk mahasiswa',
+                        'Advanced email filtering dengan machine learning',
+                        'Multi-factor authentication untuk portal mahasiswa',
+                        'Regular phishing simulation exercises'
+                    ]
+                },
+                {
+                    id: 'INV-2024-002',
+                    incidentId: 'INC-2024-002',
+                    title: 'Ransomware Attack Laboratorium Komputer',
+                    priority: 'high',
+                    status: 'active',
+                    investigator: 'Siti Nurhaliza',
+                    startDate: '2024-12-03',
+                    expectedEndDate: '2024-12-08',
+                    progress: 90,
+                    caseDescription: 'Investigasi malware/ransomware yang terdeteksi pada 20 unit komputer di laboratorium komputer Fakultas Ekonomi. Ransomware mengenkripsi file tugas mahasiswa dan demand 0.5 BTC.',
+                    initialEvidence: 'File terenkripsi, log aktivitas malware, sample ransomware yang diisolasi, CCTV footage.',
+                    ipAddress: '10.0.5.25',
+                    affectedSystems: ['Lab Computer Units', 'File Server', 'Network Storage'],
+                    severity: 'critical',
+                    timeline: [
+                        { date: '2024-12-03 14:00', action: 'Deteksi ransomware pada lab komputer oleh mahasiswa', timestamp: '2024-12-03T14:00:00Z' },
+                        { date: '2024-12-03 14:15', action: 'Isolasi network segment laboratorium', timestamp: '2024-12-03T14:15:00Z' },
+                        { date: '2024-12-03 14:30', action: 'Shutdown komputer yang terinfeksi untuk mencegah spread', timestamp: '2024-12-03T14:30:00Z' },
+                        { date: '2024-12-03 15:00', action: 'Backup recovery dan restore file dari cloud backup', timestamp: '2024-12-03T15:00:00Z' },
+                        { date: '2024-12-03 16:30', action: 'Analisis CCTV footage untuk identifikasi sumber infeksi', timestamp: '2024-12-03T16:30:00Z' },
+                        { date: '2024-12-04 09:00', action: 'Full system restore dan implementasi security hardening', timestamp: '2024-12-04T09:00:00Z' }
+                    ],
+                    evidence: [
+                        { id: 'EV-005', name: 'Ransomware_Sample.exe', type: 'exe', size: '1.2 MB', uploadDate: '2024-12-03 14:45', uploadedBy: 'Siti Nurhaliza', hash: 's7a8m9p0l1e2', description: 'Sample ransomware yang diekstrak dari komputer terinfeksi' },
+                        { id: 'EV-006', name: 'Lab_System_Logs.log', type: 'log', size: '8.7 MB', uploadDate: '2024-12-03 15:20', uploadedBy: 'Siti Nurhaliza', hash: 'r3e4s5o6r7c8', description: 'System logs dari lab komputer saat insiden' },
+                        { id: 'EV-007', name: 'CCTV_Record.mp4', type: 'video', size: '125.4 MB', uploadDate: '2024-12-03 17:30', uploadedBy: 'Tim Keamanan', hash: 'c1c2t3v4f5o6', description: 'CCTV footage laboratorium 2 jam sebelum dan sesudah insiden' },
+                        { id: 'EV-008', name: 'Recovery_Report.pdf', type: 'pdf', size: '2.8 MB', uploadDate: '2024-12-04 11:00', uploadedBy: 'Siti Nurhaliza', hash: 'r1e2c3o4v5e6', description: 'Detailed recovery process dan data integrity verification' }
+                    ],
+                    findings: [
+                        'Ransomware variant: Conti v2 dengan AES-256 encryption',
+                        'Vector penyebaran: USB flash disk yang terinfeksi',
+                        '15 dari 20 komputer terinfeksi dengan 85% file terenkripsi',
+                        'Tidak ada pembayaran tebusan dilakukan',
+                        'CCTV menunjukkan mahasiswa unknown menghubungkan USB di jam 13:45',
+                        'Ransom note mengidentifikasi sebagai professional ransomware group'
+                    ],
+                    recommendations: [
+                        'Disable autorun untuk removable media di semua lab',
+                        'Implementasi application whitelisting untuk lab komputer',
+                        'Regular offline backup testing dan verification',
+                        'Network segmentation dengan strict access controls',
+                        'Security awareness training tentang USB devices',
+                        'Implementation of next-gen antivirus dengan behavior analysis'
+                    ]
+                },
+                {
+                    id: 'INV-2024-003',
+                    incidentId: 'INC-2024-003',
+                    title: 'Data Breach Sistem Informasi Akademik',
+                    priority: 'medium',
+                    status: 'completed',
+                    investigator: 'Ahmad Fadli',
+                    startDate: '2024-11-28',
+                    expectedEndDate: '2024-12-02',
+                    progress: 100,
+                    caseDescription: 'Investigasi kebocoran data mahasiswa yang ditemukan pada public GitHub repository. Data berisi nama, NIM, email, dan nomor telepon 5000+ mahasiswa.',
+                    initialEvidence: 'Link public repository, file data yang bocor, akses logs, git commit history.',
+                    ipAddress: '172.16.0.45',
+                    affectedSystems: ['Academic Database', 'Student Portal', 'Git Server'],
+                    severity: 'high',
+                    timeline: [
+                        { date: '2024-11-28 16:00', action: 'Laporan kebocoran data diterima dari mahasiswa', timestamp: '2024-11-28T16:00:00Z' },
+                        { date: '2024-11-28 16:30', action: 'Identifikasi dan validasi data yang bocor', timestamp: '2024-11-28T16:30:00Z' },
+                        { date: '2024-11-28 17:00', action: 'Emergency takedown data dari public repository', timestamp: '2024-11-28T17:00:00Z' },
+                        { date: '2024-11-28 17:30', action: 'Analisis penyebab kebocoran - developer credentials', timestamp: '2024-11-28T17:30:00Z' },
+                        { date: '2024-11-29 09:00', action: 'Forensik analysis dan user access review', timestamp: '2024-11-29T09:00:00Z' },
+                        { date: '2024-12-01 14:00', action: 'Security assessment dan remediation implementation', timestamp: '2024-12-01T14:00:00Z' }
+                    ],
+                    evidence: [
+                        { id: 'EV-009', name: 'Data_Export.csv', type: 'csv', size: '0.5 MB', uploadDate: '2024-11-28 16:45', uploadedBy: 'Ahmad Fadli', hash: 'd1a2t3a4e5x6', description: 'Sample dari data mahasiswa yang bocor' },
+                        { id: 'EV-010', name: 'Database_Access_Logs.log', type: 'log', size: '3.2 MB', uploadDate: '2024-11-28 17:15', uploadedBy: 'Ahmad Fadli', hash: 'a1c2l3o4g5s6', description: 'Access logs dari database selama periode kebocoran' },
+                        { id: 'EV-011', name: 'Git_Commit_History.json', type: 'json', size: '1.8 MB', uploadDate: '2024-11-28 18:30', uploadedBy: 'Ahmad Fadli', hash: 'g1i2t3c4o5m6', description: 'Complete git commit history analysis' },
+                        { id: 'EV-012', name: 'Forensics_Report.pdf', type: 'pdf', size: '5.2 MB', uploadDate: '2024-12-01 16:00', uploadedBy: 'Ahmad Fadli', hash: 'f1o2r3e4n5s6', description: 'Complete forensics investigation report' }
+                    ],
+                    findings: [
+                        'Data bocor akibat developer credentials yang hardcoded di config file',
+                        'Developer mengupload project ke public GitHub dengan credentials terinclude',
+                        '5247 mahasiswa data exposed selama 48 jam',
+                        'Tidak ada bukti data telah di-download oleh pihak tidak berwenang',
+                        'GitHub menghapus repository dalam 2 jam setelah report',
+                        'Root cause: lack of secrets management dan code review process'
+                    ],
+                    recommendations: [
+                        'Implementasi centralized secrets management (HashiCorp Vault)',
+                        'Pre-commit hooks untuk detect sensitive information',
+                        'Regular code review dengan security checklist',
+                        'Developer security training tentang best practices',
+                        'Implementation of data loss prevention (DLP) systems',
+                        'Regular security assessment untuk development pipelines'
+                    ]
+                },
+                {
+                    id: 'INV-2024-004',
+                    incidentId: 'INC-2024-004',
+                    title: 'DDoS Attack Public Website University',
+                    priority: 'medium',
+                    status: 'pending',
+                    investigator: 'Rizki Ahmad',
+                    startDate: '2024-12-06',
+                    expectedEndDate: '2024-12-12',
+                    progress: 35,
+                    caseDescription: 'Investigasi serangan DDoS volume 15 Gbps yang menyebabkan website utama universitas tidak dapat diakses selama 4 jam. Serangan terjadi saat periode registrasi mahasiswa baru.',
+                    initialEvidence: 'Traffic logs, server metrics, network flow data, attack patterns.',
+                    ipAddress: '203.0.113.1',
+                    affectedSystems: ['Web Server', 'Load Balancer', 'CDN'],
+                    severity: 'medium',
+                    timeline: [
+                        { date: '2024-12-06 09:00', action: 'Monitoring alert - website tidak dapat diakses', timestamp: '2024-12-06T09:00:00Z' },
+                        { date: '2024-12-06 09:15', action: 'Identifikasi DDoS attack dari multiple sources', timestamp: '2024-12-06T09:15:00Z' },
+                        { date: '2024-12-06 09:30', action: 'Activation DDoS mitigation service', timestamp: '2024-12-06T09:30:00Z' },
+                        { date: '2024-12-06 10:00', action: 'Traffic scrubbing dan rate limiting implementation', timestamp: '2024-12-06T10:00:00Z' },
+                        { date: '2024-12-06 11:00', action: 'Partial service restoration', timestamp: '2024-12-06T11:00:00Z' },
+                        { date: '2024-12-06 13:00', action: 'Full service restoration dengan enhanced protection', timestamp: '2024-12-06T13:00:00Z' }
+                    ],
+                    evidence: [
+                        { id: 'EV-013', name: 'Attack_Traffic.pcap', type: 'pcap', size: '250.8 MB', uploadDate: '2024-12-06 09:45', uploadedBy: 'Rizki Ahmad', hash: 'a1t2t3a4c5k6', description: 'Network traffic capture selama DDoS attack' },
+                        { id: 'EV-014', name: 'Server_Metrics.json', type: 'json', size: '2.1 MB', uploadDate: '2024-12-06 10:30', uploadedBy: 'Rizki Ahmad', hash: 's1e2r3v4e5r6', description: 'Server performance metrics selama attack' },
+                        { id: 'EV-015', name: 'Mitigation_Report.pdf', type: 'pdf', size: '3.5 MB', uploadDate: '2024-12-06 14:30', uploadedBy: 'Rizki Ahmad', hash: 'm1i2t3i4g5a6', description: 'DDoS mitigation process dan effectiveness analysis' }
+                    ],
+                    findings: [
+                        'Serangan menggunakan kombinasi SYN flood dan HTTP GET flood',
+                        'Attack sources: 15,000+ unique IP dari botnet globally distributed',
+                        'Peak traffic: 15.2 Gbps vs normal 500 Mbps',
+                        'Primary target: homepage dan registration page',
+                        'Mitigation effectiveness: 85% traffic filtering success rate',
+                        'Financial impact: estimated 25% decrease in registration rates'
+                    ],
+                    recommendations: [
+                        'Implementasi dedicated DDoS protection service (Cloudflare/Akamai)',
+                        'CDN multi-provider setup untuk redundancy',
+                        'Rate limiting dengan progressive escalation',
+                        'Anomaly detection untuk traffic patterns',
+                        'Capacity planning untuk 10x normal traffic',
+                        'Regular DDoS simulation testing dan incident response drills'
+                    ]
+                },
+                {
+                    id: 'INV-2024-005',
+                    incidentId: 'INC-2024-005',
+                    title: 'Insider Threat Data Exfiltration Departemen HR',
+                    priority: 'high',
+                    status: 'pending',
+                    investigator: 'Tim Investigasi Khusus',
+                    startDate: '2024-12-07',
+                    expectedEndDate: '2024-12-14',
+                    progress: 25,
+                    caseDescription: 'Investigasi aktivitas mencurigakan dari employee HR dengan akses data karyawan di luar jam kerja. Terindikasi exfiltration data salary dan performance evaluation.',
+                    initialEvidence: 'Access logs, USB connection logs, email audit trail, system alerts.',
+                    ipAddress: '192.168.10.25',
+                    affectedSystems: ['HR Database', 'File Server', 'Email System'],
+                    severity: 'high',
+                    timeline: [
+                        { date: '2024-12-07 08:00', action: 'Alert - unusual access pattern dari employee HR', timestamp: '2024-12-07T08:00:00Z' },
+                        { date: '2024-12-07 08:30', action: 'Preliminary investigation dan data collection', timestamp: '2024-12-07T08:30:00Z' },
+                        { date: '2024-12-07 09:00', action: 'Interview dengan supervisor dan team lead', timestamp: '2024-12-07T09:00:00Z' },
+                        { date: '2024-12-07 10:00', action: 'Digital forensik analysis workstation yang bersangkutan', timestamp: '2024-12-07T10:00:00Z' },
+                        { date: '2024-12-07 11:00', action: 'Review CCTV footage dan access logs', timestamp: '2024-12-07T11:00:00Z' }
+                    ],
+                    evidence: [
+                        { id: 'EV-016', name: 'Access_Anomaly.log', type: 'log', size: '1.2 MB', uploadDate: '2024-12-07 08:15', uploadedBy: 'Tim Investigasi', hash: 'a1n2o3m4a5l6', description: 'Detailed access logs showing unusual patterns' },
+                        { id: 'EV-017', name: 'Email_Audit.pdf', type: 'pdf', size: '4.8 MB', uploadDate: '2024-12-07 09:30', uploadedBy: 'Tim Investigasi', hash: 'e1m2a3i4l5a6', description: 'Complete email audit trail untuk suspected employee' },
+                        { id: 'EV-018', name: 'USB_Devices.json', type: 'json', size: '0.8 MB', uploadDate: '2024-12-07 10:45', uploadedBy: 'Tim Investigasi', hash: 'u1s2b3d4e5v6', description: 'USB device connection history dan file transfer logs' }
+                    ],
+                    findings: [
+                        'Employee mengakses data karyawan 500+ kali di luar jam kerja',
+                        'USB device activities detected dengan data transfer 2.3 GB',
+                        'Email encryption pattern mencurigakan ke personal addresses',
+                        'Remote access dari 3 IP address yang tidak dikenal',
+                        'Data yang diakses: salary information, performance reviews, personal contacts',
+                        'Timeline menunjukkan coordinated data collection selama 2 minggu'
+                    ],
+                    recommendations: [
+                        'Immediate suspension untuk suspected employee',
+                        'Implementasi privileged access management (PAM)',
+                        'Enhanced monitoring untuk high-risk employee access',
+                        'Data classification dengan strict access controls',
+                        'Regular insider threat assessment dan behavioral analytics',
+                        'Implementation of data loss prevention dengan content inspection'
+                    ]
+                }
+            ];
+            localStorage.setItem('investigations', JSON.stringify(investigations));
+        }
+                initialEvidence: 'Traffic logs, IP source analysis, bandwidth utilization.',
+                timeline: [
+                    { date: '2024-12-06 13:00', action: 'Laporan website down diterima' },
+                    { date: '2024-12-06 13:15', action: 'Analisis traffic anomali' }
+                ],
+                evidence: [
+                    { id: 'EV-008', name: 'Traffic Capture', type: 'pcap', size: '125.6 MB', uploadDate: '2024-12-06 13:45' }
+                ]
+            },
+            {
+                id: 'INV-2024-005',
+                incidentId: 'INC-005',
+                title: 'Unauthorized Access Database',
+                priority: 'high',
+                status: 'active',
+                investigator: 'Dewi Anggraini',
+                startDate: '2024-12-04',
+                progress: 45,
+                caseDescription: 'Investigasi akses tidak sah ke database customer yang mengakibatkan data privacy breach.',
+                initialEvidence: 'Database logs, authentication logs, network traffic analysis.',
+                timeline: [
+                    { date: '2024-12-04 10:00', action: 'Alert akses tidak sah terdeteksi' },
+                    { date: '2024-12-04 10:30', action: 'Penonaktifan akun yang mencurigakan' },
+                    { date: '2024-12-04 11:00', action: 'Analisis data yang diakses' }
+                ],
+                evidence: [
+                    { id: 'EV-009', name: 'DB Logs', type: 'log', size: '18.4 MB', uploadDate: '2024-12-04 10:45' },
+                    { id: 'EV-010', name: 'Auth Records', type: 'txt', size: '0.8 MB', uploadDate: '2024-12-04 11:15' }
+                ]
+            }
+        ];
+
+        let filteredInvestigations = [...investigations];
+        let currentInvestigation = null;
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderInvestigations();
+        });
+
+        // Modal functions
+        function openModal(investigation = null) {
+            currentInvestigation = investigation;
+            const modal = document.getElementById('investigationModal');
+            
+            if (investigation) {
+                document.getElementById('incidentId').value = investigation.incidentId;
+                document.getElementById('investigationTitle').value = investigation.title;
+                document.getElementById('investigationPriority').value = investigation.priority;
+                document.getElementById('investigatorName').value = investigation.investigator;
+                document.getElementById('caseDescription').value = investigation.caseDescription;
+                document.getElementById('initialEvidence').value = investigation.initialEvidence;
+            } else {
+                document.getElementById('investigationForm').reset();
+            }
+            
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('investigationModal').style.display = 'none';
+            document.getElementById('investigationForm').reset();
+            currentInvestigation = null;
+        }
+
+        function openDetailModal(investigation) {
+            const modal = document.getElementById('detailModal');
+            const content = document.getElementById('detailContent');
+            
+            // Generate timeline HTML
+            const timelineHtml = investigation.timeline.map(item => `
+                <div class="flex items-start space-x-3 mb-4">
+                    <div class="flex-shrink-0 w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
+                    <div class="flex-1">
+                        <p class="text-sm font-medium text-gray-900">${item.action}</p>
+                        <p class="text-xs text-gray-500">${item.date}</p>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Generate evidence HTML
+            const evidenceHtml = investigation.evidence.map(item => `
+                <div class="evidence-item">
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-start space-x-3">
+                            <i class="fa-solid fa-file text-gray-400 mt-1"></i>
+                            <div>
+                                <h4 class="font-medium text-gray-900">${item.name}</h4>
+                                <p class="text-sm text-gray-500">ID: ${item.id} | Size: ${item.size} | Upload: ${item.uploadDate}</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="text-blue-600 hover:text-blue-800" onclick="downloadEvidence('${item.id}')">
+                                <i class="fa-solid fa-download"></i>
+                            </button>
+                            <button class="text-red-600 hover:text-red-800" onclick="deleteEvidence('${item.id}')">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            content.innerHTML = `
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2">Informasi Investigasi</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm text-gray-600">ID:</p>
+                                <p class="font-medium">${investigation.id}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">ID Insiden:</p>
+                                <p class="font-medium">${investigation.incidentId}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Prioritas:</p>
+                                <p class="font-medium priority-${investigation.priority}">${getPriorityLabel(investigation.priority)}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Status:</p>
+                                <span class="px-2 py-1 rounded-full text-xs font-semibold status-${investigation.status}">${getStatusLabel(investigation.status)}</span>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Investigator:</p>
+                                <p class="font-medium">${investigation.investigator}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Progress:</p>
+                                <div class="flex items-center">
+                                    <div class="w-24 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-blue-600 h-2 rounded-full" style="width: ${investigation.progress}%"></div>
+                                    </div>
+                                    <span class="text-sm font-medium ml-2">${investigation.progress}%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2">Deskripsi Kasus</h3>
+                        <p class="text-gray-600">${investigation.caseDescription}</p>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2">Evidence Awal</h3>
+                        <p class="text-gray-600">${investigation.initialEvidence}</p>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-4">Timeline Investigasi</h3>
+                        <div class="border-l-2 border-gray-200 pl-4">
+                            ${timelineHtml}
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-4">Evidence Terkumpul</h3>
+                        ${evidenceHtml}
+                    </div>
+                </div>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').style.display = 'none';
+        }
+
+        // Form submission
+        document.getElementById('investigationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newInvestigation = {
+                id: 'INV-' + String(investigations.length + 1).padStart(3, '0'),
+                incidentId: document.getElementById('incidentId').value,
+                title: document.getElementById('investigationTitle').value,
+                priority: document.getElementById('investigationPriority').value,
+                status: 'active',
+                investigator: document.getElementById('investigatorName').value,
+                startDate: new Date().toISOString().split('T')[0],
+                progress: 0,
+                caseDescription: document.getElementById('caseDescription').value,
+                initialEvidence: document.getElementById('initialEvidence').value,
+                timeline: [
+                    { date: new Date().toLocaleString(), action: 'Investigasi dimulai' }
+                ],
+                evidence: []
+            };
+            
+            if (currentInvestigation) {
+                // Update existing investigation
+                const index = investigations.findIndex(i => i.id === currentInvestigation.id);
+                if (index !== -1) {
+                    investigations[index] = newInvestigation;
+                }
+            } else {
+                // Add new investigation
+                investigations.unshift(newInvestigation);
+            }
+            
+            filteredInvestigations = [...investigations];
+            renderInvestigations();
+            closeModal();
+        });
+
+        // Search function
+        function searchInvestigations() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (searchTerm === '') {
+                filteredInvestigations = [...investigations];
+            } else {
+                filteredInvestigations = investigations.filter(inv => {
+                    return inv.id.toLowerCase().includes(searchTerm) ||
+                           inv.incidentId.toLowerCase().includes(searchTerm) ||
+                           inv.title.toLowerCase().includes(searchTerm) ||
+                           inv.investigator.toLowerCase().includes(searchTerm) ||
+                           getPriorityLabel(inv.priority).toLowerCase().includes(searchTerm) ||
+                           getStatusLabel(inv.status).toLowerCase().includes(searchTerm) ||
+                           inv.caseDescription.toLowerCase().includes(searchTerm);
+                });
+            }
+            
+            renderInvestigations();
+        }
+
+        // Filter functions
+        function toggleFilter() {
+            const filterSection = document.getElementById('filterSection');
+            filterSection.classList.toggle('hidden');
+        }
+
+        function applyFilters() {
+            const statusFilter = document.getElementById('filterStatus').value;
+            const priorityFilter = document.getElementById('filterPriority').value;
+            
+            filteredInvestigations = investigations.filter(inv => {
+                const statusMatch = !statusFilter || inv.status === statusFilter;
+                const priorityMatch = !priorityFilter || inv.priority === priorityFilter;
+                
+                return statusMatch && priorityMatch;
+            });
+            
+            renderInvestigations();
+        }
+
+        function resetFilters() {
+            document.getElementById('filterStatus').value = '';
+            document.getElementById('filterPriority').value = '';
+            
+            filteredInvestigations = [...investigations];
+            renderInvestigations();
+        }
+
+        // Render investigations
+        function renderInvestigations() {
+            const grid = document.getElementById('investigationsGrid');
+            
+            if (filteredInvestigations.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
+                            <i class="fa-solid fa-search text-4xl mb-4 text-gray-300"></i>
+                            <h3 class="text-lg font-semibold text-gray-700 mb-2">Tidak Ada Investigasi</h3>
+                            <p class="text-gray-500">Tidak ada investigasi yang cocok dengan kriteria pencarian atau filter.</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            const cardsHtml = filteredInvestigations.map(inv => {
+                const statusClass = getStatusClass(inv.status);
+                const priorityClass = `priority-${inv.priority}`;
+                const color = inv.priority === 'high' ? 'red' : inv.priority === 'medium' ? 'yellow' : 'green';
+                
+                return `
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-200">
+                        <div class="bg-gradient-to-r from-${color}-500 to-${color}-600 p-4">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-white font-semibold">${inv.id}</h3>
+                                    <p class="text-${color}-100 text-sm">${inv.title}</p>
+                                </div>
+                                <span class="bg-white text-${color}-600 px-2 py-1 rounded-full text-xs font-semibold ${statusClass}">${getStatusLabel(inv.status)}</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span class="text-sm text-gray-600">Investigator:</span>
+                                    <span class="text-sm font-medium">${inv.investigator}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-sm text-gray-600">Mulai:</span>
+                                    <span class="text-sm font-medium">${inv.startDate}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-sm text-gray-600">Progress:</span>
+                                    <div class="flex items-center">
+                                        <div class="w-20 bg-gray-200 rounded-full h-2">
+                                            <div class="bg-blue-600 h-2 rounded-full" style="width: ${inv.progress}%"></div>
+                                        </div>
+                                        <span class="text-sm font-medium ml-2">${inv.progress}%</span>
+                                    </div>
+                                </div>
+                                <div class="flex gap-2 mt-4">
+                                    <button class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors" onclick="openDetailModal(investigations.find(i => i.id === '${inv.id}'))">
+                                        <i class="fa-solid fa-eye mr-1"></i>
+                                        View
+                                    </button>
+                                    <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors" onclick="openModal(investigations.find(i => i.id === '${inv.id}'))">
+                                        <i class="fa-solid fa-edit mr-1"></i>
+                                        Edit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            grid.innerHTML = cardsHtml;
+        }
+
+        // Action functions
+        function archiveEvidence() {
+            if (confirm('Apakah Anda yakin ingin mengarsipkan semua evidence investigasi yang selesai?')) {
+                alert('Evidence investigasi yang selesai telah diarsipkan.');
+            }
+        }
+
+        function exportReports() {
+            const csvContent = [
+                ['ID', 'Title', 'Incident ID', 'Priority', 'Status', 'Investigator', 'Start Date', 'Progress', 'Description'],
+                ...filteredInvestigations.map(inv => [
+                    inv.id,
+                    inv.title,
+                    inv.incidentId,
+                    getPriorityLabel(inv.priority),
+                    getStatusLabel(inv.status),
+                    inv.investigator,
+                    inv.startDate,
+                    inv.progress + '%',
+                    inv.caseDescription
+                ])
+            ].map(row => row.join(',')).join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `investigations_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function downloadEvidence(evidenceId) {
+            alert(`Downloading evidence ${evidenceId}...`);
+        }
+
+        function deleteEvidence(evidenceId) {
+            if (confirm(`Apakah Anda yakin ingin menghapus evidence ${evidenceId}?`)) {
+                alert(`Evidence ${evidenceId} telah dihapus.`);
+            }
+        }
+
+        // Helper functions
+        function getPriorityLabel(priority) {
+            const labels = {
+                'high': 'Tinggi',
+                'medium': 'Sedang',
+                'low': 'Rendah'
+            };
+            return labels[priority] || priority;
+        }
+
+        function getStatusLabel(status) {
+            const labels = {
+                'active': 'Aktif',
+                'pending': 'Menunggu',
+                'completed': 'Selesai'
+            };
+            return labels[status] || status;
+        }
+
+        function getStatusClass(status) {
+            return `status-${status}`;
+        }
+
+        // Sidebar toggle functionality
+        const burgerMenu = document.getElementById('burgerMenu');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        
+        function toggleSidebar() {
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('expanded');
+            sidebarOverlay.classList.toggle('active');
+            
+            // Change icon based on sidebar state
+            const icon = burgerMenu.querySelector('i');
+            // When sidebar is collapsed (hidden), show bars icon to open it
+            // When sidebar is open (not collapsed), show times icon to close it
+            if (sidebar.classList.contains('collapsed')) {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            } else {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            }
+        }
+        
+        burgerMenu.addEventListener('click', toggleSidebar);
+        
+        // Initialize sidebar state - always start collapsed
+        function initializeSidebar() {
+            // Ensure sidebar starts collapsed on all devices
+            if (!sidebar.classList.contains('collapsed')) {
+                sidebar.classList.add('collapsed');
+                mainContent.classList.add('expanded');
+                
+                // Set correct icon - should show bars when collapsed
+                const icon = burgerMenu.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        }
+        
+        // Initialize on page load
+        initializeSidebar();
+        
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            initializeSidebar();
+        });
+        
+        // Close sidebar when clicking on overlay (mobile only)
+        sidebarOverlay.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                toggleSidebar();
+            }
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const detailModal = document.getElementById('detailModal');
+            const investigationModal = document.getElementById('investigationModal');
+            
+            if (event.target === detailModal) {
+                closeDetailModal();
+            }
+            if (event.target === investigationModal) {
+                closeModal();
+            }
+        }
+    </script>
+    <script src="/src/main.js"></script>
+</body>
+</html>

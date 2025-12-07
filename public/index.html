@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniSafe - Sistem Pengaduan Peretasan Email Mahasiswa</title>
+    <link rel="stylesheet" href="/.dist/output.css">
+    <link rel="stylesheet" href="/src/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* Force all elements to use Exo 2 font */
+        * {
+            font-family: 'Exo 2', sans-serif;
+        }
+        
+        /* Override any other font-family declarations */
+        body, div, span, h1, h2, h3, h4, h5, h6, p, a, button, input, label, textarea, select {
+            font-family: 'Exo 2', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center gap-2">
+                    <img src="logo.png" alt="UniSafe Logo" class="h-10 w-auto">
+                    <span class="text-2xl font-bold text-amber-500">UniSafe</span>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden lg:flex items-center gap-8">
+                    <a href="#home" class="text-gray-700 text-base hover:text-amber-500 transition-all font-semibold">Beranda</a>
+                    <a href="#about" class="text-gray-700 text-base hover:text-amber-500 transition-all font-semibold">Tentang</a>
+                    <a href="#features" class="text-gray-700 text-base hover:text-amber-500 transition-all font-semibold">Fitur</a>
+                    <a href="#contact" class="text-gray-700 text-base hover:text-amber-500 transition-all font-semibold">Kontak</a>
+                </div>
+
+                <!-- Auth Buttons -->
+                <div class="flex items-center gap-4">
+                    <a href="login.html" class="px-6 py-2.5 text-gray-700 text-base font-semibold border-2 border-amber-400 rounded-lg hover:bg-amber-50 transition-all">Login</a>
+                    <a href="register.html" class="px-6 py-2.5 bg-amber-500 text-white text-base font-semibold rounded-lg hover:bg-amber-600 transition-all">Daftar</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" class="lg:hidden text-gray-900 text-2xl">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="hidden lg:hidden mt-4 pb-4">
+                <a href="#home" class="block py-2 text-gray-900 text-base hover:text-amber-500 transition font-medium">Beranda</a>
+                <a href="#about" class="block py-2 text-gray-900 text-base hover:text-amber-500 transition font-medium">Tentang</a>
+                <a href="#features" class="block py-2 text-gray-900 text-base hover:text-amber-500 transition font-medium">Fitur</a>
+                <a href="#contact" class="block py-2 text-gray-900 text-base hover:text-amber-500 transition font-medium">Kontak</a>
+                <div class="pt-3 border-t border-gray-200 space-y-2">
+                    <a href="login.html" class="block py-2 text-center text-gray-900 text-sm font-medium border border-gray-300 rounded hover:bg-gray-50 transition">Login</a>
+                    <a href="register.html" class="block py-2 text-center bg-amber-500 text-white text-sm font-medium rounded hover:bg-amber-600 transition">Daftar</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <!-- HERO SECTION -->
+        <section id="home" class="relative max-w-7xl mx-auto px-6 sm:px-8 py-12 sm:py-16 lg:py-20">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                
+                <!-- Left Content -->
+                <div>
+                    <!-- Large Logo -->
+                    <div class="mb-8">
+                        <img src="logo.png" alt="UniSafe Logo" class="h-24 sm:h-28 lg:h-32 w-auto mb-4">
+                    </div>
+
+                    <!-- Title -->
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
+                        Lindungi Email Anda dari <span class="text-amber-500">Peretasan</span>
+                    </h1>
+
+                    <!-- Description -->
+                    <p class="text-gray-700 text-lg sm:text-xl font-medium leading-relaxed mb-10">
+                        UniSafe adalah platform terpercaya untuk melaporkan dan menangani insiden peretasan email mahasiswa. Dapatkan bantuan cepat dan solusi efektif dari tim IRT kami.
+                    </p>
+
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="register.html" class="px-8 py-4 bg-amber-500 text-white text-lg font-bold rounded-xl hover:bg-amber-600 transition-all shadow-lg hover:shadow-xl transform hover:scale-105 text-center">
+                            <i class="fa-solid fa-shield-halved mr-2"></i>
+                            Mulai Dilindungi
+                        </a>
+                        <a href="#about" class="px-8 py-4 border-2 border-gray-300 text-gray-800 text-lg font-bold rounded-xl hover:border-amber-500 hover:text-amber-600 transition-all text-center">
+                            <i class="fa-solid fa-info-circle mr-2"></i>
+                            Pelajari Lebih Lanjut
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Content - Image -->
+                <div class="flex justify-center mt-8 lg:mt-0">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600" 
+                             alt="Cyber Security" class="w-full max-w-lg rounded-2xl shadow-2xl">
+                        <div class="absolute -bottom-6 -right-6 bg-amber-500 text-white p-6 rounded-2xl shadow-xl">
+                            <p class="text-3xl font-bold">1000+</p>
+                            <p class="text-sm">Laporan Diproses</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT SECTION -->
+        <section id="about" class="bg-gradient-to-b from-gray-50 to-white py-16 sm:py-20">
+            <div class="max-w-7xl mx-auto px-6 sm:px-8">
+                
+                <!-- Section Title -->
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4">Tentang UniSafe</h2>
+                    <p class="text-gray-600 text-lg max-w-3xl mx-auto">
+                        Platform modern untuk pengaduan dan penanganan insiden peretasan email yang aman dan terpercaya
+                    </p>
+                </div>
+
+                <!-- About Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    
+                    <!-- Card 1 -->
+                    <div class="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-all">
+                        <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
+                            <i class="fa-solid fa-shield-halved text-blue-600 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Keamanan Terjamin</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            Data Anda dilindungi dengan enkripsi end-to-end dan keamanan berlapis untuk menjaga privasi Anda.
+                        </p>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-all">
+                        <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mb-6">
+                            <i class="fa-solid fa-bolt text-green-600 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Respon Cepat</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            Tim IRT kami siaga 24/7 untuk menindaklanjuti setiap laporan dengan cepat dan profesional.
+                        </p>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-all">
+                        <div class="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mb-6">
+                            <i class="fa-solid fa-users text-amber-600 text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Tim Profesional</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            Didukung oleh pakar keamanan siber berpengalaman untuk memberikan solusi terbaik untuk Anda.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- FEATURES SECTION -->
+        <section id="features" class="py-16 sm:py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-6 sm:px-8">
+                
+                <!-- Section Title -->
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4">Fitur Kami</h2>
+                    <p class="text-gray-600 text-lg max-w-3xl mx-auto">
+                        Solusi lengkap untuk keamanan email mahasiswa
+                    </p>
+                </div>
+
+                <!-- Features Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    
+                    <!-- Left Column -->
+                    <div class="space-y-8">
+                        <!-- Feature 1 -->
+                        <div class="flex gap-6">
+                            <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-file-lines text-amber-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Pelaporan Mudah</h3>
+                                <p class="text-gray-600">Isi formulir sederhana dan lampirkan bukti untuk melaporkan insiden peretasan</p>
+                            </div>
+                        </div>
+
+                        <!-- Feature 2 -->
+                        <div class="flex gap-6">
+                            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-chart-line text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Status Real-time</h3>
+                                <p class="text-gray-600">Pantau perkembangan laporan Anda secara langsung dari dashboard</p>
+                            </div>
+                        </div>
+
+                        <!-- Feature 3 -->
+                        <div class="flex gap-6">
+                            <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-microscope text-green-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Investigasi Mendalam</h3>
+                                <p class="text-gray-600">Tim kami melakukan analisis forensik digital untuk menemukan penyebabnya</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="space-y-8">
+                        <!-- Feature 4 -->
+                        <div class="flex gap-6">
+                            <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-lock text-purple-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Pemulihan Akun</h3>
+                                <p class="text-gray-600">Bantuan profesional untuk mengembalikan akses email yang diretas</p>
+                            </div>
+                        </div>
+
+                        <!-- Feature 5 -->
+                        <div class="flex gap-6">
+                            <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-shield-virus text-red-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Edukasi Keamanan</h3>
+                                <p class="text-gray-600">Dapatkan tips dan panduan untuk mencegah peretasan di masa depan</p>
+                            </div>
+                        </div>
+
+                        <!-- Feature 6 -->
+                        <div class="flex gap-6">
+                            <div class="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-certificate text-indigo-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">Laporan Resmi</h3>
+                                <p class="text-gray-600">Dapatkan dokumen resmi untuk keperluan administrasi universitas</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- STATS SECTION -->
+        <section class="bg-gradient-to-r from-amber-500 to-amber-600 py-16">
+            <div class="max-w-7xl mx-auto px-6 sm:px-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+                    <div>
+                        <p class="text-4xl sm:text-5xl font-bold text-white mb-2">1000+</p>
+                        <p class="text-amber-100">Laporan Diproses</p>
+                    </div>
+                    <div>
+                        <p class="text-4xl sm:text-5xl font-bold text-white mb-2">95%</p>
+                        <p class="text-amber-100">Tingkat Keberhasilan</p>
+                    </div>
+                    <div>
+                        <p class="text-4xl sm:text-5xl font-bold text-white mb-2">24/7</p>
+                        <p class="text-amber-100">Dukungan Tim IRT</p>
+                    </div>
+                    <div>
+                        <p class="text-4xl sm:text-5xl font-bold text-white mb-2">100+</p>
+                        <p class="text-amber-100">Universitas Mitra</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT SECTION -->
+        <section id="contact" class="py-16 sm:py-20 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-6 sm:px-8">
+                
+                <!-- Section Title -->
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4">Hubungi Kami</h2>
+                    <p class="text-gray-600 text-lg max-w-3xl mx-auto">
+                        Ada pertanyaan atau butuh bantuan segera? Tim kami siap membantu Anda 24/7
+                    </p>
+                </div>
+
+                <!-- Contact Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    
+                    <!-- Contact Info -->
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-4">Informasi Kontak</h3>
+                            
+                            <!-- Email -->
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
+                                    <i class="fa-solid fa-envelope text-amber-600"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Email</p>
+                                    <p class="font-semibold text-gray-900">irt@unisafe.edu</p>
+                                </div>
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                                    <i class="fa-solid fa-phone text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Telepon Darurat</p>
+                                    <p class="font-semibold text-gray-900">+62 21 1234 5678</p>
+                                </div>
+                            </div>
+
+                            <!-- Address -->
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                                    <i class="fa-solid fa-location-dot text-green-600"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Alamat</p>
+                                    <p class="font-semibold text-gray-900">Gedung ICT Center Lt. 2, Kampus A</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Emergency Contact -->
+                        <div class="bg-red-50 border border-red-200 rounded-2xl p-6">
+                            <h4 class="font-bold text-red-900 mb-2">
+                                <i class="fa-solid fa-exclamation-triangle mr-2"></i>
+                                Kontak Darurat
+                            </h4>
+                            <p class="text-red-800 text-sm mb-3">
+                                Untuk insiden keamanan siber yang memerlukan penanganan segera
+                            </p>
+                            <p class="font-bold text-red-900">WhatsApp: +62 812-3456-7890</p>
+                        </div>
+                    </div>
+
+                    <!-- Quick Contact Form -->
+                    <div class="bg-white rounded-2xl shadow-lg p-8">
+                        <h3 class="text-xl font-bold text-gray-900 mb-6">Kirim Pesan Cepat</h3>
+                        
+                        <form id="quickContactForm" class="space-y-4">
+                            <input type="text" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500" 
+                                   placeholder="Nama Lengkap" required>
+                            
+                            <input type="email" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500" 
+                                   placeholder="Email" required>
+                            
+                            <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500" required>
+                                <option value="">Pilih Kategori</option>
+                                <option value="report">Laporkan Insiden</option>
+                                <option value="question">Pertanyaan Umum</option>
+                                <option value="technical">Bantuan Teknis</option>
+                                <option value="other">Lainnya</option>
+                            </select>
+                            
+                            <textarea rows="4" 
+                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none" 
+                                      placeholder="Pesan Anda..." required></textarea>
+                            
+                            <button type="submit" 
+                                    class="w-full py-3 bg-amber-500 text-white font-bold rounded-lg hover:bg-amber-600 transition-all">
+                                Kirim Pesan
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                
+                <!-- Logo and Description -->
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <img src="logo.png" alt="UniSafe Logo" class="h-8 w-auto">
+                        <span class="text-xl font-bold text-amber-500">UniSafe</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Platform terpercaya untuk keamanan siber mahasiswa universitas
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-semibold mb-4">Link Cepat</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="login.html" class="hover:text-amber-500 transition">Login</a></li>
+                        <li><a href="register.html" class="hover:text-amber-500 transition">Daftar</a></li>
+                        <li><a href="#about" class="hover:text-amber-500 transition">Tentang</a></li>
+                        <li><a href="#features" class="hover:text-amber-500 transition">Fitur</a></li>
+                    </ul>
+                </div>
+
+                <!-- Resources -->
+                <div>
+                    <h4 class="font-semibold mb-4">Sumber Daya</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-amber-500 transition">Panduan Keamanan</a></li>
+                        <li><a href="#" class="hover:text-amber-500 transition">FAQ</a></li>
+                        <li><a href="#" class="hover:text-amber-500 transition">Kebijakan Privasi</a></li>
+                        <li><a href="#" class="hover:text-amber-500 transition">Syarat & Ketentuan</a></li>
+                    </ul>
+                </div>
+
+                <!-- Social Media -->
+                <div>
+                    <h4 class="font-semibold mb-4">Ikuti Kami</h4>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-amber-600 transition">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-amber-600 transition">
+                            <i class="fa-brands fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-amber-600 transition">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-amber-600 transition">
+                            <i class="fa-brands fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
+                <p>&copy; 2024 UniSafe. All rights reserved. | Developed by Incident Response Team</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        mobileMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+            const icon = this.querySelector('i');
+            if (mobileMenu.classList.contains('hidden')) {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            } else {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            }
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', function() {
+                mobileMenu.classList.add('hidden');
+                const icon = mobileMenuBtn.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            });
+        });
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Handle quick contact form
+        const quickContactForm = document.getElementById('quickContactForm');
+        if (quickContactForm) {
+            quickContactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Pesan Anda telah terkirim! Tim kami akan segera menghubungi Anda.');
+                this.reset();
+            });
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - UniSafe</title>
+    <link rel="stylesheet" href="../../.dist/output.css">
+    <link rel="stylesheet" href="../../src/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Exo 2' }
+    </style>
+</head>
+
+<body class="bg-white font-sans overflow-x-hidden">
+
+    <!-- NAVBAR -->
+    <nav class="bg-white shadow-lg border-b border-gray-100 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 py-4 sm:py-5">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <img src="../../logo.png" alt="UniSafe Logo" class="h-10 sm:h-12 w-auto">
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden lg:flex items-center gap-10 xl:gap-12">
+                    <!-- Navigation Links -->
+                    <div class="flex items-center gap-8 xl:gap-10">
+                        <a href="#home" class="text-gray-700 text-base hover:text-amber-500 transition-all font-semibold hover:scale-105">Dashboard</a>
+                        <a href="#reporting" class="text-gray-700 text-base hover:text-amber-500 transition-all font-semibold hover:scale-105">Laporkan Insiden</a>
+                        <a href="#tracking" class="text-gray-700 text-base hover:text-amber-500 transition-all font-semibold hover:scale-105">Status Laporan</a>
+                        <a href="#profile" class="text-gray-700 text-base hover:text-amber-500 transition-all font-semibold hover:scale-105">Profil</a>
+                    </div>
+
+                    <!-- Auth Buttons -->
+                    <div class="flex items-center gap-4">
+                        <button id="logoutBtn" class="px-6 py-2.5 text-gray-700 text-base font-semibold border-2 border-amber-400 rounded-lg hover:bg-amber-50 transition-all">Logout</button>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" class="lg:hidden text-zinc-900 text-2xl">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="hidden lg:hidden mt-4 pb-4 space-y-3">
+                <a href="#home" class="block py-2 text-zinc-900 text-base hover:text-yellow-500 transition font-medium">Dashboard</a>
+                <a href="#reporting" class="block py-2 text-zinc-900 text-base hover:text-yellow-500 transition font-medium">Laporkan Insiden</a>
+                <a href="#tracking" class="block py-2 text-zinc-900 text-base hover:text-yellow-500 transition font-medium">Status Laporan</a>
+                <a href="#profile" class="block py-2 text-zinc-900 text-base hover:text-yellow-500 transition font-medium">Profil</a>
+                <div class="pt-3 border-t border-gray-200 space-y-2">
+                    <button id="logoutBtnMobile" class="block w-full py-2 text-center text-zinc-900 text-sm font-medium border border-zinc-300 rounded hover:bg-gray-50 transition">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main>
+
+        <!-- DASHBOARD MAHASISWA -->
+        <section id="home" class="relative max-w-7xl mx-auto px-6 sm:px-8 py-12 sm:py-16 lg:py-20">
+            <div class="mb-8">
+                <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Selamat Datang, <span id="userName">Mahasiswa</span>!</h1>
+                <p class="text-gray-600 text-lg">Laporkan peretasan email Anda dan pantau status penanganannya</p>
+            </div>
+
+            <!-- Stat Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <!-- Total Laporan -->
+                <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center">
+                            <i class="fa-solid fa-file-lines text-amber-600 text-2xl"></i>
+                        </div>
+                        <span class="text-sm text-gray-500">Total</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900" id="totalReports">0</h3>
+                    <p class="text-gray-600 text-sm mt-1">Laporan yang telah dibuat</p>
+                </div>
+
+                <!-- Sedang Diproses -->
+                <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center">
+                            <i class="fa-solid fa-clock text-blue-600 text-2xl"></i>
+                        </div>
+                        <span class="text-sm text-gray-500">Proses</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900" id="processingReports">0</h3>
+                    <p class="text-gray-600 text-sm mt-1">Sedang dalam investigasi</p>
+                </div>
+
+                <!-- Selesai -->
+                <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center">
+                            <i class="fa-solid fa-circle-check text-green-600 text-2xl"></i>
+                        </div>
+                        <span class="text-sm text-gray-500">Selesai</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900" id="completedReports">0</h3>
+                    <p class="text-gray-600 text-sm mt-1">Laporan selesai ditangani</p>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                <!-- Buat Laporan Baru -->
+                <div class="bg-gradient-to-br from-amber-400 to-amber-500 rounded-2xl shadow-2xl p-8 text-white">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
+                            <i class="fa-solid fa-plus text-2xl"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold">Buat Laporan Baru</h2>
+                    </div>
+                    <p class="text-white/90 mb-6">Laporkan insiden peretasan email Anda sekarang juga</p>
+                    <a href="#reporting" class="inline-flex items-center gap-2 px-6 py-3 bg-white text-amber-600 font-bold rounded-xl hover:bg-gray-100 transition-all">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        Buat Laporan
+                    </a>
+                </div>
+
+                <!-- Lihat Status Laporan -->
+                <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center">
+                            <i class="fa-solid fa-search text-blue-600 text-2xl"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-900">Lihat Status Laporan</h2>
+                    </div>
+                    <p class="text-gray-600 mb-6">Pantau perkembangan laporan yang telah Anda buat</p>
+                    <a href="#tracking" class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-all">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        Lihat Status
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- TRACKING STATUS SECTION -->
+        <section id="tracking" class="bg-gradient-to-b from-gray-50 to-white py-16 sm:py-20">
+            <div class="max-w-7xl mx-auto px-6 sm:px-8">
+                
+                <!-- Section Title -->
+                <h2 class="text-4xl sm:text-5xl font-extrabold text-gray-900 text-center mb-6">Status Laporan</h2>
+                <p class="text-gray-600 text-base sm:text-lg font-medium text-center max-w-3xl mx-auto mb-12 sm:mb-16 leading-relaxed">
+                    Pantau perkembangan laporan Anda secara real-time. Laporan akan melalui beberapa tahapan investigasi hingga selesai.
+                </p>
+
+                <!-- Reports Table -->
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                        <h3 class="text-xl font-bold text-gray-900">Riwayat Laporan Anda</h3>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">ID Laporan</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Email yang Diretas</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Tanggal</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Status</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reportsTableBody" class="divide-y divide-gray-200">
+                                <!-- Empty state -->
+                                <tr id="emptyState">
+                                    <td colspan="5" class="px-6 py-12 text-center">
+                                        <div class="flex flex-col items-center">
+                                            <i class="fa-solid fa-inbox text-gray-300 text-5xl mb-4"></i>
+                                            <p class="text-gray-500 text-lg font-medium">Belum ada laporan</p>
+                                            <p class="text-gray-400">Buat laporan pertama Anda untuk melihat statusnya di sini</p>
+                                            <a href="#reporting" class="mt-4 px-6 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-all">
+                                                Buat Laporan
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Status Flow Info -->
+                <div class="mt-12 bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-3xl p-8 sm:p-10 shadow-lg">
+                    <h4 class="text-gray-800 text-xl sm:text-2xl font-bold mb-8 text-center">
+                        Alur Status Laporan
+                    </h4>
+
+                    <!-- Progress Steps -->
+                    <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm">
+                        <div class="flex justify-between items-start relative">
+                            <!-- Progress Line -->
+                            <div class="absolute top-6 left-12 right-12 h-1 bg-gray-200 z-0 rounded-full"></div>
+
+                            <!-- Step 1: Submitted -->
+                            <div class="flex flex-col items-center gap-3 z-10 flex-1">
+                                <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
+                                    <i class="fa-solid fa-paper-plane text-white text-base"></i>
+                                </div>
+                                <span class="text-gray-700 text-sm sm:text-base font-bold text-center">Submitted</span>
+                                <span class="text-gray-500 text-xs text-center hidden sm:block">Laporan diterima</span>
+                            </div>
+
+                            <!-- Step 2: Investigating -->
+                            <div class="flex flex-col items-center gap-3 z-10 flex-1">
+                                <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
+                                    <i class="fa-solid fa-magnifying-glass text-white text-base"></i>
+                                </div>
+                                <span class="text-gray-700 text-sm sm:text-base font-bold text-center">Investigating</span>
+                                <span class="text-gray-500 text-xs text-center hidden sm:block">Sedang ditinjau</span>
+                            </div>
+
+                            <!-- Step 3: Recovered -->
+                            <div class="flex flex-col items-center gap-3 z-10 flex-1">
+                                <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
+                                    <i class="fa-solid fa-wrench text-white text-base"></i>
+                                </div>
+                                <span class="text-gray-700 text-sm sm:text-base font-bold text-center">Recovered</span>
+                                <span class="text-gray-500 text-xs text-center hidden sm:block">Dalam pemulihan</span>
+                            </div>
+
+                            <!-- Step 4: Closed -->
+                            <div class="flex flex-col items-center gap-3 z-10 flex-1">
+                                <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
+                                    <i class="fa-solid fa-circle-check text-white text-base"></i>
+                                </div>
+                                <span class="text-gray-700 text-sm sm:text-base font-bold text-center">Closed</span>
+                                <span class="text-gray-500 text-xs text-center hidden sm:block">Selesai</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- REPORTING SECTION -->
+        <section id="reporting" class="py-16 sm:py-20 bg-gray-50">
+            <div class="max-w-4xl mx-auto px-6 sm:px-8">
+                
+                <!-- Section Title -->
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4">Laporkan Insiden</h2>
+                    <p class="text-gray-600 text-lg">Isi formulir di bawah ini untuk melaporkan peretasan email Anda</p>
+                </div>
+
+                <!-- Form -->
+                <form id="incidentForm" class="bg-white rounded-2xl shadow-xl p-8 sm:p-10 space-y-6">
+                    
+                    <!-- Nama Lengkap -->
+                    <div>
+                        <label class="block text-gray-800 text-base font-semibold mb-3">Nama Lengkap <span class="text-red-500">*</span></label>
+                        <input type="text" id="reportName" 
+                               class="w-full h-14 px-5 rounded-xl border-2 border-gray-300 focus:border-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-100 text-base transition-all"
+                               placeholder="Masukkan nama lengkap" required>
+                    </div>
+
+                    <!-- NIM -->
+                    <div>
+                        <label class="block text-gray-800 text-base font-semibold mb-3">Nomor Induk Mahasiswa (NIM) <span class="text-red-500">*</span></label>
+                        <input type="text" id="reportNIM" 
+                               class="w-full h-14 px-5 rounded-xl border-2 border-gray-300 focus:border-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-100 text-base transition-all"
+                               placeholder="Masukkan NIM" required>
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label class="block text-gray-800 text-base font-semibold mb-3">Email yang Diretas <span class="text-red-500">*</span></label>
+                        <input type="email" id="reportEmail"
+                               class="w-full h-14 px-5 rounded-xl border-2 border-gray-300 focus:border-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-100 text-base transition-all"
+                               placeholder="contoh@student.univ.ac.id" required>
+                    </div>
+
+                    <!-- Waktu Kejadian -->
+                    <div>
+                        <label class="block text-gray-800 text-base font-semibold mb-3">Waktu Kejadian <span class="text-red-500">*</span></label>
+                        <input type="datetime-local" id="reportDateTime"
+                               class="w-full h-14 px-5 rounded-xl border-2 border-gray-300 focus:border-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-100 text-base transition-all"
+                               required>
+                    </div>
+
+                    <!-- Kategori Insiden -->
+                    <div>
+                        <label class="block text-gray-800 text-base font-semibold mb-3">Kategori Insiden <span class="text-red-500">*</span></label>
+                        <select id="reportCategory" 
+                                class="w-full h-14 px-5 rounded-xl border-2 border-gray-300 focus:border-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-100 text-base transition-all"
+                                required>
+                            <option value="">Pilih kategori insiden</option>
+                            <option value="Peretasan Akun Email">Peretasan Akun Email</option>
+                            <option value="Phishing">Phishing</option>
+                            <option value="Malware">Malware</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                    </div>
+
+                    <!-- Kronologi -->
+                    <div>
+                        <label class="block text-gray-800 text-base font-semibold mb-3">Kronologi Kejadian <span class="text-red-500">*</span></label>
+                        <textarea id="reportDescription"
+                               class="w-full px-5 py-4 rounded-xl border-2 border-gray-300 focus:border-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-100 text-base transition-all resize-none"
+                               placeholder="Ceritakan secara detail kronologi peretasan yang terjadi..."
+                               rows="5" required></textarea>
+                    </div>
+
+                    <!-- Bukti Pendukung -->
+                    <div>
+                        <label class="flex items-center text-gray-800 text-base font-semibold mb-3">
+                            <i class="fa-solid fa-paperclip text-amber-500 mr-2 text-lg"></i>
+                            Bukti Pendukung (Screenshot)
+                        </label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-amber-400 transition-all cursor-pointer bg-gray-50">
+                            <input type="file" 
+                                   class="hidden"
+                                   id="fileUpload"
+                                   accept="image/*"
+                                   multiple>
+                            <label for="fileUpload" class="cursor-pointer">
+                                <i class="fa-solid fa-cloud-arrow-up text-5xl text-amber-400 mb-3"></i>
+                                <p class="text-gray-700 font-medium mb-1">Klik untuk upload atau drag & drop</p>
+                                <p class="text-gray-500 text-sm">PNG, JPG atau JPEG (Max 5MB per file)</p>
+                            </label>
+                        </div>
+                        <div id="uploadedFiles" class="mt-4 grid grid-cols-2 gap-3">
+                            <!-- Uploaded files will be displayed here -->
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="flex justify-center pt-6">
+                        <button type="submit" 
+                                class="w-full sm:w-auto px-12 py-4 bg-gradient-to-r from-amber-500 to-amber-600 rounded-xl text-white text-lg font-bold hover:from-amber-600 hover:to-amber-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-3">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            Kirim Laporan
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </section>
+
+        <!-- PROFILE SECTION -->
+        <section id="profile" class="py-16 sm:py-20 bg-gray-50">
+            <div class="max-w-4xl mx-auto px-6 sm:px-8">
+                
+                <!-- Section Title -->
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4">Profil Saya</h2>
+                    <p class="text-gray-600 text-lg">Kelola informasi akun dan password Anda</p>
+                </div>
+
+                <!-- Profile Form -->
+                <form id="profileForm" class="bg-white rounded-2xl shadow-xl p-8 sm:p-10">
+                    
+                    <!-- Profile Picture and Basic Info -->
+                    <div class="flex flex-col sm:flex-row items-center gap-8 mb-8">
+                        <div class="w-32 h-32 bg-gradient-to-br from-amber-400 to-amber-500 rounded-full flex items-center justify-center text-white text-4xl font-bold">
+                            <span id="profileInitials">M</span>
+                        </div>
+                        <div class="flex-1 text-center sm:text-left">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-2" id="profileName">Mahasiswa</h3>
+                            <p class="text-gray-600 mb-1" id="profileNIM">NIM: 2023001</p>
+                            <p class="text-gray-600" id="profileEmail">student@unisafe.com</p>
+                        </div>
+                    </div>
+
+                    <!-- Form Fields -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <!-- Nama Lengkap -->
+                        <div>
+                            <label class="block text-gray-800 text-base font-semibold mb-3">Nama Lengkap</label>
+                            <input type="text" id="profileNameInput"
+                                   class="w-full h-14 px-5 rounded-xl border-2 border-gray-300 focus:border-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-100 text-base transition-all"
+                                   placeholder="Masukkan nama lengkap">
+                        </div>
+
+                        <!-- NIM -->
+                        <div>
+                            <label class="block text-gray-800 text-base font-semibold mb-3">Nomor Induk Mahasiswa (NIM)</label>
+                            <input type="text" id="profileNIMInput"
+                                   class="w-full h-14 px-5 rounded-xl border-2 border-gray-300 focus:border-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-100 text-base transition-all"
+                                   placeholder="Masukkan NIM" readonly>
+                        </div>
+
+                        <!-- Email -->
+                        <div>
+                            <label class="block text-gray-800 text-base font-semibold mb-3">Email</label>
+                            <input type="email" id="profileEmailInput"
+                                   class="w-full h-14 px-5 rounded-xl border-2 border-gray-300 focus:border-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-100 text-base transition-all"
+                                   placeholder="contoh@student.univ.ac.id">
+                        </div>
+
+                        <!-- Phone Number -->
+                        <div>
+                            <label class="block text-gray-800 text-base font-semibold mb-3">Nomor Telepon</label>
+                            <input type="tel" id="profilePhoneInput"
+                                   class="w-full h-14 px-5 rounded-xl border-2 border-gray-300 focus:border-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-100 text-base transition-all"
+                                   placeholder="+62 812-3456-7890">
+                        </div>
+                    </div>
+
+                    <!-- Password Change Section -->
+                    <div class="mt-8 pt-8 border-t border-gray-200">
+                        <h4 class="text-xl font-bold text-gray-900 mb-6">Ubah Password</h4>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <!-- Current Password -->
+                            <div>
+                                <label class="block text-gray-800 text-base font-semibold mb-3">Password Saat Ini</label>
+                                <input type="password" id="currentPassword"
+                                       class="w-full h-14 px-5 rounded-xl border-2 border-gray-300 focus:border-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-100 text-base transition-all"
+                                       placeholder="Password saat ini">
+                            </div>
+
+                            <!-- New Password -->
+                            <div>
+                                <label class="block text-gray-800 text-base font-semibold mb-3">Password Baru</label>
+                                <input type="password" id="newPassword"
+                                       class="w-full h-14 px-5 rounded-xl border-2 border-gray-300 focus:border-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-100 text-base transition-all"
+                                       placeholder="Password baru">
+                            </div>
+
+                            <!-- Confirm New Password -->
+                            <div>
+                                <label class="block text-gray-800 text-base font-semibold mb-3">Konfirmasi Password Baru</label>
+                                <input type="password" id="confirmPassword"
+                                       class="w-full h-14 px-5 rounded-xl border-2 border-gray-300 focus:border-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-100 text-base transition-all"
+                                       placeholder="Konfirmasi password baru">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Buttons -->
+                    <div class="flex flex-col sm:flex-row justify-center gap-4 mt-8">
+                        <button type="submit" 
+                                class="px-8 py-3 bg-amber-500 text-white text-lg font-bold rounded-xl hover:bg-amber-600 transition-all shadow-lg hover:shadow-xl">
+                            <i class="fa-solid fa-save mr-2"></i>
+                            Simpan Perubahan
+                        </button>
+                        <button type="button" id="cancelProfileBtn"
+                                class="px-8 py-3 bg-gray-200 text-gray-800 text-lg font-bold rounded-xl hover:bg-gray-300 transition-all">
+                            <i class="fa-solid fa-times mr-2"></i>
+                            Batal
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </section>
+
+        <!-- CTA SECTION -->
+        <section class="relative bg-gradient-to-r from-amber-500 to-amber-600 py-20 sm:py-24 lg:py-28 overflow-hidden">
+            <!-- Decorative Elements -->
+            <div class="absolute inset-0 opacity-10">
+                <div class="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+                <div class="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+            </div>
+
+            <!-- Content -->
+            <div class="relative z-10 max-w-5xl mx-auto px-6 sm:px-8 text-center">
+                <div class="mb-8">
+                    <i class="fa-solid fa-shield-halved text-white text-6xl mb-6"></i>
+                </div>
+                <h2 class="text-white text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight mb-6">
+                    Amankan Akun Emailmu Sekarang!
+                </h2>
+                <p class="text-white text-lg sm:text-xl font-medium mb-10 opacity-90">
+                    Laporkan insiden peretasan dengan cepat dan dapatkan bantuan dari tim kami
+                </p>
+                <a href="#reporting" class="inline-flex items-center gap-3 px-10 py-4 bg-white text-amber-600 text-lg font-bold rounded-xl hover:bg-gray-50 transition-all shadow-2xl hover:shadow-3xl transform hover:scale-105">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    Buat Laporan
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8">
+            
+            <!-- Main Footer Content - Horizontal Layout -->
+            <div class="flex flex-col lg:flex-row justify-between items-center lg:items-start gap-8 lg:gap-12">
+                
+                <!-- Left Section: Logo & Description -->
+                <div class="text-center lg:text-left lg:max-w-md">
+                    <img src="../../logo.png" alt="UniSafe Logo" class="h-14 w-auto mx-auto lg:mx-0 mb-4">
+                    <p class="text-gray-400 text-base leading-relaxed mb-6">
+                        Platform keamanan email mahasiswa yang membantu melindungi akun dari ancaman peretasan
+                    </p>
+                    
+                    <!-- Social Media -->
+                    <div class="flex items-center justify-center lg:justify-start gap-3">
+                        <a href="#" class="w-11 h-11 bg-gray-800 hover:bg-amber-500 rounded-xl flex items-center justify-center transition-all transform hover:scale-110 hover:rotate-6">
+                            <i class="fa-brands fa-facebook text-lg"></i>
+                        </a>
+                        <a href="#" class="w-11 h-11 bg-gray-800 hover:bg-amber-500 rounded-xl flex items-center justify-center transition-all transform hover:scale-110 hover:rotate-6">
+                            <i class="fa-brands fa-twitter text-lg"></i>
+                        </a>
+                        <a href="#" class="w-11 h-11 bg-gray-800 hover:bg-amber-500 rounded-xl flex items-center justify-center transition-all transform hover:scale-110 hover:rotate-6">
+                            <i class="fa-brands fa-instagram text-lg"></i>
+                        </a>
+                        <a href="#" class="w-11 h-11 bg-gray-800 hover:bg-amber-500 rounded-xl flex items-center justify-center transition-all transform hover:scale-110 hover:rotate-6">
+                            <i class="fa-brands fa-linkedin text-lg"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Middle Section: Quick Links -->
+                <div class="flex flex-wrap justify-center lg:justify-start gap-x-12 gap-y-6 text-center lg:text-left">
+                    <div>
+                        <h4 class="text-white text-base font-bold mb-4">Menu</h4>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li><a href="#home" class="hover:text-amber-400 transition-colors">Home</a></li>
+                            <li><a href="#steps" class="hover:text-amber-400 transition-colors">Steps</a></li>
+                            <li><a href="#reporting" class="hover:text-amber-400 transition-colors">Reporting</a></li>
+                            <li><a href="#detail-report" class="hover:text-amber-400 transition-colors">Detail Report</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="text-white text-base font-bold mb-4">Bantuan</h4>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li><a href="#" class="hover:text-amber-400 transition-colors">FAQ</a></li>
+                            <li><a href="#" class="hover:text-amber-400 transition-colors">Panduan</a></li>
+                            <li><a href="#" class="hover:text-amber-400 transition-colors">Support</a></li>
+                            <li><a href="#" class="hover:text-amber-400 transition-colors">Hubungi Kami</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="text-white text-base font-bold mb-4">Layanan</h4>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li><a href="#" class="hover:text-amber-400 transition-colors">Laporan Baru</a></li>
+                            <li><a href="#" class="hover:text-amber-400 transition-colors">Riwayat</a></li>
+                            <li><a href="#" class="hover:text-amber-400 transition-colors">Status</a></li>
+                            <li><a href="#" class="hover:text-amber-400 transition-colors">Pemulihan</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Right Section: Contact Info -->
+                <div class="text-center lg:text-left">
+                    <h4 class="text-white text-base font-bold mb-4">Hubungi Kami</h4>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li class="flex items-center justify-center lg:justify-start gap-3">
+                            <i class="fa-solid fa-envelope text-amber-400"></i>
+                            <span>support@unisafe.ac.id</span>
+                        </li>
+                        <li class="flex items-center justify-center lg:justify-start gap-3">
+                            <i class="fa-solid fa-phone text-amber-400"></i>
+                            <span>+62 123-4567-890</span>
+                        </li>
+                        <li class="flex items-center justify-center lg:justify-start gap-3">
+                            <i class="fa-solid fa-location-dot text-amber-400"></i>
+                            <span>Jakarta, Indonesia</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <div class="my-8 border-t border-gray-700"></div>
+
+            <!-- Bottom Footer: Copyright & Links -->
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-400">
+                <p class="flex items-center gap-2">
+                    <i class="fa-regular fa-copyright"></i>
+                    2025 UniSafe. All Rights Reserved.
+                </p>
+                <div class="flex items-center gap-6">
+                    <a href="#" class="hover:text-amber-400 transition-colors">Privacy Policy</a>
+                    <span class="text-gray-600">•</span>
+                    <a href="#" class="hover:text-amber-400 transition-colors">Terms of Service</a>
+                    <span class="text-gray-600">•</span>
+                    <a href="#" class="hover:text-amber-400 transition-colors">Cookie Policy</a>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        mobileMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+            const icon = this.querySelector('i');
+            if (mobileMenu.classList.contains('hidden')) {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            } else {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            }
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('#mobileMenu a').forEach(link => {
+            link.addEventListener('click', function() {
+                mobileMenu.classList.add('hidden');
+                const icon = mobileMenuBtn.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            });
+        });
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Check if user is logged in as mahasiswa
+        const userRole = localStorage.getItem('userRole');
+        if (!userRole || userRole !== 'mahasiswa') {
+            // Uncomment to enable auth check
+            // window.location.href = '../login.html';
+        }
+
+        // Load user data from localStorage
+        function loadUserData() {
+            const userName = localStorage.getItem('userName') || 'Mahasiswa';
+            const userNIM = localStorage.getItem('userNIM') || '2023001';
+            const userEmail = localStorage.getItem('userEmail') || 'student@unisafe.com';
+            
+            // Update welcome message
+            document.getElementById('userName').textContent = userName;
+            
+            // Update profile section
+            document.getElementById('profileName').textContent = userName;
+            document.getElementById('profileNIM').textContent = 'NIM: ' + userNIM;
+            document.getElementById('profileEmail').textContent = userEmail;
+            document.getElementById('profileInitials').textContent = userName.charAt(0).toUpperCase();
+            
+            // Update profile form
+            document.getElementById('profileNameInput').value = userName;
+            document.getElementById('profileNIMInput').value = userNIM;
+            document.getElementById('profileEmailInput').value = userEmail;
+            
+            // Update report form
+            document.getElementById('reportName').value = userName;
+            document.getElementById('reportNIM').value = userNIM;
+        }
+
+        // Load reports from localStorage
+        function loadReports() {
+            const reports = JSON.parse(localStorage.getItem('reports') || '[]');
+            const userNIM = localStorage.getItem('userNIM');
+            
+            // Filter reports for current user
+            const userReports = reports.filter(report => report.nim === userNIM);
+            
+            // Update stats
+            document.getElementById('totalReports').textContent = userReports.length;
+            document.getElementById('processingReports').textContent = userReports.filter(r => r.status === 'Investigating').length;
+            document.getElementById('completedReports').textContent = userReports.filter(r => r.status === 'Closed').length;
+            
+            // Update reports table
+            const tbody = document.getElementById('reportsTableBody');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (userReports.length === 0) {
+                emptyState.style.display = 'table-row';
+            } else {
+                emptyState.style.display = 'none';
+                
+                userReports.forEach(report => {
+                    const row = document.createElement('tr');
+                    row.className = 'hover:bg-gray-50';
+                    
+                    const statusBadge = getStatusBadge(report.status);
+                    
+                    row.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${report.id}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${report.email}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${formatDate(report.dateTime)}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${statusBadge}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            <button onclick="viewReportDetails('${report.id}')" class="text-amber-600 hover:text-amber-900 font-medium">Lihat Detail</button>
+                        </td>
+                    `;
+                    
+                    tbody.appendChild(row);
+                });
+            }
+        }
+
+        // Get status badge HTML
+        function getStatusBadge(status) {
+            const statusConfig = {
+                'Submitted': { class: 'bg-blue-100 text-blue-800', icon: 'fa-paper-plane' },
+                'Investigating': { class: 'bg-yellow-100 text-yellow-800', icon: 'fa-magnifying-glass' },
+                'Recovered': { class: 'bg-orange-100 text-orange-800', icon: 'fa-wrench' },
+                'Closed': { class: 'bg-green-100 text-green-800', icon: 'fa-circle-check' }
+            };
+            
+            const config = statusConfig[status] || statusConfig['Submitted'];
+            
+            return `
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${config.class}">
+                    <i class="fa-solid ${config.icon} mr-1"></i>
+                    ${status}
+                </span>
+            `;
+        }
+
+        // Format date
+        function formatDate(dateTime) {
+            const date = new Date(dateTime);
+            return date.toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // View report details
+        function viewReportDetails(reportId) {
+            const reports = JSON.parse(localStorage.getItem('reports') || '[]');
+            const report = reports.find(r => r.id === reportId);
+            
+            if (report) {
+                // Scroll to tracking section and highlight the status
+                document.getElementById('tracking').scrollIntoView({ behavior: 'smooth' });
+                
+                // Update progress visualization
+                updateProgressVisualization(report.status);
+            }
+        }
+
+        // Update progress visualization
+        function updateProgressVisualization(status) {
+            const steps = ['Submitted', 'Investigating', 'Recovered', 'Closed'];
+            const currentIndex = steps.indexOf(status);
+            
+            // Update step colors and icons
+            const stepElements = document.querySelectorAll('#tracking .flex.flex-col.items-center');
+            stepElements.forEach((element, index) => {
+                const circle = element.querySelector('.rounded-full');
+                const isCompleted = index <= currentIndex;
+                
+                if (isCompleted) {
+                    circle.classList.remove('bg-gray-200');
+                    circle.classList.add('bg-blue-600');
+                }
+            });
+        }
+
+        // Handle incident form submission
+        const incidentForm = document.getElementById('incidentForm');
+        if (incidentForm) {
+            incidentForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const reports = JSON.parse(localStorage.getItem('reports') || '[]');
+                const userNIM = localStorage.getItem('userNIM');
+                
+                const newReport = {
+                    id: 'RPT' + Date.now(),
+                    name: document.getElementById('reportName').value,
+                    nim: document.getElementById('reportNIM').value,
+                    email: document.getElementById('reportEmail').value,
+                    dateTime: document.getElementById('reportDateTime').value,
+                    category: document.getElementById('reportCategory').value,
+                    description: document.getElementById('reportDescription').value,
+                    status: 'Submitted',
+                    createdAt: new Date().toISOString(),
+                    evidence: [] // Handle file uploads separately
+                };
+                
+                reports.push(newReport);
+                localStorage.setItem('reports', JSON.stringify(reports));
+                
+                alert('Laporan berhasil dikirim! ID Laporan: ' + newReport.id);
+                
+                // Reload page to update the reports list
+                window.location.reload();
+            });
+        }
+
+        // Handle profile form submission
+        const profileForm = document.getElementById('profileForm');
+        if (profileForm) {
+            profileForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const currentPassword = document.getElementById('currentPassword').value;
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                // Update basic info
+                localStorage.setItem('userName', document.getElementById('profileNameInput').value);
+                localStorage.setItem('userEmail', document.getElementById('profileEmailInput').value);
+                
+                // Handle password change if needed
+                if (newPassword) {
+                    if (newPassword !== confirmPassword) {
+                        alert('Password baru dan konfirmasi password tidak cocok!');
+                        return;
+                    }
+                    
+                    // In a real application, you would validate current password
+                    // and update it in the user database
+                    alert('Password berhasil diubah!');
+                }
+                
+                // Reload user data
+                loadUserData();
+                alert('Profil berhasil diperbarui!');
+            });
+        }
+
+        // Handle logout
+        document.getElementById('logoutBtn')?.addEventListener('click', function() {
+            if (confirm('Apakah Anda yakin ingin keluar?')) {
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userNIM');
+                localStorage.removeItem('userEmail');
+                window.location.href = '../login.html';
+            }
+        });
+
+        document.getElementById('logoutBtnMobile')?.addEventListener('click', function() {
+            if (confirm('Apakah Anda yakin ingin keluar?')) {
+                localStorage.removeItem('userRole');
+                localStorage.removeItem('userName');
+                localStorage.removeItem('userNIM');
+                localStorage.removeItem('userEmail');
+                window.location.href = '../login.html';
+            }
+        });
+
+        // Handle file upload preview
+        const fileUpload = document.getElementById('fileUpload');
+        const uploadedFiles = document.getElementById('uploadedFiles');
+        
+        if (fileUpload && uploadedFiles) {
+            fileUpload.addEventListener('change', function(e) {
+                const files = Array.from(e.target.files);
+                
+                files.forEach(file => {
+                    if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                        alert(`File ${file.name} terlalu besar. Maksimal 5MB per file.`);
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const fileDiv = document.createElement('div');
+                        fileDiv.className = 'relative p-3 bg-gray-50 rounded-lg border border-gray-200';
+                        fileDiv.innerHTML = `
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-image text-amber-500"></i>
+                                <span class="text-sm text-gray-700 truncate flex-1">${file.name}</span>
+                                <button type="button" onclick="this.parentElement.parentElement.remove()" class="text-red-500 hover:text-red-700">
+                                    <i class="fa-solid fa-times"></i>
+                                </button>
+                            </div>
+                        `;
+                        uploadedFiles.appendChild(fileDiv);
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+        }
+
+        // Initialize page
+        loadUserData();
+        loadReports();
+    </script>
+
+</body>
+</html>

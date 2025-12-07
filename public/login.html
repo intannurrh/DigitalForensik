@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - UniSafe</title>
+    <link rel="stylesheet" href="../.dist/output.css">
+    <link rel="stylesheet" href="../src/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* All elements use Exo 2 font */
+        * {
+            font-family: 'Exo 2', sans-serif;
+        }
+        
+        /* Override any other font-family declarations */
+        body, div, span, h1, h2, h3, h4, h5, h6, p, a, button, input, label, textarea, select {
+            font-family: 'Exo 2', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 flex justify-center items-center min-h-screen">
+
+    <div class="w-full max-w-md text-center px-4 sm:px-6 py-8 sm:py-12">
+
+        <!-- LOGO -->
+        <div class="mb-8">
+            <img src="/logo.png" alt="UniSafe Logo" class="w-40 sm:w-48 mx-auto mb-4">
+        </div>
+
+        <!-- LOGIN FORM -->
+        <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8">
+            
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Login</h2>
+            
+            <form id="loginForm" class="space-y-5">
+                
+                <div>
+                    <label class="block text-left text-gray-700 text-sm font-medium mb-2">NIM</label>
+                    <input type="text" id="loginNIM" required placeholder="Masukkan NIM" 
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-gray-700 placeholder-gray-400 transition">
+                </div>
+
+                <div>
+                    <label class="block text-left text-gray-700 text-sm font-medium mb-2">Password</label>
+                    <input type="password" id="loginPassword" required placeholder="Masukkan Password" 
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-gray-700 placeholder-gray-400 transition">
+                </div>
+
+                <button type="submit" class="w-full py-3.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl transition shadow-md hover:shadow-lg transform hover:scale-105">
+                    Masuk
+                </button>
+            </form>
+
+            <div id="errorMessage" class="hidden mt-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">
+            </div>
+
+            <div class="mt-4 flex justify-between items-center">
+                <a href="#" id="forgotPasswordLink" class="text-amber-600 hover:text-amber-700 font-medium text-sm">Lupa Password?</a>
+            </div>
+
+            <div class="mt-6 pt-6 border-t border-gray-200">
+                <p class="text-gray-600 text-sm">Belum punya akun? 
+                    <a href="register.html" class="text-amber-600 hover:text-amber-700 font-medium">Daftar sekarang</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Login Info -->
+        <div class="mt-8 bg-white rounded-xl shadow-lg p-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Akun Demo</h3>
+            <div class="space-y-3 text-left">
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                    <p class="text-sm font-medium text-amber-900">Admin IRT</p>
+                    <p class="text-sm text-amber-700">NIM: ADMIN001 | Password: admin123</p>
+                </div>
+                <div class="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <p class="text-sm font-medium text-blue-900">Mahasiswa</p>
+                    <p class="text-sm text-blue-700">NIM: 2023001 | Password: student123</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nim = document.getElementById('loginNIM').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('errorMessage');
+            
+            // Get registered users from localStorage
+            const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            
+            // Find user with matching NIM and password
+            const user = users.find(u => u.nim === nim && u.password === password);
+            
+            if (user) {
+                // Store current user info
+                localStorage.setItem('userRole', user.role);
+                localStorage.setItem('userEmail', user.email);
+                localStorage.setItem('userName', user.name);
+                localStorage.setItem('userNIM', user.nim);
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                
+                // Redirect based on role
+                if (user.role === 'mahasiswa') {
+                    window.location.href = 'mahasiswaDashboard.html';
+                } else if (user.role === 'irt') {
+                    window.location.href = 'IRT/dashboard.html';
+                }
+            } else {
+                // Show error
+                errorDiv.textContent = 'NIM atau Password salah. Silakan coba lagi.';
+                errorDiv.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    errorDiv.classList.add('hidden');
+                }, 3000);
+            }
+        });
+
+        // Forgot Password functionality
+        document.getElementById('forgotPasswordLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const nim = prompt('Masukkan NIM Anda untuk reset password:');
+            if (nim) {
+                const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+                const user = users.find(u => u.nim === nim);
+                
+                if (user) {
+                    const newPassword = Math.random().toString(36).slice(-8);
+                    user.password = newPassword;
+                    localStorage.setItem('registeredUsers', JSON.stringify(users));
+                    
+                    alert(`Password baru untuk ${user.name} (${user.nim}) adalah: ${newPassword}\n\nSilakan gunakan password baru ini untuk login dan segera ubah password Anda.`);
+                } else {
+                    alert('NIM tidak ditemukan. Silakan periksa kembali NIM Anda atau hubungi administrator.');
+                }
+            }
+        });
+
+        // Create default admin account if not exists
+        const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+        if (users.length === 0) {
+            const defaultUsers = [
+                {
+                    name: 'Moni Roy',
+                    email: 'admin@unisafe.com',
+                    password: 'admin123',
+                    role: 'irt',
+                    nim: 'ADMIN001'
+                },
+                {
+                    name: 'John Student',
+                    email: 'student@unisafe.com',
+                    password: 'student123',
+                    role: 'mahasiswa',
+                    nim: '2023001'
+                }
+            ];
+            localStorage.setItem('registeredUsers', JSON.stringify(defaultUsers));
+        }
+    </script>
+
+
+</html>
