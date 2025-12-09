@@ -11,7 +11,75 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Exo 2' }
+        /* CSS Variables */
+        :root {
+            --unisafe-orange: #E6B400;
+            --unisafe-orange-dark: #cc9f00;
+            --unisafe-gray: #f5f5f5;
+            --unisafe-black: #222222;
+        }
+        
+        body { 
+            font-family: 'Exo 2', sans-serif;
+        }
+        
+        /* Custom button styles */
+        .btn-primary {
+            background-color: var(--unisafe-orange);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--unisafe-orange-dark);
+        }
+        
+        .btn-secondary {
+            border-color: var(--unisafe-orange);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--unisafe-orange);
+            border-color: var(--unisafe-orange);
+        }
+        
+        /* Custom link styles */
+        .link-primary {
+            color: var(--unisafe-orange);
+        }
+        
+        .link-primary:hover {
+            color: var(--unisafe-orange-dark);
+        }
+        
+        /* Input focus styles */
+        .input-focus:focus {
+            outline: none;
+            border-color: var(--unisafe-orange);
+            box-shadow: 0 0 0 3px rgba(230, 180, 0, 0.1);
+        }
+        
+        /* Custom gradient */
+        .gradient-unisafe {
+            background: linear-gradient(135deg, var(--unisafe-orange), var(--unisafe-orange-dark));
+        }
+        
+        /* Icon colors */
+        .icon-unisafe {
+            color: var(--unisafe-orange);
+        }
+        
+        /* Hover effects */
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+        
+        .hover-scale:active {
+            transform: scale(0.98);
+        }
+        
+        /* File upload area */
+        .file-upload-area:hover {
+            border-color: var(--unisafe-orange);
+        }
     </style>
 </head>
 
@@ -23,22 +91,22 @@
             <div class="flex justify-between items-center">
                 <!-- Logo -->
                 <div class="flex items-center gap-3">
-                    <img src="../../logo.png" alt="UniSafe Logo" class="h-10 sm:h-12 w-auto">
+                    <img src="/logo.png" alt="UniSafe Logo" class="h-10 sm:h-12 w-auto">
                 </div>
 
                 <!-- Desktop Navigation -->
                 <div class="hidden lg:flex items-center gap-10 xl:gap-12">
                     <!-- Navigation Links -->
                     <div class="flex items-center gap-8 xl:gap-10">
-                        <a href="#home" class="text-gray-700 text-base hover:text-amber-500 transition-all font-semibold hover:scale-105">Dashboard</a>
-                        <a href="#reporting" class="text-gray-700 text-base hover:text-amber-500 transition-all font-semibold hover:scale-105">Laporkan Insiden</a>
-                        <a href="#tracking" class="text-gray-700 text-base hover:text-amber-500 transition-all font-semibold hover:scale-105">Status Laporan</a>
-                        <a href="#profile" class="text-gray-700 text-base hover:text-amber-500 transition-all font-semibold hover:scale-105">Profil</a>
+                        <a href="#home" class="text-gray-700 text-base transition-all font-semibold hover:scale-105 link-primary">Dashboard</a>
+                        <a href="#reporting" class="text-gray-700 text-base transition-all font-semibold hover:scale-105 link-primary">Laporkan Insiden</a>
+                        <a href="#tracking" class="text-gray-700 text-base transition-all font-semibold hover:scale-105 link-primary">Status Laporan</a>
+                        <a href="#profile" class="text-gray-700 text-base transition-all font-semibold hover:scale-105 link-primary">Profil</a>
                     </div>
 
                     <!-- Auth Buttons -->
                     <div class="flex items-center gap-4">
-                        <button id="logoutBtn" class="px-6 py-2.5 text-gray-700 text-base font-semibold border-2 border-amber-400 rounded-lg hover:bg-amber-50 transition-all">Logout</button>
+                        <button id="logoutBtn" class="btn-secondary px-6 py-2.5 text-gray-700 text-base font-semibold border-2 rounded-lg transition-all">Logout</button>
                     </div>
                 </div>
 
@@ -76,8 +144,8 @@
                 <!-- Total Laporan -->
                 <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
                     <div class="flex items-center justify-between mb-4">
-                        <div class="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center">
-                            <i class="fa-solid fa-file-lines text-amber-600 text-2xl"></i>
+                        <div class="w-16 h-16 rounded-2xl flex items-center justify-center" style="background-color: rgba(230, 180, 0, 0.1);">
+                            <i class="fa-solid fa-file-lines text-2xl" style="color: var(--unisafe-orange);"></i>
                         </div>
                         <span class="text-sm text-gray-500">Total</span>
                     </div>
@@ -113,7 +181,7 @@
             <!-- Quick Actions -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
                 <!-- Buat Laporan Baru -->
-                <div class="bg-gradient-to-br from-amber-400 to-amber-500 rounded-2xl shadow-2xl p-8 text-white">
+                <div class="gradient-unisafe rounded-2xl shadow-2xl p-8 text-white">
                     <div class="flex items-center gap-4 mb-4">
                         <div class="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center">
                             <i class="fa-solid fa-plus text-2xl"></i>
@@ -121,7 +189,7 @@
                         <h2 class="text-2xl font-bold">Buat Laporan Baru</h2>
                     </div>
                     <p class="text-white/90 mb-6">Laporkan insiden peretasan email Anda sekarang juga</p>
-                    <a href="#reporting" class="inline-flex items-center gap-2 px-6 py-3 bg-white text-amber-600 font-bold rounded-xl hover:bg-gray-100 transition-all">
+                    <a href="#reporting" class="inline-flex items-center gap-2 px-6 py-3 bg-white btn-primary font-bold rounded-xl hover:scale-105 transition-all">
                         <i class="fa-solid fa-arrow-right"></i>
                         Buat Laporan
                     </a>
@@ -260,7 +328,7 @@
                     <div>
                         <label class="block text-gray-800 text-base font-semibold mb-3">Nama Lengkap <span class="text-red-500">*</span></label>
                         <input type="text" id="reportName" 
-                               class="w-full h-14 px-5 rounded-xl border-2 border-gray-300 focus:border-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-100 text-base transition-all"
+                               class="w-full h-14 px-5 rounded-xl border-2 border-gray-300 input-focus text-base transition-all"
                                placeholder="Masukkan nama lengkap" required>
                     </div>
 
@@ -268,7 +336,7 @@
                     <div>
                         <label class="block text-gray-800 text-base font-semibold mb-3">Nomor Induk Mahasiswa (NIM) <span class="text-red-500">*</span></label>
                         <input type="text" id="reportNIM" 
-                               class="w-full h-14 px-5 rounded-xl border-2 border-gray-300 focus:border-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-100 text-base transition-all"
+                               class="w-full h-14 px-5 rounded-xl border-2 border-gray-300 input-focus text-base transition-all"
                                placeholder="Masukkan NIM" required>
                     </div>
 
@@ -276,7 +344,7 @@
                     <div>
                         <label class="block text-gray-800 text-base font-semibold mb-3">Email yang Diretas <span class="text-red-500">*</span></label>
                         <input type="email" id="reportEmail"
-                               class="w-full h-14 px-5 rounded-xl border-2 border-gray-300 focus:border-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-100 text-base transition-all"
+                               class="w-full h-14 px-5 rounded-xl border-2 border-gray-300 input-focus text-base transition-all"
                                placeholder="contoh@student.univ.ac.id" required>
                     </div>
 
@@ -284,7 +352,7 @@
                     <div>
                         <label class="block text-gray-800 text-base font-semibold mb-3">Waktu Kejadian <span class="text-red-500">*</span></label>
                         <input type="datetime-local" id="reportDateTime"
-                               class="w-full h-14 px-5 rounded-xl border-2 border-gray-300 focus:border-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-100 text-base transition-all"
+                               class="w-full h-14 px-5 rounded-xl border-2 border-gray-300 input-focus text-base transition-all"
                                required>
                     </div>
 
@@ -292,7 +360,7 @@
                     <div>
                         <label class="block text-gray-800 text-base font-semibold mb-3">Kategori Insiden <span class="text-red-500">*</span></label>
                         <select id="reportCategory" 
-                                class="w-full h-14 px-5 rounded-xl border-2 border-gray-300 focus:border-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-100 text-base transition-all"
+                                class="w-full h-14 px-5 rounded-xl border-2 border-gray-300 input-focus text-base transition-all"
                                 required>
                             <option value="">Pilih kategori insiden</option>
                             <option value="Peretasan Akun Email">Peretasan Akun Email</option>
@@ -306,7 +374,7 @@
                     <div>
                         <label class="block text-gray-800 text-base font-semibold mb-3">Kronologi Kejadian <span class="text-red-500">*</span></label>
                         <textarea id="reportDescription"
-                               class="w-full px-5 py-4 rounded-xl border-2 border-gray-300 focus:border-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-100 text-base transition-all resize-none"
+                               class="w-full px-5 py-4 rounded-xl border-2 border-gray-300 input-focus text-base transition-all resize-none"
                                placeholder="Ceritakan secara detail kronologi peretasan yang terjadi..."
                                rows="5" required></textarea>
                     </div>
@@ -314,17 +382,17 @@
                     <!-- Bukti Pendukung -->
                     <div>
                         <label class="flex items-center text-gray-800 text-base font-semibold mb-3">
-                            <i class="fa-solid fa-paperclip text-amber-500 mr-2 text-lg"></i>
+                            <i class="fa-solid fa-paperclip icon-unisafe mr-2 text-lg"></i>
                             Bukti Pendukung (Screenshot)
                         </label>
-                        <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-amber-400 transition-all cursor-pointer bg-gray-50">
+                        <div class="file-upload-area border-2 border-dashed border-gray-300 rounded-xl p-6 text-center cursor-pointer bg-gray-50">
                             <input type="file" 
                                    class="hidden"
                                    id="fileUpload"
                                    accept="image/*"
                                    multiple>
                             <label for="fileUpload" class="cursor-pointer">
-                                <i class="fa-solid fa-cloud-arrow-up text-5xl text-amber-400 mb-3"></i>
+                                <i class="fa-solid fa-cloud-arrow-up text-5xl mb-3 icon-unisafe"></i>
                                 <p class="text-gray-700 font-medium mb-1">Klik untuk upload atau drag & drop</p>
                                 <p class="text-gray-500 text-sm">PNG, JPG atau JPEG (Max 5MB per file)</p>
                             </label>
@@ -337,7 +405,7 @@
                     <!-- Submit Button -->
                     <div class="flex justify-center pt-6">
                         <button type="submit" 
-                                class="w-full sm:w-auto px-12 py-4 bg-gradient-to-r from-amber-500 to-amber-600 rounded-xl text-white text-lg font-bold hover:from-amber-600 hover:to-amber-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-3">
+                                class="w-full sm:w-auto px-12 py-4 btn-primary rounded-xl text-white text-lg font-bold shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-3 hover-scale">
                             <i class="fa-solid fa-paper-plane"></i>
                             Kirim Laporan
                         </button>
@@ -379,7 +447,7 @@
                         <div>
                             <label class="block text-gray-800 text-base font-semibold mb-3">Nama Lengkap</label>
                             <input type="text" id="profileNameInput"
-                                   class="w-full h-14 px-5 rounded-xl border-2 border-gray-300 focus:border-amber-500 focus:outline-none focus:ring-4 focus:ring-amber-100 text-base transition-all"
+                                   class="w-full h-14 px-5 rounded-xl border-2 border-gray-300 input-focus text-base transition-all"
                                    placeholder="Masukkan nama lengkap">
                         </div>
 
@@ -494,7 +562,7 @@
                 
                 <!-- Left Section: Logo & Description -->
                 <div class="text-center lg:text-left lg:max-w-md">
-                    <img src="../../logo.png" alt="UniSafe Logo" class="h-14 w-auto mx-auto lg:mx-0 mb-4">
+                    <img src="/logo.png" alt="UniSafe Logo" class="h-14 w-auto mx-auto lg:mx-0 mb-4">
                     <p class="text-gray-400 text-base leading-relaxed mb-6">
                         Platform keamanan email mahasiswa yang membantu melindungi akun dari ancaman peretasan
                     </p>
@@ -591,6 +659,91 @@
     </footer>
 
     <script>
+        // Initialize dummy data for testing
+        function initializeDummyData() {
+            const existingReports = JSON.parse(localStorage.getItem('reports') || '[]');
+            
+            if (existingReports.length === 0) {
+                const dummyReports = [
+                    {
+                        id: 'RPT1640000000001',
+                        name: 'Ahmad Rizki',
+                        nim: '2021001234',
+                        email: 'ahmad.rizki@student.university.edu',
+                        dateTime: '2024-01-15T10:30:00',
+                        category: 'Peretasan Akun Email',
+                        description: 'Saya menerima email yang mencurigakan yang meminta saya untuk mengubah password. Setelah saya klik link tersebut, akun email saya tidak bisa diakses.',
+                        status: 'Closed',
+                        createdAt: '2024-01-15T00:00:00.000Z',
+                        evidence: ['screenshot1.png', 'screenshot2.png']
+                    },
+                    {
+                        id: 'RPT1640000000002',
+                        name: 'Budi Santoso',
+                        nim: '2021005678',
+                        email: 'budi.santoso@student.university.edu',
+                        dateTime: '2024-02-20T14:45:00',
+                        category: 'Phishing',
+                        description: 'Menerima email dari pihak yang mengaku dari kampus meminta data pribadi. Ternyata itu adalah email phishing.',
+                        status: 'Investigating',
+                        createdAt: '2024-02-20T00:00:00.000Z',
+                        evidence: ['phishing_email.png']
+                    },
+                    {
+                        id: 'RPT1640000000003',
+                        name: 'Maya Putri',
+                        nim: '2023001',
+                        email: 'maya.putri@student.university.edu',
+                        dateTime: '2024-03-05T09:20:00',
+                        category: 'Malware',
+                        description: 'Komputer saya terinfeksi malware setelah mengunduh attachment dari email yang tidak dikenal.',
+                        status: 'Recovered',
+                        createdAt: '2024-03-05T00:00:00.000Z',
+                        evidence: ['malware_alert.png']
+                    }
+                ];
+                
+                localStorage.setItem('reports', JSON.stringify(dummyReports));
+                console.log('Dummy reports initialized for testing');
+            }
+        }
+        
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const colors = {
+                success: 'bg-green-100 text-green-800 border-green-200',
+                error: 'bg-red-100 text-red-800 border-red-200',
+                info: 'bg-blue-100 text-blue-800 border-blue-200',
+                warning: 'bg-yellow-100 text-yellow-800 border-yellow-200'
+            };
+            
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 ${colors[type]} px-6 py-4 rounded-lg border shadow-lg z-50 transform transition-all duration-300 translate-x-full`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fa-solid ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'} mr-3"></i>
+                    <span class="font-medium">${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-gray-500 hover:text-gray-700">
+                        <i class="fa-solid fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+                notification.classList.add('translate-x-0');
+            }, 10);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+        
         // Mobile Menu Toggle
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
@@ -886,8 +1039,11 @@
         }
 
         // Initialize page
-        loadUserData();
-        loadReports();
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDummyData();
+            loadUserData();
+            loadReports();
+        });
     </script>
 
 </body>

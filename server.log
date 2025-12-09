@@ -941,3 +941,26 @@ Serving HTTP on :: port 8081 (http://[::]:8081/) ...
 ::1 - - [07/Dec/2025 11:17:20] "GET /public/IRT/logAktivitas.html HTTP/1.1" 304 -
 ::1 - - [07/Dec/2025 11:19:21] "GET /public/IRT/incoming.html HTTP/1.1" 200 -
 ::1 - - [07/Dec/2025 11:19:21] "GET /.dist/output.css HTTP/1.1" 304 -
+::1 - - [07/Dec/2025 11:35:12] "GET /public/IRT/incoming.html HTTP/1.1" 304 -
+::1 - - [07/Dec/2025 11:35:12] "GET /src/main.css HTTP/1.1" 304 -
+::1 - - [07/Dec/2025 11:35:12] "GET /.dist/output.css HTTP/1.1" 304 -
+::1 - - [07/Dec/2025 11:35:14] "GET /public/IRT/investigasi.html HTTP/1.1" 200 -
+::1 - - [07/Dec/2025 11:35:19] "GET /public/IRT/finalReport.html HTTP/1.1" 304 -
+::1 - - [07/Dec/2025 13:32:30] "GET /public/IRT/investigasi.html HTTP/1.1" 200 -
+::1 - - [07/Dec/2025 13:32:30] "GET /src/main.css HTTP/1.1" 304 -
+::1 - - [07/Dec/2025 13:32:30] "GET /.dist/output.css HTTP/1.1" 304 -
+::1 - - [07/Dec/2025 13:32:30] "GET /src/main.js HTTP/1.1" 304 -
+::1 - - [07/Dec/2025 13:32:54] "GET /public/IRT/incoming.html HTTP/1.1" 304 -
+::1 - - [07/Dec/2025 13:32:59] "GET /public/IRT/finalReport.html HTTP/1.1" 304 -
+::1 - - [07/Dec/2025 13:33:22] "GET /public/IRT/manajemenInsiden.html HTTP/1.1" 200 -
+::1 - - [07/Dec/2025 13:33:33] "GET /public/IRT/dashboard.html HTTP/1.1" 304 -
+::1 - - [07/Dec/2025 13:39:39] "GET /public/IRT/setting.html HTTP/1.1" 200 -
+::1 - - [07/Dec/2025 13:39:42] "GET /public/IRT/setting.html? HTTP/1.1" 200 -
+::1 - - [07/Dec/2025 13:40:56] code 404, message File not found
+::1 - - [07/Dec/2025 13:40:56] "GET /public/index.htmIRT HTTP/1.1" 404 -
+::1 - - [07/Dec/2025 13:41:01] code 404, message File not found
+::1 - - [07/Dec/2025 13:41:01] "GET /public/index.htmI HTTP/1.1" 404 -
+::1 - - [07/Dec/2025 13:41:40] code 404, message File not found
+::1 - - [07/Dec/2025 13:41:40] "GET /public/index.htmI HTTP/1.1" 404 -
+::1 - - [07/Dec/2025 13:43:31] code 404, message File not found
+::1 - - [07/Dec/2025 13:43:31] "GET /public/index.htmI HTTP/1.1" 404 -

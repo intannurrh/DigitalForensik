@@ -12,6 +12,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
+        /* CSS Variables */
+        :root {
+            --unisafe-orange: #E6B400;
+            --unisafe-orange-dark: #cc9f00;
+            --unisafe-gray: #f5f5f5;
+            --unisafe-black: #222222;
+        }
+        
         /* All elements use Exo 2 font */
         * {
             font-family: 'Exo 2', sans-serif;
@@ -20,6 +28,46 @@
         /* Override any other font-family declarations */
         body, div, span, h1, h2, h3, h4, h5, h6, p, a, button, input, label, textarea, select {
             font-family: 'Exo 2', sans-serif;
+        }
+        
+        /* Custom button styles */
+        .btn-primary {
+            background-color: var(--unisafe-orange);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--unisafe-orange-dark);
+        }
+        
+        .btn-primary:focus {
+            background-color: var(--unisafe-orange);
+        }
+        
+        /* Custom input focus styles */
+        .input-focus:focus {
+            outline: none;
+            border-color: var(--unisafe-orange);
+            box-shadow: 0 0 0 3px rgba(230, 180, 0, 0.1);
+        }
+        
+        /* Link styles */
+        .link-primary {
+            color: var(--unisafe-orange);
+        }
+        
+        .link-primary:hover {
+            color: var(--unisafe-orange-dark);
+        }
+        
+        /* Demo card styles */
+        .demo-card-irt {
+            background-color: rgba(230, 180, 0, 0.05);
+            border-color: var(--unisafe-orange);
+        }
+        
+        .demo-card-mahasiswa {
+            background-color: rgba(59, 130, 246, 0.05);
+            border-color: rgb(59, 130, 246);
         }
     </style>
 </head>
@@ -43,16 +91,16 @@
                 <div>
                     <label class="block text-left text-gray-700 text-sm font-medium mb-2">NIM</label>
                     <input type="text" id="loginNIM" required placeholder="Masukkan NIM" 
-                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-gray-700 placeholder-gray-400 transition">
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl input-focus text-gray-700 placeholder-gray-400 transition">
                 </div>
 
                 <div>
                     <label class="block text-left text-gray-700 text-sm font-medium mb-2">Password</label>
                     <input type="password" id="loginPassword" required placeholder="Masukkan Password" 
-                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-gray-700 placeholder-gray-400 transition">
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl input-focus text-gray-700 placeholder-gray-400 transition">
                 </div>
 
-                <button type="submit" class="w-full py-3.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl transition shadow-md hover:shadow-lg transform hover:scale-105">
+                <button type="submit" class="btn-primary w-full py-3.5 text-white font-bold rounded-xl transition shadow-md hover:shadow-lg transform hover:scale-105">
                     Masuk
                 </button>
             </form>
@@ -61,12 +109,12 @@
             </div>
 
             <div class="mt-4 flex justify-between items-center">
-                <a href="#" id="forgotPasswordLink" class="text-amber-600 hover:text-amber-700 font-medium text-sm">Lupa Password?</a>
+                <a href="#" id="forgotPasswordLink" class="link-primary font-medium text-sm">Lupa Password?</a>
             </div>
 
             <div class="mt-6 pt-6 border-t border-gray-200">
                 <p class="text-gray-600 text-sm">Belum punya akun? 
-                    <a href="register.html" class="text-amber-600 hover:text-amber-700 font-medium">Daftar sekarang</a>
+                    <a href="register.html" class="link-primary font-medium">Daftar sekarang</a>
                 </p>
             </div>
         </div>
@@ -75,13 +123,13 @@
         <div class="mt-8 bg-white rounded-xl shadow-lg p-6">
             <h3 class="text-lg font-bold text-gray-900 mb-4">Akun Demo</h3>
             <div class="space-y-3 text-left">
-                <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg">
-                    <p class="text-sm font-medium text-amber-900">Admin IRT</p>
-                    <p class="text-sm text-amber-700">NIM: ADMIN001 | Password: admin123</p>
+                <div class="p-3 demo-card-irt border rounded-lg">
+                    <p class="text-sm font-medium" style="color: var(--unisafe-orange);">Admin IRT</p>
+                    <p class="text-sm">NIM: ADMIN001 | Password: admin123</p>
                 </div>
-                <div class="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                    <p class="text-sm font-medium text-blue-900">Mahasiswa</p>
-                    <p class="text-sm text-blue-700">NIM: 2023001 | Password: student123</p>
+                <div class="p-3 demo-card-mahasiswa border rounded-lg">
+                    <p class="text-sm font-medium" style="color: rgb(59, 130, 246);">Mahasiswa</p>
+                    <p class="text-sm">NIM: 2023001 | Password: student123</p>
                 </div>
             </div>
         </div>
@@ -89,41 +137,211 @@
     </div>
 
     <script>
+        // Initialize dummy data for testing
+        function initializeDummyData() {
+            const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            
+            if (existingUsers.length === 0) {
+                const dummyUsers = [
+                    {
+                        name: "Admin IRT",
+                        nim: "ADMIN001",
+                        email: "admin@irt.university.edu",
+                        password: "admin123",
+                        role: "irt",
+                        registeredAt: "2024-01-01T00:00:00.000Z",
+                        isActive: true,
+                        lastLogin: null
+                    },
+                    {
+                        name: "Ahmad Rizki",
+                        nim: "2021001234",
+                        email: "ahmad.rizki@student.university.edu",
+                        password: "password123",
+                        role: "mahasiswa",
+                        registeredAt: "2024-01-15T10:30:00.000Z",
+                        isActive: true,
+                        lastLogin: null
+                    },
+                    {
+                        name: "Siti Nurhaliza",
+                        nim: "IRT2021001",
+                        email: "siti.nurhaliza@irt.university.edu",
+                        password: "admin123",
+                        role: "irt",
+                        registeredAt: "2024-01-10T08:15:00.000Z",
+                        isActive: true,
+                        lastLogin: null
+                    },
+                    {
+                        name: "Budi Santoso",
+                        nim: "2021005678",
+                        email: "budi.santoso@student.university.edu",
+                        password: "budisanti",
+                        role: "mahasiswa",
+                        registeredAt: "2024-02-20T14:45:00.000Z",
+                        isActive: true,
+                        lastLogin: null
+                    },
+                    {
+                        name: "Maya Putri",
+                        nim: "2023001",
+                        email: "maya.putri@student.university.edu",
+                        password: "student123",
+                        role: "mahasiswa",
+                        registeredAt: "2024-03-05T09:20:00.000Z",
+                        isActive: true,
+                        lastLogin: null
+                    }
+                ];
+                
+                localStorage.setItem('registeredUsers', JSON.stringify(dummyUsers));
+                console.log('Dummy users initialized for testing');
+            }
+        }
+        
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const colors = {
+                success: 'bg-green-100 text-green-800 border-green-200',
+                error: 'bg-red-100 text-red-800 border-red-200',
+                info: 'bg-blue-100 text-blue-800 border-blue-200',
+                warning: 'bg-yellow-100 text-yellow-800 border-yellow-200'
+            };
+            
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 ${colors[type]} px-6 py-4 rounded-lg border shadow-lg z-50 transform transition-all duration-300 translate-x-full`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fa-solid ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'} mr-3"></i>
+                    <span class="font-medium">${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-gray-500 hover:text-gray-700">
+                        <i class="fa-solid fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+                notification.classList.add('translate-x-0');
+            }, 10);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDummyData();
+            
+            // Add loading animation
+            const submitBtn = document.querySelector('#loginForm button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.addEventListener('click', function() {
+                this.disabled = true;
+                this.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Memproses...';
+            });
+            
+            // Reset button state
+            const form = document.getElementById('loginForm');
+            form.addEventListener('submit', function() {
+                // Reset will happen after processing
+                setTimeout(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                }, 3000);
+            });
+        });
+        
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const nim = document.getElementById('loginNIM').value;
-            const password = document.getElementById('loginPassword').value;
+            const nim = document.getElementById('loginNIM').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
             const errorDiv = document.getElementById('errorMessage');
+            const submitBtn = document.querySelector('#loginForm button[type="submit"]');
+            
+            // Hide previous error
+            errorDiv.classList.add('hidden');
+            
+            // Basic validation
+            if (!nim || !password) {
+                errorDiv.innerHTML = '<i class="fa-solid fa-exclamation-triangle mr-2"></i>Harap isi NIM dan Password!';
+                errorDiv.classList.remove('hidden');
+                
+                // Reset button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Masuk';
+                return;
+            }
             
             // Get registered users from localStorage
             const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
             
             // Find user with matching NIM and password
-            const user = users.find(u => u.nim === nim && u.password === password);
+            const user = users.find(u => u.nim === nim && u.password === password && u.isActive);
             
             if (user) {
-                // Store current user info
+                // Update last login
+                user.lastLogin = new Date().toISOString();
+                const userIndex = users.findIndex(u => u.nim === nim);
+                users[userIndex] = user;
+                localStorage.setItem('registeredUsers', JSON.stringify(users));
+                
+                // Store current user session
+                const currentUser = {
+                    email: user.email,
+                    name: user.name,
+                    role: user.role,
+                    nim: user.nim,
+                    isLoggedIn: true,
+                    loginTime: new Date().toISOString()
+                };
+                
                 localStorage.setItem('userRole', user.role);
                 localStorage.setItem('userEmail', user.email);
                 localStorage.setItem('userName', user.name);
                 localStorage.setItem('userNIM', user.nim);
-                localStorage.setItem('currentUser', JSON.stringify(user));
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
+                // Show success notification
+                showNotification(`Selamat datang kembali, ${user.name}!`, 'success');
                 
                 // Redirect based on role
-                if (user.role === 'mahasiswa') {
-                    window.location.href = 'mahasiswaDashboard.html';
-                } else if (user.role === 'irt') {
-                    window.location.href = 'IRT/dashboard.html';
-                }
+                setTimeout(() => {
+                    if (user.role === 'mahasiswa') {
+                        window.location.href = 'mahasiswaDashboard.html';
+                    } else if (user.role === 'irt') {
+                        window.location.href = 'IRT/dashboard.html';
+                    }
+                }, 1500);
+                
             } else {
-                // Show error
-                errorDiv.textContent = 'NIM atau Password salah. Silakan coba lagi.';
+                // Check if user exists but wrong password
+                const existingUser = users.find(u => u.nim === nim);
+                
+                if (existingUser) {
+                    errorDiv.innerHTML = '<i class="fa-solid fa-exclamation-circle mr-2"></i>Password salah. Silakan coba lagi.';
+                } else {
+                    errorDiv.innerHTML = '<i class="fa-solid fa-exclamation-circle mr-2"></i>NIM tidak ditemukan. Silakan periksa kembali atau <a href="register.html" class="link-primary font-semibold">daftar</a> terlebih dahulu.';
+                }
+                
                 errorDiv.classList.remove('hidden');
                 
+                // Reset button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Masuk';
+                
+                // Hide error after 5 seconds
                 setTimeout(() => {
                     errorDiv.classList.add('hidden');
-                }, 3000);
+                }, 5000);
             }
         });
 
@@ -134,41 +352,64 @@
             const nim = prompt('Masukkan NIM Anda untuk reset password:');
             if (nim) {
                 const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-                const user = users.find(u => u.nim === nim);
+                const user = users.find(u => u.nim === nim && u.isActive);
                 
                 if (user) {
                     const newPassword = Math.random().toString(36).slice(-8);
                     user.password = newPassword;
+                    
+                    // Update user in localStorage
+                    const userIndex = users.findIndex(u => u.nim === nim);
+                    users[userIndex] = user;
                     localStorage.setItem('registeredUsers', JSON.stringify(users));
                     
-                    alert(`Password baru untuk ${user.name} (${user.nim}) adalah: ${newPassword}\n\nSilakan gunakan password baru ini untuk login dan segera ubah password Anda.`);
+                    showNotification(`Password baru untuk ${user.name} (${user.nim}) adalah: ${newPassword}`, 'info');
+                    alert(`Password berhasil direset!\n\nNama: ${user.name}\nNIM: ${user.nim}\nPassword Baru: ${newPassword}\n\nSilakan gunakan password baru ini untuk login dan segera ubah password Anda.`);
                 } else {
-                    alert('NIM tidak ditemukan. Silakan periksa kembali NIM Anda atau hubungi administrator.');
+                    showNotification('NIM tidak ditemukan. Silakan periksa kembali NIM Anda atau hubungi administrator.', 'error');
                 }
             }
         });
-
-        // Create default admin account if not exists
-        const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-        if (users.length === 0) {
-            const defaultUsers = [
-                {
-                    name: 'Moni Roy',
-                    email: 'admin@unisafe.com',
-                    password: 'admin123',
-                    role: 'irt',
-                    nim: 'ADMIN001'
-                },
-                {
-                    name: 'John Student',
-                    email: 'student@unisafe.com',
-                    password: 'student123',
-                    role: 'mahasiswa',
-                    nim: '2023001'
-                }
-            ];
-            localStorage.setItem('registeredUsers', JSON.stringify(defaultUsers));
-        }
+        
+        // Add input field animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('input[type="text"], input[type="password"]');
+            
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'scale(1.02)';
+                    this.parentElement.style.transition = 'transform 0.2s ease';
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'scale(1)';
+                });
+                
+                // Add enter key support
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+                    }
+                });
+            });
+        });
+        
+        // Check if user is already logged in
+        window.addEventListener('load', function() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            
+            if (currentUser.isLoggedIn) {
+                showNotification(`Anda sudah login sebagai ${currentUser.name}. Redirecting...`, 'info');
+                
+                setTimeout(() => {
+                    if (currentUser.role === 'mahasiswa') {
+                        window.location.href = 'mahasiswaDashboard.html';
+                    } else if (currentUser.role === 'irt') {
+                        window.location.href = 'IRT/dashboard.html';
+                    }
+                }, 2000);
+            }
+        });
     </script>
 
 

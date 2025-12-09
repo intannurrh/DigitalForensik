@@ -20,7 +20,44 @@
     
     <!-- Custom Styles -->
     <style>
+        /* CSS Variables */
+        :root {
+            --unisafe-orange: #E6B400;
+            --unisafe-orange-dark: #cc9f00;
+            --unisafe-gray: #f5f5f5;
+            --unisafe-black: #222222;
+        }
         
+        body {
+            font-family: 'Exo 2', sans-serif;
+        }
+        
+        /* Custom button styles */
+        .btn-primary {
+            background-color: var(--unisafe-orange);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--unisafe-orange-dark);
+        }
+        
+        /* Custom link styles */
+        .link-primary {
+            color: var(--unisafe-orange);
+        }
+        
+        .link-primary:hover {
+            color: var(--unisafe-orange-dark);
+        }
+        
+        /* Input focus styles */
+        .input-focus:focus {
+            outline: none;
+            border-color: var(--unisafe-orange);
+            box-shadow: 0 0 0 2px rgba(230, 180, 0, 0.2);
+        }
+        
+        /* Sidebar Styles */
         .sidebar {
             transition: transform 0.3s ease-in-out;
         }
@@ -76,11 +113,7 @@
             }
         }
         
-    
-        body {
-            font-family: 'Exo 2', sans-serif;
-        }
-        
+        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -103,39 +136,73 @@
             border-radius: 8px;
         }
         
+        /* Priority Status Styles */
         .priority-high {
             color: #dc2626;
             background-color: #fee2e2;
+            font-weight: 600;
         }
         
         .priority-medium {
             color: #d97706;
             background-color: #fef3c7;
+            font-weight: 600;
         }
         
         .priority-low {
             color: #059669;
             background-color: #d1fae5;
+            font-weight: 600;
         }
         
         .status-open {
             color: #0891b2;
             background-color: #ecfeff;
+            font-weight: 600;
         }
         
         .status-progress {
             color: #7c3aed;
             background-color: #f3e8ff;
+            font-weight: 600;
         }
         
         .status-resolved {
             color: #059669;
             background-color: #d1fae5;
+            font-weight: 600;
         }
         
         .status-closed {
             color: #6b7280;
             background-color: #f3f4f6;
+            font-weight: 600;
+        }
+        
+        /* Evidence Preview Styles */
+        .evidence-preview {
+            border: 2px solid var(--unisafe-orange);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .evidence-item {
+            transition: transform 0.2s ease;
+        }
+        
+        .evidence-item:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Forensic Analysis Styles */
+        .forensic-section {
+            background: linear-gradient(135deg, rgba(230, 180, 0, 0.05), rgba(230, 180, 0, 0.1));
+            border-left: 4px solid var(--unisafe-orange);
+        }
+        
+        /* Table Row Hover */
+        .table-row-hover:hover {
+            background-color: rgba(230, 180, 0, 0.05);
         }
     </style>
 </head>
@@ -150,7 +217,7 @@
         <!-- Sidebar -->
         <aside id="sidebar" class="sidebar w-64 bg-white shadow-sm h-screen fixed z-40">
             <div class="px-6 py-6 border-b flex items-center gap-3">
-                <img src="/logo.png" alt="UniSafe Logo" class="h-10 w-auto">
+                <img src="/Users/intannurrahmahariyadi/Downloads/webDigfor/src/logo.png" alt="UniSafe Logo" class="h-10 w-auto">
 
             </div>
 
@@ -218,7 +285,7 @@
                     </button>
                     <div class="relative">
                         <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                        <input type="text" id="searchInput" placeholder="Cari insiden..." class="pl-10 pr-4 py-2 bg-gray-100 rounded-lg border-0 focus:outline-none focus:ring-2 w-80" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'" onkeyup="searchIncidents()">
+                        <input type="text" id="searchInput" placeholder="Cari insiden..." class="pl-10 pr-4 py-2 bg-gray-100 rounded-lg border-0 input-focus w-80" onkeyup="searchIncidents()">
                     </div>
                 </div>
 
@@ -253,7 +320,7 @@
                     <div class="flex flex-wrap gap-4 items-center">
                         <div class="flex-1 min-w-[200px]">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                            <select id="filterStatus" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'">
+                            <select id="filterStatus" class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus">
                                 <option value="">Semua Status</option>
                                 <option value="open">Terbuka</option>
                                 <option value="progress">Dalam Proses</option>
@@ -263,7 +330,7 @@
                         </div>
                         <div class="flex-1 min-w-[200px]">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Prioritas</label>
-                            <select id="filterPriority" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'">
+                            <select id="filterPriority" class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus">
                                 <option value="">Semua Prioritas</option>
                                 <option value="high">Tinggi</option>
                                 <option value="medium">Sedang</option>
@@ -272,7 +339,7 @@
                         </div>
                         <div class="flex-1 min-w-[200px]">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
-                            <select id="filterCategory" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'">
+                            <select id="filterCategory" class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus">
                                 <option value="">Semua Kategori</option>
                                 <option value="phishing">Phishing</option>
                                 <option value="malware">Malware</option>
@@ -282,7 +349,7 @@
                             </select>
                         </div>
                         <div class="flex gap-2 items-end">
-                            <button class="text-white px-6 py-2 rounded-lg font-medium transition-colors" style="background-color: #E6B400;" onmouseover="this.style.backgroundColor='#D4A000'" onmouseout="this.style.backgroundColor='#E6B400'" onclick="applyFilters()">
+                            <button class="btn-primary text-white px-6 py-2 rounded-lg font-medium transition-colors" onclick="applyFilters()">
                                 <i class="fa-solid fa-search mr-2"></i>
                                 Terapkan
                             </button>
@@ -297,7 +364,7 @@
                 <!-- Action Bar -->
                 <div class="flex justify-between items-center mb-6">
                     <div class="flex gap-4">
-                        <button class="text-white px-6 py-2 rounded-lg font-medium transition-colors" style="background-color: #E6B400;" onmouseover="this.style.backgroundColor='#D4A000'" onmouseout="this.style.backgroundColor='#E6B400'" onclick="openModal()">
+                        <button class="btn-primary text-white px-6 py-2 rounded-lg font-medium transition-colors" onclick="openModal()">
                             <i class="fa-solid fa-plus mr-2"></i>
                             Insiden Baru
                         </button>
@@ -312,7 +379,7 @@
                     </div>
                     <div class="flex items-center gap-4">
                         <span class="text-sm text-gray-600">Tampilkan:</span>
-                        <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'" onchange="changePageSize(this.value)">
+                        <select class="px-4 py-2 border border-gray-300 rounded-lg input-focus" onchange="changePageSize(this.value)">
                             <option>10</option>
                             <option>25</option>
                             <option>50</option>
@@ -372,12 +439,12 @@
             <form id="incidentForm" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Judul Insiden</label>
-                    <input type="text" id="incidentTitle" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'" required>
+                    <input type="text" id="incidentTitle" class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus" required>
                 </div>
                 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
-                    <select id="incidentCategory" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'" required>
+                    <select id="incidentCategory" class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus" required>
                         <option value="">Pilih Kategori</option>
                         <option value="phishing">Phishing</option>
                         <option value="malware">Malware</option>
@@ -389,7 +456,7 @@
                 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Prioritas</label>
-                    <select id="incidentPriority" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'" required>
+                    <select id="incidentPriority" class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus" required>
                         <option value="">Pilih Prioritas</option>
                         <option value="high">Tinggi</option>
                         <option value="medium">Sedang</option>
@@ -399,19 +466,19 @@
                 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi</label>
-                    <textarea id="incidentDescription" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'" required></textarea>
+                    <textarea id="incidentDescription" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus" required></textarea>
                 </div>
                 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Pelapor</label>
-                    <input type="text" id="incidentReporter" value="Admin IRT" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:outline-none" onfocus="this.style.boxShadow='0 0 0 2px #E6B400'" onblur="this.style.boxShadow='none'" required>
+                    <input type="text" id="incidentReporter" value="Admin IRT" class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus" required>
                 </div>
                 
                 <div class="flex justify-end gap-2">
                     <button type="button" class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors" onclick="closeModal()">
                         Batal
                     </button>
-                    <button type="submit" class="text-white px-6 py-2 rounded-lg font-medium transition-colors" style="background-color: #E6B400;" onmouseover="this.style.backgroundColor='#D4A000'" onmouseout="this.style.backgroundColor='#E6B400'">
+                    <button type="submit" class="btn-primary text-white px-6 py-2 rounded-lg font-medium transition-colors">
                         Simpan Insiden
                     </button>
                 </div>
@@ -419,9 +486,166 @@
         </div>
     </div>
 
+    <!-- Modal for Evidence View & Forensic Analysis -->
+    <div id="evidenceModal" class="modal">
+        <div class="modal-content max-w-4xl">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-semibold text-gray-800">Detail Insiden & Analisis Forensik</h2>
+                <button class="text-gray-500 hover:text-gray-700" onclick="closeEvidenceModal()">
+                    <i class="fa-solid fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Left Column: Incident Details -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Informasi Insiden</h3>
+                    
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <div class="space-y-3">
+                            <div>
+                                <label class="text-sm font-medium text-gray-500">ID Insiden</label>
+                                <p class="text-base font-semibold" id="detailId">-</p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-500">Pelapor</label>
+                                <p class="text-base" id="detailReporter">-</p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-500">Email Pelapor</label>
+                                <p class="text-base" id="detailEmail">-</p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-500">Waktu Kejadian</label>
+                                <p class="text-base" id="detailDateTime">-</p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-500">Kategori</label>
+                                <p class="text-base" id="detailCategory">-</p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-500">Prioritas</label>
+                                <span id="detailPriority" class="px-2 py-1 rounded-full text-xs font-semibold">-</span>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-500">Status</label>
+                                <span id="detailStatus" class="px-2 py-1 rounded-full text-xs font-semibold">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">Kronologi Kejadian</label>
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <p class="text-sm" id="detailDescription">-</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column: Evidence & Forensic Analysis -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Bukti Pendukung</h3>
+                    
+                    <div class="evidence-preview bg-gray-50 rounded-lg p-4">
+                        <div id="evidenceGallery" class="grid grid-cols-2 gap-3">
+                            <!-- Evidence items will be added here dynamically -->
+                        </div>
+                        <div id="noEvidence" class="text-center py-8 text-gray-500">
+                            <i class="fa-solid fa-image text-4xl mb-3"></i>
+                            <p>Tidak ada bukti pendukung</p>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Analisis Forensik</h3>
+                    
+                    <div class="forensic-section rounded-lg p-4 space-y-4">
+                        <div>
+                            <label class="text-sm font-medium text-gray-500">Analisis IRT</label>
+                            <textarea id="forensicAnalysis" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-focus" placeholder="Lakukan analisis forensik terhadap bukti dan insiden..."></textarea>
+                        </div>
+                        
+                        <div>
+                            <label class="text-sm font-medium text-gray-500">Rekomendasi Tindakan</label>
+                            <textarea id="forensicRecommendation" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-focus" placeholder="Rekomendasi tindakan yang perlu diambil..."></textarea>
+                        </div>
+                        
+                        <div>
+                            <label class="text-sm font-medium text-gray-500">Estimasi Waktu Penyelesaian</label>
+                            <select id="estimatedResolution" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-focus">
+                                <option value="1">1 Jam</option>
+                                <option value="6">6 Jam</option>
+                                <option value="24">24 Jam</option>
+                                <option value="72">3 Hari</option>
+                                <option value="168">1 Minggu</option>
+                            </select>
+                        </div>
+                        
+                        <div class="flex justify-end gap-2">
+                            <button class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-6 py-2 rounded-lg font-medium" onclick="closeEvidenceModal()">
+                                Batal
+                            </button>
+                            <button class="btn-primary text-white px-6 py-2 rounded-lg font-medium" onclick="saveForensicAnalysis()">
+                                <i class="fa-solid fa-save mr-2"></i>
+                                Simpan Analisis
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script>
-        // Dummy data for incidents
+        // Initialize dummy data for testing
+        function initializeIntegratedData() {
+            const existingIncidents = JSON.parse(localStorage.getItem('incidents') || '[]');
+            const existingReports = JSON.parse(localStorage.getItem('reports') || '[]');
+            
+            // Convert reports to incidents format if incidents is empty
+            if (existingIncidents.length === 0 && existingReports.length > 0) {
+                const incidentData = existingReports.map((report, index) => {
+                    // Generate random evidence for demonstration
+                    const hasEvidence = Math.random() > 0.3;
+                    const evidenceItems = hasEvidence ? [
+                        `screenshot_${index + 1}.png`,
+                        `email_header_${index + 1}.eml`,
+                        `log_analysis_${index + 1}.txt`
+                    ] : [];
+                    
+                    return {
+                        id: report.id || `RPT${1640000000000 + index + 1}`,
+                        title: `${report.category} - ${report.email}`,
+                        category: report.category.toLowerCase().replace('peretasan akun email', 'hacking').replace(' ', '-'),
+                        priority: report.status === 'Investigating' ? 'high' : 
+                                 report.status === 'Recovered' ? 'medium' : 'low',
+                        status: report.status.toLowerCase().replace('submitted', 'open')
+                                               .replace('investigating', 'progress')
+                                               .replace('recovered', 'resolved')
+                                               .replace('closed', 'closed'),
+                        reporter: report.name,
+                        date: new Date(report.dateTime).toLocaleString('id-ID', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }),
+                        description: report.description,
+                        email: report.email,
+                        evidence: evidenceItems,
+                        forensicAnalysis: '',
+                        recommendation: '',
+                        estimatedResolution: '24',
+                        createdAt: report.createdAt || new Date().toISOString()
+                    };
+                });
+                
+                localStorage.setItem('incidents', JSON.stringify(incidentData));
+            }
+        }
+        
+        // Dummy data for incidents (will be replaced by integrated data)
         let incidents = [
             {
                 id: 'INC-001',
@@ -511,8 +735,33 @@
 
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
+            // Load incidents from localStorage or use dummy data
+            const storedIncidents = JSON.parse(localStorage.getItem('incidents') || '[]');
+            if (storedIncidents.length > 0) {
+                incidents = storedIncidents;
+            } else {
+                // Initialize integrated data from reports
+                initializeIntegratedData();
+                const updatedIncidents = JSON.parse(localStorage.getItem('incidents') || '[]');
+                incidents = updatedIncidents.length > 0 ? updatedIncidents : incidents;
+            }
+            
+            filteredIncidents = [...incidents];
             renderTable();
         });
+        
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const incidentModal = document.getElementById('incidentModal');
+            const evidenceModal = document.getElementById('evidenceModal');
+            
+            if (event.target === incidentModal) {
+                closeModal();
+            }
+            if (event.target === evidenceModal) {
+                closeEvidenceModal();
+            }
+        }
 
         // Modal functions
         function openModal() {
@@ -663,16 +912,16 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${incident.reporter}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${incident.date}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button onclick="viewIncident('${incident.id}')" class="text-blue-600 hover:text-blue-900 mr-3">
+                        <button onclick="viewIncident('${incident.id}')" class="link-primary mr-3" title="View Detail">
                             <i class="fa-solid fa-eye"></i>
                         </button>
-                        <button onclick="editIncident('${incident.id}')" class="text-green-600 hover:text-green-900 mr-3">
+                        <button onclick="editIncident('${incident.id}')" class="text-green-600 hover:text-green-900 mr-3" title="Edit">
                             <i class="fa-solid fa-edit"></i>
                         </button>
-                        <button onclick="changeStatus('${incident.id}')" class="text-yellow-600 hover:text-yellow-900 mr-3">
+                        <button onclick="changeStatus('${incident.id}')" class="text-yellow-600 hover:text-yellow-900 mr-3" title="Change Status">
                             <i class="fa-solid fa-sync"></i>
                         </button>
-                        <button onclick="deleteIncident('${incident.id}')" class="text-red-600 hover:text-red-900">
+                        <button onclick="deleteIncident('${incident.id}')" class="text-red-600 hover:text-red-900" title="Delete">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </td>
@@ -701,7 +950,115 @@
         function viewIncident(id) {
             const incident = incidents.find(i => i.id === id);
             if (incident) {
-                alert(`Detail Insiden:\n\nID: ${incident.id}\nJudul: ${incident.title}\nKategori: ${getCategoryLabel(incident.category)}\nPrioritas: ${getPriorityLabel(incident.priority)}\nStatus: ${getStatusLabel(incident.status)}\nPelapor: ${incident.reporter}\nWaktu: ${incident.date}\n\nDeskripsi: ${incident.description}`);
+                openEvidenceModal(incident);
+            }
+        }
+        
+        // Evidence Modal Functions
+        function openEvidenceModal(incident) {
+            // Fill incident details
+            document.getElementById('detailId').textContent = incident.id;
+            document.getElementById('detailReporter').textContent = incident.reporter;
+            document.getElementById('detailEmail').textContent = incident.email || 'N/A';
+            document.getElementById('detailDateTime').textContent = incident.date;
+            document.getElementById('detailCategory').textContent = getCategoryLabel(incident.category);
+            
+            // Set priority badge
+            const priorityElement = document.getElementById('detailPriority');
+            priorityElement.textContent = getPriorityLabel(incident.priority);
+            priorityElement.className = `px-2 py-1 rounded-full text-xs font-semibold ${getPriorityClass(incident.priority)}`;
+            
+            // Set status badge
+            const statusElement = document.getElementById('detailStatus');
+            statusElement.textContent = getStatusLabel(incident.status);
+            statusElement.className = `px-2 py-1 rounded-full text-xs font-semibold ${getStatusClass(incident.status)}`;
+            
+            document.getElementById('detailDescription').textContent = incident.description;
+            
+            // Load forensic analysis if exists
+            document.getElementById('forensicAnalysis').value = incident.forensicAnalysis || '';
+            document.getElementById('forensicRecommendation').value = incident.recommendation || '';
+            document.getElementById('estimatedResolution').value = incident.estimatedResolution || '24';
+            
+            // Display evidence
+            displayEvidence(incident.evidence || []);
+            
+            // Store current incident for saving
+            window.currentIncidentId = incident.id;
+            
+            // Show modal
+            document.getElementById('evidenceModal').style.display = 'block';
+        }
+        
+        function closeEvidenceModal() {
+            document.getElementById('evidenceModal').style.display = 'none';
+            window.currentIncidentId = null;
+        }
+        
+        function displayEvidence(evidenceItems) {
+            const gallery = document.getElementById('evidenceGallery');
+            const noEvidence = document.getElementById('noEvidence');
+            
+            if (evidenceItems.length === 0) {
+                gallery.style.display = 'none';
+                noEvidence.style.display = 'block';
+            } else {
+                gallery.style.display = 'grid';
+                noEvidence.style.display = 'none';
+                
+                gallery.innerHTML = '';
+                evidenceItems.forEach((item, index) => {
+                    const isImage = /\.(jpg|jpeg|png|gif)$/i.test(item);
+                    const evidenceDiv = document.createElement('div');
+                    evidenceDiv.className = 'evidence-item cursor-pointer border rounded-lg p-2 text-center';
+                    evidenceDiv.style.borderColor = 'var(--unisafe-orange)';
+                    evidenceDiv.onclick = () => viewEvidence(item);
+                    
+                    if (isImage) {
+                        evidenceDiv.innerHTML = `
+                            <img src="https://picsum.photos/seed/${item}/200/150.jpg" 
+                                 alt="${item}" 
+                                 class="w-full h-24 object-cover rounded mb-2">
+                            <p class="text-xs truncate">${item}</p>
+                        `;
+                    } else {
+                        evidenceDiv.innerHTML = `
+                            <div class="w-full h-24 bg-gray-100 rounded mb-2 flex items-center justify-center">
+                                <i class="fa-solid fa-file-alt text-2xl" style="color: var(--unisafe-orange);"></i>
+                            </div>
+                            <p class="text-xs truncate">${item}</p>
+                        `;
+                    }
+                    
+                    gallery.appendChild(evidenceDiv);
+                });
+            }
+        }
+        
+        function viewEvidence(filename) {
+            alert(`Membuka file: ${filename}\n\nDalam implementasi nyata, file akan dibuka dalam viewer sesuai tipe file.`);
+        }
+        
+        function saveForensicAnalysis() {
+            if (!window.currentIncidentId) return;
+            
+            const incident = incidents.find(i => i.id === window.currentIncidentId);
+            if (incident) {
+                incident.forensicAnalysis = document.getElementById('forensicAnalysis').value;
+                incident.recommendation = document.getElementById('forensicRecommendation').value;
+                incident.estimatedResolution = document.getElementById('estimatedResolution').value;
+                
+                // Save to localStorage
+                localStorage.setItem('incidents', JSON.stringify(incidents));
+                
+                // Show success notification
+                alert('Analisis forensik berhasil disimpan!');
+                
+                // Close modal
+                closeEvidenceModal();
+                
+                // Reload table
+                renderTable();
             }
         }
 

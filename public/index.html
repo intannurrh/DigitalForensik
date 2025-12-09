@@ -11,6 +11,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
+        /* CSS Variables */
+        :root {
+            --unisafe-orange: #E6B400;
+            --unisafe-orange-dark: #cc9f00;
+            --unisafe-gray: #f5f5f5;
+            --unisafe-black: #222222;
+        }
+        
         /* Force all elements to use Exo 2 font */
         * {
             font-family: 'Exo 2', sans-serif;
@@ -19,6 +27,20 @@
         /* Override any other font-family declarations */
         body, div, span, h1, h2, h3, h4, h5, h6, p, a, button, input, label, textarea, select {
             font-family: 'Exo 2', sans-serif;
+        }
+        
+        /* Custom hover state for nav links */
+        .nav-link:hover {
+            color: var(--unisafe-orange);
+        }
+        
+        /* Custom button styles */
+        .btn-primary {
+            background-color: var(--unisafe-orange);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--unisafe-orange-dark);
         }
     </style>
 </head>
@@ -30,22 +52,21 @@
             <div class="flex justify-between items-center">
                 <!-- Logo -->
                 <div class="flex items-center gap-2">
-                    <img src="logo.png" alt="UniSafe Logo" class="h-10 w-auto">
-                    <span class="text-2xl font-bold text-amber-500">UniSafe</span>
+                    <img src="/logo.png" alt="UniSafe Logo" class="h-10 w-auto">
                 </div>
 
                 <!-- Desktop Navigation -->
                 <div class="hidden lg:flex items-center gap-8">
-                    <a href="#home" class="text-gray-700 text-base hover:text-amber-500 transition-all font-semibold">Beranda</a>
-                    <a href="#about" class="text-gray-700 text-base hover:text-amber-500 transition-all font-semibold">Tentang</a>
-                    <a href="#features" class="text-gray-700 text-base hover:text-amber-500 transition-all font-semibold">Fitur</a>
-                    <a href="#contact" class="text-gray-700 text-base hover:text-amber-500 transition-all font-semibold">Kontak</a>
+                    <a href="#home" class="nav-link text-gray-700 text-base transition-all font-semibold">Beranda</a>
+                    <a href="#about" class="nav-link text-gray-700 text-base transition-all font-semibold">Tentang</a>
+                    <a href="#features" class="nav-link text-gray-700 text-base transition-all font-semibold">Fitur</a>
+                    <a href="#contact" class="nav-link text-gray-700 text-base transition-all font-semibold">Kontak</a>
                 </div>
 
                 <!-- Auth Buttons -->
                 <div class="flex items-center gap-4">
-                    <a href="login.html" class="px-6 py-2.5 text-gray-700 text-base font-semibold border-2 border-amber-400 rounded-lg hover:bg-amber-50 transition-all">Login</a>
-                    <a href="register.html" class="px-6 py-2.5 bg-amber-500 text-white text-base font-semibold rounded-lg hover:bg-amber-600 transition-all">Daftar</a>
+                    <a href="login.html" class="px-6 py-2.5 text-gray-700 text-base font-semibold border-2 rounded-lg hover:bg-amber-50 transition-all" style="border-color: var(--unisafe-orange);">Login</a>
+                    <a href="register.html" class="btn-primary px-6 py-2.5 text-white text-base font-semibold rounded-lg transition-all">Daftar</a>
                 </div>
 
                 <!-- Mobile Menu Button -->
@@ -62,7 +83,7 @@
                 <a href="#contact" class="block py-2 text-gray-900 text-base hover:text-amber-500 transition font-medium">Kontak</a>
                 <div class="pt-3 border-t border-gray-200 space-y-2">
                     <a href="login.html" class="block py-2 text-center text-gray-900 text-sm font-medium border border-gray-300 rounded hover:bg-gray-50 transition">Login</a>
-                    <a href="register.html" class="block py-2 text-center bg-amber-500 text-white text-sm font-medium rounded hover:bg-amber-600 transition">Daftar</a>
+                    <a href="register.html" class="block py-2 text-center btn-primary text-white text-sm font-medium rounded transition">Daftar</a>
                 </div>
             </div>
         </div>
@@ -78,12 +99,12 @@
                 <div>
                     <!-- Large Logo -->
                     <div class="mb-8">
-                        <img src="logo.png" alt="UniSafe Logo" class="h-24 sm:h-28 lg:h-32 w-auto mb-4">
+                        <img src="/logo.png" alt="UniSafe Logo" class="h-24 sm:h-28 lg:h-32 w-auto mb-4">
                     </div>
 
                     <!-- Title -->
                     <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
-                        Lindungi Email Anda dari <span class="text-amber-500">Peretasan</span>
+                        Lindungi Email Anda dari <span style="color: var(--unisafe-orange);">Peretasan</span>
                     </h1>
 
                     <!-- Description -->
@@ -93,7 +114,7 @@
 
                     <!-- CTA Buttons -->
                     <div class="flex flex-col sm:flex-row gap-4">
-                        <a href="register.html" class="px-8 py-4 bg-amber-500 text-white text-lg font-bold rounded-xl hover:bg-amber-600 transition-all shadow-lg hover:shadow-xl transform hover:scale-105 text-center">
+                        <a href="register.html" class="px-8 py-4 btn-primary text-white text-lg font-bold rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-105 text-center">
                             <i class="fa-solid fa-shield-halved mr-2"></i>
                             Mulai Dilindungi
                         </a>
@@ -109,7 +130,7 @@
                     <div class="relative">
                         <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600" 
                              alt="Cyber Security" class="w-full max-w-lg rounded-2xl shadow-2xl">
-                        <div class="absolute -bottom-6 -right-6 bg-amber-500 text-white p-6 rounded-2xl shadow-xl">
+                        <div class="absolute -bottom-6 -right-6 text-white p-6 rounded-2xl shadow-xl" style="background-color: var(--unisafe-orange);">
                             <p class="text-3xl font-bold">1000+</p>
                             <p class="text-sm">Laporan Diproses</p>
                         </div>
@@ -157,8 +178,8 @@
 
                     <!-- Card 3 -->
                     <div class="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-all">
-                        <div class="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mb-6">
-                            <i class="fa-solid fa-users text-amber-600 text-2xl"></i>
+                        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-6" style="background-color: rgba(230, 180, 0, 0.1);">
+                            <i class="fa-solid fa-users text-2xl" style="color: var(--unisafe-orange);"></i>
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mb-4">Tim Profesional</h3>
                         <p class="text-gray-600 leading-relaxed">
@@ -189,8 +210,8 @@
                     <div class="space-y-8">
                         <!-- Feature 1 -->
                         <div class="flex gap-6">
-                            <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                                <i class="fa-solid fa-file-lines text-amber-600"></i>
+                            <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background-color: rgba(230, 180, 0, 0.1);">
+                                <i class="fa-solid fa-file-lines text-2xl" style="color: var(--unisafe-orange);"></i>
                             </div>
                             <div>
                                 <h3 class="text-xl font-bold text-gray-900 mb-2">Pelaporan Mudah</h3>
@@ -262,7 +283,7 @@
         </section>
 
         <!-- STATS SECTION -->
-        <section class="bg-gradient-to-r from-amber-500 to-amber-600 py-16">
+        <section class="py-16" style="background: linear-gradient(to right, var(--unisafe-orange), var(--unisafe-orange-dark));">
             <div class="max-w-7xl mx-auto px-6 sm:px-8">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
                     <div>
@@ -307,8 +328,8 @@
                             
                             <!-- Email -->
                             <div class="flex items-center gap-4 mb-6">
-                                <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
-                                    <i class="fa-solid fa-envelope text-amber-600"></i>
+                                <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background-color: rgba(230, 180, 0, 0.1);">
+                                    <i class="fa-solid fa-envelope text-2xl" style="color: var(--unisafe-orange);"></i>
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-500">Email</p>
@@ -398,8 +419,7 @@
                 <!-- Logo and Description -->
                 <div>
                     <div class="flex items-center gap-2 mb-4">
-                        <img src="logo.png" alt="UniSafe Logo" class="h-8 w-auto">
-                        <span class="text-xl font-bold text-amber-500">UniSafe</span>
+                        <img src="/logo.png" alt="UniSafe Logo" class="h-8 w-auto">
                     </div>
                     <p class="text-gray-400 text-sm">
                         Platform terpercaya untuk keamanan siber mahasiswa universitas
@@ -410,10 +430,10 @@
                 <div>
                     <h4 class="font-semibold mb-4">Link Cepat</h4>
                     <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="login.html" class="hover:text-amber-500 transition">Login</a></li>
-                        <li><a href="register.html" class="hover:text-amber-500 transition">Daftar</a></li>
-                        <li><a href="#about" class="hover:text-amber-500 transition">Tentang</a></li>
-                        <li><a href="#features" class="hover:text-amber-500 transition">Fitur</a></li>
+                        <li><a href="login.html" class="nav-link transition">Login</a></li>
+                        <li><a href="register.html" class="nav-link transition">Daftar</a></li>
+                        <li><a href="#about" class="nav-link transition">Tentang</a></li>
+                        <li><a href="#features" class="nav-link transition">Fitur</a></li>
                     </ul>
                 </div>
 
@@ -421,10 +441,10 @@
                 <div>
                     <h4 class="font-semibold mb-4">Sumber Daya</h4>
                     <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-amber-500 transition">Panduan Keamanan</a></li>
-                        <li><a href="#" class="hover:text-amber-500 transition">FAQ</a></li>
-                        <li><a href="#" class="hover:text-amber-500 transition">Kebijakan Privasi</a></li>
-                        <li><a href="#" class="hover:text-amber-500 transition">Syarat & Ketentuan</a></li>
+                        <li><a href="#" class="nav-link transition">Panduan Keamanan</a></li>
+                        <li><a href="#" class="nav-link transition">FAQ</a></li>
+                        <li><a href="#" class="nav-link transition">Kebijakan Privasi</a></li>
+                        <li><a href="#" class="nav-link transition">Syarat & Ketentuan</a></li>
                     </ul>
                 </div>
 

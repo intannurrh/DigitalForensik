@@ -653,44 +653,22 @@
             ];
             localStorage.setItem('investigations', JSON.stringify(investigations));
         }
-                initialEvidence: 'Traffic logs, IP source analysis, bandwidth utilization.',
-                timeline: [
-                    { date: '2024-12-06 13:00', action: 'Laporan website down diterima' },
-                    { date: '2024-12-06 13:15', action: 'Analisis traffic anomali' }
-                ],
-                evidence: [
-                    { id: 'EV-008', name: 'Traffic Capture', type: 'pcap', size: '125.6 MB', uploadDate: '2024-12-06 13:45' }
-                ]
-            },
-            {
-                id: 'INV-2024-005',
-                incidentId: 'INC-005',
-                title: 'Unauthorized Access Database',
-                priority: 'high',
-                status: 'active',
-                investigator: 'Dewi Anggraini',
-                startDate: '2024-12-04',
-                progress: 45,
-                caseDescription: 'Investigasi akses tidak sah ke database customer yang mengakibatkan data privacy breach.',
-                initialEvidence: 'Database logs, authentication logs, network traffic analysis.',
-                timeline: [
-                    { date: '2024-12-04 10:00', action: 'Alert akses tidak sah terdeteksi' },
-                    { date: '2024-12-04 10:30', action: 'Penonaktifan akun yang mencurigakan' },
-                    { date: '2024-12-04 11:00', action: 'Analisis data yang diakses' }
-                ],
-                evidence: [
-                    { id: 'EV-009', name: 'DB Logs', type: 'log', size: '18.4 MB', uploadDate: '2024-12-04 10:45' },
-                    { id: 'EV-010', name: 'Auth Records', type: 'txt', size: '0.8 MB', uploadDate: '2024-12-04 11:15' }
-                ]
-            }
-        ];
 
         let filteredInvestigations = [...investigations];
         let currentInvestigation = null;
 
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
+            // Set user role in localStorage if not set
+            if (!localStorage.getItem('userRole')) {
+                localStorage.setItem('userRole', 'irt');
+            }
+            if (!localStorage.getItem('username')) {
+                localStorage.setItem('username', 'Admin IRT');
+            }
+            
             renderInvestigations();
+            initializeSidebar();
         });
 
         // Modal functions
@@ -722,8 +700,21 @@
             const modal = document.getElementById('detailModal');
             const content = document.getElementById('detailContent');
             
+            // Handle the case when investigation is passed as a string ID
+            let invData;
+            if (typeof investigation === 'string') {
+                invData = investigations.find(i => i.id === investigation);
+            } else {
+                invData = investigation;
+            }
+            
+            if (!invData) {
+                console.error('Investigation not found:', investigation);
+                return;
+            }
+            
             // Generate timeline HTML
-            const timelineHtml = investigation.timeline.map(item => `
+            const timelineHtml = invData.timeline.map(item => `
                 <div class="flex items-start space-x-3 mb-4">
                     <div class="flex-shrink-0 w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
                     <div class="flex-1">
@@ -734,7 +725,7 @@
             `).join('');
             
             // Generate evidence HTML
-            const evidenceHtml = investigation.evidence.map(item => `
+            const evidenceHtml = invData.evidence.map(item => `
                 <div class="evidence-item">
                     <div class="flex justify-between items-start">
                         <div class="flex items-start space-x-3">
@@ -742,6 +733,7 @@
                             <div>
                                 <h4 class="font-medium text-gray-900">${item.name}</h4>
                                 <p class="text-sm text-gray-500">ID: ${item.id} | Size: ${item.size} | Upload: ${item.uploadDate}</p>
+                                ${item.description ? `<p class="text-xs text-gray-400 mt-1">${item.description}</p>` : ''}
                             </div>
                         </div>
                         <div class="flex gap-2">
@@ -756,6 +748,16 @@
                 </div>
             `).join('');
             
+            // Generate findings HTML
+            const findingsHtml = invData.findings ? invData.findings.map(item => `
+                <li class="text-gray-700 mb-1">${item}</li>
+            `).join('') : '';
+            
+            // Generate recommendations HTML
+            const recommendationsHtml = invData.recommendations ? invData.recommendations.map(item => `
+                <li class="text-gray-700 mb-1">${item}</li>
+            `).join('') : '';
+            
             content.innerHTML = `
                 <div class="space-y-6">
                     <div>
@@ -763,31 +765,31 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <p class="text-sm text-gray-600">ID:</p>
-                                <p class="font-medium">${investigation.id}</p>
+                                <p class="font-medium">${invData.id}</p>
                             </div>
                             <div>
                                 <p class="text-sm text-gray-600">ID Insiden:</p>
-                                <p class="font-medium">${investigation.incidentId}</p>
+                                <p class="font-medium">${invData.incidentId}</p>
                             </div>
                             <div>
                                 <p class="text-sm text-gray-600">Prioritas:</p>
-                                <p class="font-medium priority-${investigation.priority}">${getPriorityLabel(investigation.priority)}</p>
+                                <p class="font-medium priority-${invData.priority}">${getPriorityLabel(invData.priority)}</p>
                             </div>
                             <div>
                                 <p class="text-sm text-gray-600">Status:</p>
-                                <span class="px-2 py-1 rounded-full text-xs font-semibold status-${investigation.status}">${getStatusLabel(investigation.status)}</span>
+                                <span class="px-2 py-1 rounded-full text-xs font-semibold status-${invData.status}">${getStatusLabel(invData.status)}</span>
                             </div>
                             <div>
                                 <p class="text-sm text-gray-600">Investigator:</p>
-                                <p class="font-medium">${investigation.investigator}</p>
+                                <p class="font-medium">${invData.investigator}</p>
                             </div>
                             <div>
                                 <p class="text-sm text-gray-600">Progress:</p>
                                 <div class="flex items-center">
                                     <div class="w-24 bg-gray-200 rounded-full h-2">
-                                        <div class="bg-blue-600 h-2 rounded-full" style="width: ${investigation.progress}%"></div>
+                                        <div class="bg-blue-600 h-2 rounded-full" style="width: ${invData.progress}%"></div>
                                     </div>
-                                    <span class="text-sm font-medium ml-2">${investigation.progress}%</span>
+                                    <span class="text-sm font-medium ml-2">${invData.progress}%</span>
                                 </div>
                             </div>
                         </div>
@@ -795,12 +797,12 @@
                     
                     <div>
                         <h3 class="font-semibold text-gray-800 mb-2">Deskripsi Kasus</h3>
-                        <p class="text-gray-600">${investigation.caseDescription}</p>
+                        <p class="text-gray-600">${invData.caseDescription}</p>
                     </div>
                     
                     <div>
                         <h3 class="font-semibold text-gray-800 mb-2">Evidence Awal</h3>
-                        <p class="text-gray-600">${investigation.initialEvidence}</p>
+                        <p class="text-gray-600">${invData.initialEvidence}</p>
                     </div>
                     
                     <div>
@@ -814,6 +816,24 @@
                         <h3 class="font-semibold text-gray-800 mb-4">Evidence Terkumpul</h3>
                         ${evidenceHtml}
                     </div>
+                    
+                    ${findingsHtml ? `
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-4">Temuan Investigasi</h3>
+                        <ul class="list-disc pl-6">
+                            ${findingsHtml}
+                        </ul>
+                    </div>
+                    ` : ''}
+                    
+                    ${recommendationsHtml ? `
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-4">Rekomendasi</h3>
+                        <ul class="list-disc pl-6">
+                            ${recommendationsHtml}
+                        </ul>
+                    </div>
+                    ` : ''}
                 </div>
             `;
             
@@ -859,6 +879,11 @@
             filteredInvestigations = [...investigations];
             renderInvestigations();
             closeModal();
+            
+            // Redirect to workspace for new investigation
+            if (!currentInvestigation) {
+                window.location.href = 'workspace.html';
+            }
         });
 
         // Search function
@@ -930,17 +955,29 @@
             const cardsHtml = filteredInvestigations.map(inv => {
                 const statusClass = getStatusClass(inv.status);
                 const priorityClass = `priority-${inv.priority}`;
-                const color = inv.priority === 'high' ? 'red' : inv.priority === 'medium' ? 'yellow' : 'green';
+                
+                // Set color based on priority
+                let bgColor, textColor;
+                if (inv.priority === 'high') {
+                    bgColor = 'bg-red-500';
+                    textColor = 'text-red-600';
+                } else if (inv.priority === 'medium') {
+                    bgColor = 'bg-yellow-500';
+                    textColor = 'text-yellow-600';
+                } else {
+                    bgColor = 'bg-green-500';
+                    textColor = 'text-green-600';
+                }
                 
                 return `
                     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-200">
-                        <div class="bg-gradient-to-r from-${color}-500 to-${color}-600 p-4">
+                        <div class="${bgColor} p-4">
                             <div class="flex justify-between items-start">
                                 <div>
                                     <h3 class="text-white font-semibold">${inv.id}</h3>
-                                    <p class="text-${color}-100 text-sm">${inv.title}</p>
+                                    <p class="text-gray-100 text-sm">${inv.title}</p>
                                 </div>
-                                <span class="bg-white text-${color}-600 px-2 py-1 rounded-full text-xs font-semibold ${statusClass}">${getStatusLabel(inv.status)}</span>
+                                <span class="bg-white ${textColor} px-2 py-1 rounded-full text-xs font-semibold ${statusClass}">${getStatusLabel(inv.status)}</span>
                             </div>
                         </div>
                         <div class="p-6">
@@ -963,7 +1000,7 @@
                                     </div>
                                 </div>
                                 <div class="flex gap-2 mt-4">
-                                    <button class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors" onclick="openDetailModal(investigations.find(i => i.id === '${inv.id}'))">
+                                    <button class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium transition-colors" onclick="openDetailModal('${inv.id}')">
                                         <i class="fa-solid fa-eye mr-1"></i>
                                         View
                                     </button>
@@ -983,12 +1020,49 @@
 
         // Action functions
         function archiveEvidence() {
-            if (confirm('Apakah Anda yakin ingin mengarsipkan semua evidence investigasi yang selesai?')) {
-                alert('Evidence investigasi yang selesai telah diarsipkan.');
+            const completedInvestigations = investigations.filter(inv => inv.status === 'completed');
+            
+            if (completedInvestigations.length === 0) {
+                showNotification('Tidak ada investigasi yang selesai untuk diarsipkan', 'warning');
+                return;
+            }
+            
+            if (confirm(`Apakah Anda yakin ingin mengarsipkan semua evidence dari ${completedInvestigations.length} investigasi yang selesai?`)) {
+                // In a real application, this would call a backend API
+                // For now, we'll just show a success message
+                const notification = document.createElement('div');
+                notification.className = 'fixed top-4 right-4 bg-blue-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-all duration-300';
+                notification.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fa-solid fa-archive mr-2"></i>
+                        <span>Archiving evidence from ${completedInvestigations.length} completed investigations...</span>
+                    </div>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                // Animate in
+                setTimeout(() => {
+                    notification.style.transform = 'translateY(0)';
+                }, 10);
+                
+                // Remove after 3 seconds
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+                
+                // In a real app, you might update the status of these investigations
+                // or move them to a different collection
             }
         }
 
         function exportReports() {
+            if (filteredInvestigations.length === 0) {
+                showNotification('Tidak ada investigasi untuk diekspor', 'warning');
+                return;
+            }
+            
             const csvContent = [
                 ['ID', 'Title', 'Incident ID', 'Priority', 'Status', 'Investigator', 'Start Date', 'Progress', 'Description'],
                 ...filteredInvestigations.map(inv => [
@@ -1011,15 +1085,158 @@
             a.download = `investigations_${new Date().toISOString().split('T')[0]}.csv`;
             a.click();
             window.URL.revokeObjectURL(url);
+            
+            // Show success notification
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-all duration-300';
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fa-solid fa-download mr-2"></i>
+                    <span>Exported ${filteredInvestigations.length} investigations to CSV</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateY(0)';
+            }, 10);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+        
+        // Show notification helper function
+        function showNotification(message, type = 'info') {
+            const colors = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                info: 'bg-blue-500',
+                warning: 'bg-yellow-500'
+            };
+            
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-all duration-300`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateY(0)';
+            }, 10);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
         }
 
         function downloadEvidence(evidenceId) {
-            alert(`Downloading evidence ${evidenceId}...`);
+            // Find the evidence across all investigations
+            let evidence = null;
+            let evidenceName = '';
+            
+            for (const inv of investigations) {
+                const foundEvidence = inv.evidence.find(e => e.id === evidenceId);
+                if (foundEvidence) {
+                    evidence = foundEvidence;
+                    evidenceName = foundEvidence.name;
+                    break;
+                }
+            }
+            
+            if (evidence) {
+                // Create a temporary download notification
+                const notification = document.createElement('div');
+                notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-all duration-300';
+                notification.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fa-solid fa-download mr-2"></i>
+                        <span>Downloading ${evidenceName}...</span>
+                    </div>
+                `;
+                
+                document.body.appendChild(notification);
+                
+                // Animate in
+                setTimeout(() => {
+                    notification.style.transform = 'translateY(0)';
+                }, 10);
+                
+                // Remove after 3 seconds
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+                
+                console.log(`Downloading evidence: ${evidenceId}`, evidence);
+            } else {
+                alert(`Evidence ${evidenceId} not found.`);
+            }
         }
 
         function deleteEvidence(evidenceId) {
             if (confirm(`Apakah Anda yakin ingin menghapus evidence ${evidenceId}?`)) {
-                alert(`Evidence ${evidenceId} telah dihapus.`);
+                let deleted = false;
+                
+                // Find and remove the evidence from all investigations
+                for (const inv of investigations) {
+                    const index = inv.evidence.findIndex(e => e.id === evidenceId);
+                    if (index !== -1) {
+                        const evidenceName = inv.evidence[index].name;
+                        inv.evidence.splice(index, 1);
+                        deleted = true;
+                        
+                        // Show success notification
+                        const notification = document.createElement('div');
+                        notification.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform transition-all duration-300';
+                        notification.innerHTML = `
+                            <div class="flex items-center">
+                                <i class="fa-solid fa-trash mr-2"></i>
+                                <span>Evidence ${evidenceName} has been deleted</span>
+                            </div>
+                        `;
+                        
+                        document.body.appendChild(notification);
+                        
+                        // Animate in
+                        setTimeout(() => {
+                            notification.style.transform = 'translateY(0)';
+                        }, 10);
+                        
+                        // Remove after 3 seconds
+                        setTimeout(() => {
+                            notification.style.opacity = '0';
+                            setTimeout(() => notification.remove(), 300);
+                        }, 3000);
+                        
+                        // Update localStorage
+                        localStorage.setItem('investigations', JSON.stringify(investigations));
+                        
+                        // If detail modal is open, refresh it
+                        const modal = document.getElementById('detailModal');
+                        if (modal.style.display === 'block') {
+                            // Find which investigation is currently open and reopen it
+                            const idElement = document.querySelector('#detailContent p.font-medium');
+                            if (idElement) {
+                                const currentId = idElement.textContent;
+                                openDetailModal(currentId);
+                            }
+                        }
+                        
+                        break;
+                    }
+                }
+                
+                if (!deleted) {
+                    alert(`Evidence ${evidenceId} not found.`);
+                }
             }
         }
 
